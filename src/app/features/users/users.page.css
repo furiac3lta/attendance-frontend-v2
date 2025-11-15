@@ -317,3 +317,19 @@ mat-paginator {
 .dark-mode .mat-paginator-range-label {
   color: #ddd;
 }
+.cdk-overlay-container {
+  z-index: 2000 !important;
+}
+
+.cdk-overlay-pane {
+  z-index: 2000 !important;
+}
+.section-table,
+.page-card,
+.users-page {
+  overflow: visible !important;
+}
+:host ::ng-deep .mat-mdc-select-panel {
+  max-height: 300px !important;
+  overflow-y: auto !important;
+}
