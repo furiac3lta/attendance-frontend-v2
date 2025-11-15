@@ -48,10 +48,10 @@ export class UsersPage implements OnInit {
   selectedCourses: Record<number, number[]> = {};
 
   // Paginación
-  currentPage = 0;
+ /*  currentPage = 0;
   pageSize = 10;
   totalPages = 1;
-  totalElements = 0;
+  totalElements = 0; */
 
   // Flags
   loading = false;
@@ -94,21 +94,19 @@ export class UsersPage implements OnInit {
   loadUsers() {
   this.loading = true;
 
-  this.usersSvc.findAll(this.currentPage, this.pageSize, this.searchTerm)
-    .subscribe({
-      next: (res) => {
-        this.users = res.content;
-        this.filteredUsers = this.users; // ya viene filtrado del backend
-        this.totalPages = res.totalPages;
-        this.totalElements = res.totalElements;
-        this.loading = false;
-      },
-      error: () => {
-        Swal.fire('Error', '❌ Error al cargar usuarios', 'error');
-        this.loading = false;
-      }
-    });
+  this.usersSvc.getAllUsersNoPage(this.searchTerm).subscribe({
+    next: (res: User[]) => {
+      this.users = res;
+      this.applyFilter(); // aplica filtros frontend
+      this.loading = false;
+    },
+    error: () => {
+      Swal.fire('Error', '❌ Error al cargar usuarios', 'error');
+      this.loading = false;
+    }
+  });
 }
+
 
   // ===========================================================
   // CURSOS / ORGANIZACIONES
@@ -232,11 +230,11 @@ export class UsersPage implements OnInit {
   // ===========================================================
   // PAGINADOR
   // ===========================================================
-  onPaginatorChange(event: any) {
+ /*  onPaginatorChange(event: any) {
     this.pageSize = event.pageSize;
     this.currentPage = event.pageIndex;
     this.loadUsers();
-  }
+  } */
 
   // ===========================================================
   // MAPEO
