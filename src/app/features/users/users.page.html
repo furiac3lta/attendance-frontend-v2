@@ -161,7 +161,7 @@
       <h3 class="section-title">📋 Listado de usuarios</h3>
 
       <div class="table-section">
-        <table mat-table [dataSource]="filteredUsers" class="table-modern responsive-table">
+        <table mat-table [dataSource]="users" class="table-modern responsive-table">
 
           <ng-container matColumnDef="fullName">
             <th mat-header-cell *matHeaderCellDef> Nombre </th>
@@ -244,14 +244,13 @@
           ]"></tr>
 
         </table>
-
-     <!--    <mat-paginator
-          [length]="totalElements"
-          [pageSize]="pageSize"
-          [pageIndex]="currentPage"
-          [pageSizeOptions]="[5, 10, 20]"
-          (page)="onPaginatorChange($event)">
-        </mat-paginator> -->
+<mat-paginator
+  [length]="totalElements"
+  [pageSize]="pageSize"
+  [pageIndex]="currentPage"
+  [pageSizeOptions]="[5, 10, 20]"
+  (page)="onPaginatorChange($event)">
+</mat-paginator>
 
       </div>
     </div>

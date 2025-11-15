@@ -1,4 +1,3 @@
-// src/app/features/users/users.page.ts
 import { Component, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, FormsModule, Validators } from '@angular/forms';
@@ -23,21 +22,14 @@ import Swal from 'sweetalert2';
 })
 export class UsersPage implements OnInit {
 
-  // ===========================================================
-  // INYECCIONES
-  // ===========================================================
   private fb = inject(FormBuilder);
   private usersSvc = inject(UsersService);
   private coursesSvc = inject(CoursesService);
 
-  // ===========================================================
-  // ESTADO GENERAL
-  // ===========================================================
   users: User[] = [];
-  filteredUsers: User[] = [];
 
   // Filtros
-  searchTerm: string = '';
+  searchTerm = '';
   filterRole: string = 'ALL';
   filterOrg: number | 'ALL' = 'ALL';
   filterCourse: number | 'ALL' = 'ALL';
@@ -47,22 +39,16 @@ export class UsersPage implements OnInit {
   organizations: any[] = [];
   selectedCourses: Record<number, number[]> = {};
 
-  // Paginación
- /*  currentPage = 0;
+  // Paginación REAL
+  currentPage = 0;
   pageSize = 10;
-  totalPages = 1;
-  totalElements = 0; */
+  totalElements = 0;
 
-  // Flags
   loading = false;
-  isSearching = false;
 
-  currentRole: string | null = sessionStorage.getItem('role');
+  currentRole = sessionStorage.getItem('role');
   editingUserId: number | null = null;
 
-  // ===========================================================
-  // FORMULARIO
-  // ===========================================================
   form = this.fb.group({
     username: ['', Validators.required],
     email: [''],
@@ -72,55 +58,74 @@ export class UsersPage implements OnInit {
     courseIds: [[] as number[]]
   });
 
-  // ===========================================================
-  // INIT
-  // ===========================================================
   ngOnInit() {
     this.loadCourses();
     this.loadUsers();
     if (this.isSuperAdmin()) this.loadOrganizations();
   }
 
-  // ===========================================================
-  // ROLES
-  // ===========================================================
   isSuperAdmin(): boolean {
     return this.currentRole === 'SUPER_ADMIN';
   }
 
   // ===========================================================
-  // CARGA DE USERS
+  // CARGA DE USERS (PAGINADO + FILTROS)
   // ===========================================================
   loadUsers() {
-  this.loading = true;
+    this.loading = true;
 
-  this.usersSvc.getAllUsersNoPage(this.searchTerm).subscribe({
-    next: (res: User[]) => {
-      this.users = res;
-      this.applyFilter(); // aplica filtros frontend
-      this.loading = false;
-    },
-    error: () => {
-      Swal.fire('Error', '❌ Error al cargar usuarios', 'error');
-      this.loading = false;
-    }
-  });
-}
+    const params: any = {
+      page: this.currentPage,
+      size: this.pageSize,
+    };
 
+    if (this.searchTerm) params.search = this.searchTerm;
+    if (this.filterRole !== 'ALL') params.role = this.filterRole;
+    if (this.filterOrg !== 'ALL') params.orgId = this.filterOrg;
+    if (this.filterCourse !== 'ALL') params.courseId = this.filterCourse;
+
+    this.usersSvc.findAll(params).subscribe({
+      next: (res) => {
+        this.users = res.content;
+        this.totalElements = res.totalElements;
+        this.loading = false;
+      },
+      error: (err) => {
+        console.error(err);
+        Swal.fire('Error', '❌ No se pudieron cargar los usuarios', 'error');
+        this.loading = false;
+      }
+    });
+  }
+
+  // Cuando tocás un chip o buscás
+  applyFilter() {
+    this.currentPage = 0;
+    this.loadUsers();
+  }
+
+  // ===========================================================
+  // PAGINADOR REAL
+  // ===========================================================
+  onPaginatorChange(e: any) {
+    this.pageSize = e.pageSize;
+    this.currentPage = e.pageIndex;
+    this.loadUsers();
+  }
 
   // ===========================================================
   // CURSOS / ORGANIZACIONES
   // ===========================================================
   loadCourses() {
     this.coursesSvc.findAll().subscribe({
-      next: res => this.courses = res,
+      next: (res) => this.courses = res,
       error: () => Swal.fire('Error', '❌ Error al cargar cursos', 'error')
     });
   }
 
   loadOrganizations() {
     this.usersSvc.getOrganizations().subscribe({
-      next: res => this.organizations = res,
+      next: (res) => this.organizations = res,
       error: () => Swal.fire('Error', '❌ Error al cargar organizaciones', 'error')
     });
   }
@@ -130,7 +135,7 @@ export class UsersPage implements OnInit {
   // ===========================================================
   saveUser() {
     if (this.form.invalid) {
-      Swal.fire('Atención', '⚠️ Completa los campos requeridos', 'warning');
+      Swal.fire('Atención', 'Completa los campos requeridos', 'warning');
       return;
     }
 
@@ -159,23 +164,23 @@ export class UsersPage implements OnInit {
         this.editingUserId = null;
         this.loadUsers();
       },
-      error: () => Swal.fire('Error', '❌ Error al guardar usuario', 'error')
+      error: () => Swal.fire('Error', 'Error al guardar usuario', 'error')
     });
   }
 
-  editUser(user: User) {
-    this.editingUserId = user.id!;
-    const ids = this.mapCourseNamesToIds(user.courses || []);
+  editUser(u: User) {
+    this.editingUserId = u.id!;
+    const ids = this.mapCourseNamesToIds(u.courses || []);
 
     this.form.patchValue({
-      username: user.fullName,
-      email: user.email,
-      role: user.role,
-      organizationId: user.organizationId || null,
+      username: u.fullName,
+      email: u.email,
+      role: u.role,
+      organizationId: u.organizationId || null,
       courseIds: ids
     });
 
-    this.selectedCourses[user.id] = ids;
+    this.selectedCourses[u.id] = ids;
   }
 
   cancelEdit() {
@@ -199,7 +204,7 @@ export class UsersPage implements OnInit {
           Swal.fire('Eliminado', 'Usuario eliminado', 'success');
           this.loadUsers();
         },
-        error: () => Swal.fire('Error', '❌ Error al eliminar usuario', 'error')
+        error: () => Swal.fire('Error', 'Error al eliminar usuario', 'error')
       });
     });
   }
@@ -207,18 +212,6 @@ export class UsersPage implements OnInit {
   // ===========================================================
   // ASIGNAR CURSOS
   // ===========================================================
-  saveCourses(userId: number) {
-    const courseIds = this.selectedCourses[userId] || [];
-
-    this.usersSvc.assignCourses(userId, courseIds).subscribe({
-      next: () => {
-        Swal.fire('Éxito', 'Cursos asignados correctamente', 'success');
-        this.loadUsers();
-      },
-      error: () => Swal.fire('Error', '❌ Error al asignar cursos', 'error')
-    });
-  }
-
   onCoursesChange(userId: number, event: any) {
     this.selectedCourses[userId] = event.value;
 
@@ -227,67 +220,24 @@ export class UsersPage implements OnInit {
     }
   }
 
-  // ===========================================================
-  // PAGINADOR
-  // ===========================================================
- /*  onPaginatorChange(event: any) {
-    this.pageSize = event.pageSize;
-    this.currentPage = event.pageIndex;
-    this.loadUsers();
-  } */
+  saveCourses(userId: number) {
+    const ids = this.selectedCourses[userId] || [];
+
+    this.usersSvc.assignCourses(userId, ids).subscribe({
+      next: () => {
+        Swal.fire('Éxito', 'Cursos asignados correctamente', 'success');
+        this.loadUsers();
+      },
+      error: () => Swal.fire('Error', '❌ Error al asignar cursos', 'error')
+    });
+  }
 
   // ===========================================================
   // MAPEO
   // ===========================================================
-  mapCourseNamesToIds(courseNames: string[]): number[] {
+  mapCourseNamesToIds(names: string[]): number[] {
     return this.courses
-      .filter(c => courseNames.includes(c.name))
+      .filter(c => names.includes(c.name))
       .map(c => c.id);
   }
-
-  // ===========================================================
-  // 🔍 FILTROS Y BÚSQUEDA LOCAL (SIN PAGINACIÓN)
-  // ===========================================================
- applyFilter() {
-  const normalize = (str: string = '') =>
-    str.toLowerCase()
-      .normalize('NFD')
-      .replace(/[\u0300-\u036f]/g, '')
-      .trim();
-
-  const term = normalize(this.searchTerm);
-
-  this.filteredUsers = this.users.filter(u => {
-    const name = normalize(u.fullName);
-    const email = normalize(u.email || '');
-    const role = normalize(u.role || '');
-    const org = normalize(u.organizationName || '');
-    const courses = (u.courses || []).map(c => normalize(c));
-
-    const matchesText =
-      name.includes(term) ||
-      email.includes(term) ||
-      role.includes(term) ||
-      org.includes(term) ||
-      courses.some(c => c.includes(term));
-
-    const matchesRole =
-      this.filterRole === 'ALL' || u.role === this.filterRole;
-
-    const matchesOrg =
-      this.filterOrg === 'ALL' || u.organizationId === this.filterOrg;
-
-    const matchesCourse =
-      this.filterCourse === 'ALL' ||
-      (u.courses || []).includes(
-        this.courses.find(c => c.id === this.filterCourse)?.name
-      );
-
-    return matchesText && matchesRole && matchesOrg && matchesCourse;
-  });
-}
-
-
-  trackByUserId = (_: number, u: User) => u.id;
-  
 }
