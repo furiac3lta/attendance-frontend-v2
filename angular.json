@@ -3,7 +3,7 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "attendance-web": {
+    "attendance-frontend-v2": {
       "projectType": "application",
       "schematics": {},
       "root": "",
@@ -63,10 +63,10 @@
           "builder": "@angular/build:dev-server",
           "configurations": {
             "production": {
-              "buildTarget": "attendance-web:build:production"
+              "buildTarget": "attendance-frontend-v2:build:production"
             },
             "development": {
-              "buildTarget": "attendance-web:build:development"
+              "buildTarget": "attendance-frontend-v2:build:development"
             }
           },
           "defaultConfiguration": "development"
