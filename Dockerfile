@@ -12,13 +12,12 @@ RUN npm run build --prod
 ### 2. Serve with NGINX
 FROM nginx:alpine
 
-# Copiar el build de Angular
-COPY --from=builder /app/dist/attendance-frontend-v2/browser /usr/share/nginx/html
+# Copiar el build generado por Angular
+COPY --from=builder /app/dist/attendance-web /usr/share/nginx/html
 
 # Copiar config de NGINX
 COPY nginx.conf /etc/nginx/conf.d/default.conf
 
-# NGINX SIEMPRE usa PUERTO 80
 EXPOSE 80
 
 CMD ["nginx", "-g", "daemon off;"]
