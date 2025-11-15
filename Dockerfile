@@ -12,8 +12,8 @@ RUN npm run build --prod
 ### 2. Serve with NGINX
 FROM nginx:alpine
 
-# Copiar el build generado por Angular
-COPY --from=builder /app/dis/attendance-frontend-v2 /usr/share/nginx/html
+# Copiar el build generado por Angular (carpeta CORRECTA)
+COPY --from=builder /app/dist/attendance-frontend-v2/browser /usr/share/nginx/html
 
 # Copiar config de NGINX
 COPY nginx.conf /etc/nginx/conf.d/default.conf
