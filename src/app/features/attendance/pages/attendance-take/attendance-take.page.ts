@@ -32,6 +32,7 @@ export class AttendanceTakePage implements OnInit {
 
   classId!: number;
   courseId!: number;
+
   className = '';
   courseName = '';
   date = '';
@@ -61,43 +62,48 @@ export class AttendanceTakePage implements OnInit {
       return;
     }
 
-    // ==================================================
-    // 🔹 Cargar detalles de la clase
-    // ==================================================
+    // ==========================================
+    // 🔹 DETALLES DE LA CLASE
+    // ==========================================
     this.classesSvc.getClassDetails(this.classId).subscribe({
       next: (res) => {
         this.className = res.className;
         this.date = res.date;
         this.courseName = res.courseName;
         this.courseId = res.courseId;
-
-        if (!this.courseId) {
-          Swal.fire({
-            title: 'Error',
-            text: 'No se recibió el courseId del backend.',
-            icon: 'error',
-            heightAuto: false
-          });
-        }
       },
       error: () => {
         Swal.fire({
           title: 'Error',
-          text: 'No se pudo cargar detalles de la clase.',
+          text: 'No se pudieron cargar los detalles de la clase.',
           icon: 'error',
           heightAuto: false
         });
       }
     });
 
-    // ==================================================
-    // 🔹 Cargar alumnos y asistencia previa
-    // ==================================================
+    // ==========================================
+    // 🔹 ALUMNOS + ASISTENCIA PREVIA
+    // ==========================================
     this.classesSvc.getStudentsForClass(this.classId).subscribe(students => {
       this.students = students ?? [];
 
       this.attendanceSvc.getSessionAttendance(this.classId).subscribe(marks => {
-        if (marks?.length > 0) {
+
+        // -----------------------------
+        // 🔹 NORMALIZAR SI ES UN OBJETO
+        // -----------------------------
+        if (!Array.isArray(marks)) {
+          marks = Object.entries(marks).map(([id, present]) => ({
+            userId: Number(id),
+            present: Boolean(present)
+          }));
+        }
+
+        // -----------------------------
+        // 🔹 ASIGNAR ASISTENCIA
+        // -----------------------------
+        if (marks.length > 0) {
           this.wasAlreadyTaken = true;
           this.attendanceMarks = marks;
         } else {
@@ -106,6 +112,7 @@ export class AttendanceTakePage implements OnInit {
             present: false
           }));
         }
+
       });
     });
   }
@@ -120,9 +127,6 @@ export class AttendanceTakePage implements OnInit {
     else this.attendanceMarks.push({ userId, present });
   }
 
-  // ==================================================
-  // 🔹 Guardar asistencia
-  // ==================================================
   save() {
     this.attendanceSvc.registerAttendance(this.classId, this.attendanceMarks).subscribe({
       next: () => {
@@ -144,9 +148,6 @@ export class AttendanceTakePage implements OnInit {
     });
   }
 
-  // ==================================================
-  // 🔹 Cancelar
-  // ==================================================
   cancel(): void {
     this.router.navigate(['/courses']);
   }

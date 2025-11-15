@@ -23,35 +23,33 @@ export class ClassesService {
 
   constructor(private http: HttpClient) {}
 
-  /** ✅ Crear clase (formato correcto) */
-createClass(data: { name: string; date: string; courseId: number }): Observable<any> {
-  return this.http.post<any>(this.apiUrl, data);
-}
-
+  /** ✅ Crear clase */
+  createClass(data: { name: string; date: string; courseId: number }): Observable<any> {
+    return this.http.post<any>(this.apiUrl, data);
+  }
 
   /** ✅ Clases por curso */
   getByCourseId(courseId: number): Observable<ClassSessionDto[]> {
     return this.http.get<ClassSessionDto[]>(`${this.apiUrl}/course/${courseId}`);
   }
 
-  /** ✅ Clase por ID */
+  /** ✅ Obtener clase por ID */
   getById(id: number): Observable<any> {
     return this.http.get<any>(`${this.apiUrl}/${id}`);
   }
 
-  /** ✅ Detalles */
+  /** ✅ Obtener detalles */
   getDetails(id: number): Observable<any> {
     return this.http.get<any>(`${this.apiUrl}/${id}/details`);
   }
 
-  /** ✅ Alumnos */
+  /** ✅ Lista alumnos */
   getStudentsForClass(classId: number): Observable<StudentDto[]> {
     return this.http.get<StudentDto[]>(`${this.apiUrl}/${classId}/students`);
   }
-  
-getClassDetails(classId: number) {
-  return this.http.get<any>(`${environment.API_URL}/classes/${classId}/details`);
-}
 
-
+  /** 🔥 Redundante pero permitido (tu app lo usa) */
+  getClassDetails(classId: number) {
+    return this.http.get<any>(`${this.apiUrl}/${classId}/details`);
+  }
 }
