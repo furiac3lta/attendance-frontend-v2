@@ -466,3 +466,30 @@ button.mat-icon-button {
     padding-bottom: 0 !important;
   }
 }
+/* ============================
+   FORZAR ESTILO EN MOBILE
+   ============================ */
+
+/* Para pantallas chicas (mobile) seguir usando el botón rosa */
+@media (max-width: 480px) {
+
+  .mat-mdc-raised-button,
+  .mat-raised-button,
+  button[mat-raised-button] {
+    background-color: #ff7ebf !important;  /* Rosa */
+    color: white !important;
+  }
+
+  .mat-mdc-button-base.mat-mdc-button-disabled,
+  .mat-mdc-button-disabled {
+    opacity: 0.7;
+  }
+
+  /* Botones pequeños (como "Editar asistencia") */
+  .mat-mdc-button,
+  .mat-button,
+  button.mat-button {
+    color: #ff7ebf !important;
+    font-weight: 600;
+  }
+}
