@@ -48,7 +48,8 @@ export class UsersService {
   // ✅ Paginado
  findAll(page: number, size: number, search: string = '') {
   return this.http.get<PageResponse<User>>(
-    `${this.base}?page=${page}&size=${size}&search=${search}`
+    `${this.base}?page=${page}&size=${size}&search=${search}`,
+        this.authHeaders()
   );
 }
 
@@ -81,8 +82,6 @@ getOrganizations(): Observable<any[]> {
   getUsersByRole(role: string) {
   return this.http.get<any[]>(`${this.base}/role/${role}`);
 }
-getAllUsersNoPage(search: string = '') {
-  return this.http.get<User[]>(`${this.base}/all`, { params: { search } });
-}
+
 
 }
