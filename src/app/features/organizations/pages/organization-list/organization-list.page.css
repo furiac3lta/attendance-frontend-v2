@@ -1,0 +1,150 @@
+/* ===================================== */
+/* 🧩 CONTENEDOR PRINCIPAL (mat-card)     */
+/* ===================================== */
+.page-card {
+  padding: 3rem;
+  margin-top: 1rem;
+  position: relative;
+  overflow: visible !important;
+}
+
+/* ===================================== */
+/* 📊 SECCIÓN DE TABLA                   */
+/* ===================================== */
+.table-section {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  margin-top: 1rem;
+}
+
+.table-scroll-wrapper {
+  width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: thin;
+}
+
+.table-modern {
+  width: 100%;
+  min-width: 750px;
+  border-collapse: collapse;
+}
+
+/* ===================================== */
+/* ELEMENTOS EXTRA                       */
+/* ===================================== */
+
+.actions {
+  margin-bottom: 1.5rem;
+}
+
+.actions button {
+  font-weight: 500;
+}
+
+.admin-select {
+  width: 180px;
+}
+
+/* ===================================== */
+/* MOBILE                                */
+/* ===================================== */
+@media (max-width: 768px) {
+
+  .page-card {
+    padding: 1.4rem;
+  }
+
+  .table-scroll-wrapper {
+    max-width: 100%;
+    overflow-x: auto;
+    padding-bottom: 10px;
+  }
+
+  .table-modern {
+    min-width: 600px;
+  }
+
+  .actions {
+    text-align: center;
+  }
+
+  .actions button {
+    width: 100%;
+  }
+}
+
+/* ===================================== */
+/* INLINE ACCIONES (iconos + select)     */
+/* ===================================== */
+.actions-inline {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+/* ===================================== */
+/* ICONOS STYLE – PALETA DE LA APP       */
+/* ===================================== */
+
+/* EDITAR – ROSA */
+.icon-edit {
+  color: #FF4DB2 !important;
+  transition: 0.2s ease;
+}
+
+.icon-edit:hover {
+  color: #d9368e !important;
+  transform: scale(1.15);
+}
+
+/* ELIMINAR – ROJO */
+.icon-delete {
+  color: #ff4e4e !important;
+  transition: 0.2s ease;
+}
+
+.icon-delete:hover {
+  color: #a23de5 !important;
+  transform: scale(1.15);
+}
+
+/* GUARDAR – VIOLETA/ROSA */
+.icon-save {
+  color: #7c3aed !important;
+  transition: 0.2s ease;
+}
+
+.icon-save:hover {
+  color: #5b21b6 !important;
+  transform: scale(1.15);
+}
+
+/* ===================================== */
+/* AJUSTES GENERALES                      */
+/* ===================================== */
+
+.mat-icon {
+  font-size: 22px !important;
+}
+
+button.mat-icon-button {
+  padding: 4px;
+  min-width: 32px;
+  min-height: 32px;
+}
+
+table td,
+table th {
+  vertical-align: middle !important;
+}
+
+.text-muted {
+  color: #777;
+}
+
+.mat-row:hover {
+  background-color: #f5f5f5;
+  transition: 0.2s;
+}

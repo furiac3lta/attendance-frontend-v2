@@ -1,0 +1,88 @@
+/* ============================= */
+/*   CONTENEDOR GENERAL          */
+/* ============================= */
+.attendance-container {
+  max-width: 850px;
+  margin: 0 auto;
+  padding: 20px;
+  overflow: visible !important;   /* 🔥 Permite que el select se despliegue */
+  position: relative;
+}
+
+/* ============================= */
+/*   FILTROS                     */
+/* ============================= */
+.filters {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+  margin-bottom: 1rem;
+}
+
+.filter-item {
+  flex: 1 1 180px;
+  min-width: 160px;
+}
+
+/* ============================= */
+/*   BOTONES                     */
+/* ============================= */
+.center-actions {
+  text-align: center;
+  margin: 15px 0;
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+}
+
+.report-btn {
+  width: 100%;
+  margin: 10px 0;
+}
+
+/* ============================= */
+/*   LISTA DE CLASES             */
+/* ============================= */
+.class-list {
+  margin-top: 20px;
+}
+
+.class-item {
+  display: flex;
+  align-items: center;
+}
+
+.class-text {
+  font-size: 15px;
+}
+
+.spacer {
+  flex: 1;
+}
+
+.no-classes {
+  text-align: center;
+  padding: 20px;
+  color: #aaa;
+}
+
+/* ============================= */
+/*   TEXTO                       */
+/* ============================= */
+.date-label {
+  margin-bottom: 10px;
+  opacity: 0.8;
+}
+
+/* ============================= */
+/*   MOBILE                      */
+/* ============================= */
+@media (max-width: 768px) {
+  .filters {
+    flex-direction: column;
+  }
+
+  .filter-item {
+    width: 100%;
+  }
+}

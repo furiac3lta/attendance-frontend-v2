@@ -1,0 +1,95 @@
+<mat-card class="page-card">
+
+  <h2 class="title">Reporte mensual - {{ courseName }}</h2>
+
+  <!-- 🔽 Filtros con CHIPS -->
+  <div class="chips-container">
+
+    <!-- 🔵 Meses -->
+    <div class="chip-section">
+      <p class="chip-title">Mes</p>
+
+      <mat-chip-listbox class="chip-list" aria-label="Meses">
+        <mat-chip-option
+          *ngFor="let m of months"
+          [selected]="month === m.value"
+          (click)="setMonth(m.value)"
+        >
+          {{ m.short }}
+        </mat-chip-option>
+      </mat-chip-listbox>
+    </div>
+
+    <!-- 🔵 Años -->
+    <div class="chip-section">
+      <p class="chip-title">Año</p>
+
+      <mat-chip-listbox class="chip-list" aria-label="Años">
+        <mat-chip-option
+          *ngFor="let y of years"
+          [selected]="year === y"
+          (click)="setYear(y)"
+        >
+          {{ y }}
+        </mat-chip-option>
+      </mat-chip-listbox>
+    </div>
+
+  </div>
+  <div class="report-section">
+
+    <div class="table-scroll-wrapper">
+       <!-- 📊 TABLA -->
+  <div class="table-section">
+    <h3 class="subtitle">
+      {{ getMonthLabel(month) }} {{ year }}
+    </h3>
+
+    <div class="table-scroll-wrapper">
+      <table mat-table [dataSource]="stats" class="table-modern responsive-table">
+
+        <!-- Alumno -->
+        <ng-container matColumnDef="studentName">
+          <th mat-header-cell *matHeaderCellDef> Alumno </th>
+          <td mat-cell *matCellDef="let s"> {{ s.studentName }} </td>
+        </ng-container>
+
+        <!-- Asistencias -->
+        <ng-container matColumnDef="present">
+          <th mat-header-cell *matHeaderCellDef> Asistencias </th>
+          <td mat-cell *matCellDef="let s"> {{ s.present }} </td>
+        </ng-container>
+
+        <!-- Faltas -->
+        <ng-container matColumnDef="absent">
+          <th mat-header-cell *matHeaderCellDef> Faltas </th>
+          <td mat-cell *matCellDef="let s">
+            {{ s.absent }}
+          </td>
+        </ng-container>
+
+        <!-- Total -->
+        <ng-container matColumnDef="total">
+          <th mat-header-cell *matHeaderCellDef> Total </th>
+          <td mat-cell *matCellDef="let s"> {{ s.total }} </td>
+        </ng-container>
+
+        <!-- Porcentaje -->
+        <ng-container matColumnDef="percent">
+          <th mat-header-cell *matHeaderCellDef> % </th>
+          <td mat-cell *matCellDef="let s">
+            <span [style.color]="getColor(s.percent)">
+              {{ s.percent | number:'1.0-1' }}%
+            </span>
+          </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+      </table>
+    </div>
+  </div>
+    </div>
+  </div>
+
+</mat-card>

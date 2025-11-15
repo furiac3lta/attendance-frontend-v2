@@ -1,0 +1,250 @@
+/* ======================================================= */
+/* 📌 CONTENEDOR PRINCIPAL */
+/* ======================================================= */
+.users-page {
+  max-width: 1100px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.main-title {
+  text-align: center;
+  font-size: 1.9rem;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+  color: var(--text-strong);
+}
+
+/* ======================================================= */
+/* 📦 SECCIONES (Buscador / Alta / Tabla) */
+/* ======================================================= */
+.section-card {
+  background: var(--card-bg);
+  padding: 1.4rem 1.8rem;            /* 🔥 Mucho más compacto */
+  border-radius: 16px;
+  box-shadow:
+    4px 4px 14px rgba(0,0,0,0.25),
+    -4px -4px 14px rgba(255,255,255,0.05);
+  transition: 0.25s ease;
+}
+
+.section-title {
+  margin: 0 0 1rem 0;
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: var(--text-strong);
+}
+
+/* ======================================================= */
+/* 🔍 FILTROS */
+/* ======================================================= */
+.filters-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+}
+
+.filter-item {
+  flex: 1 1 220px;
+  min-width: 200px;
+}
+
+/* ======================================================= */
+/* 🟣 FORMULARIO */
+/* ======================================================= */
+.form-section {
+  display: flex;
+  justify-content: center;
+}
+
+.form-grid {
+  width: 100%;
+  max-width: 460px;  /* 🔥 Mismo ancho visual que mobile */
+  display: grid;
+  gap: 12px;
+}
+
+.actions {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+/* ======================================================= */
+/* 📋 TABLA */
+/* ======================================================= */
+.table-section {
+  width: 100%;
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.section-table .table-section {
+  margin-top: 0.4rem;
+}
+
+.no-courses {
+  color: #999;
+  font-size: 12px;
+  font-style: italic;
+}
+
+.chip-wrapper {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.course-chip {
+  font-size: 12px;
+  padding: 4px 10px;
+  border-radius: 12px;
+  background-color: #e0e0e0;
+  white-space: nowrap;
+}
+
+.course-select {
+  width: 180px;
+}
+
+mat-paginator {
+  margin-top: 15px;
+  display: flex;
+  justify-content: center;
+}
+
+/* ======================================================= */
+/* ✨ GLOW PASTEL INPUTS */
+/* ======================================================= */
+.mdc-text-field--focused .mdc-notched-outline__leading,
+.mdc-text-field--focused .mdc-notched-outline__trailing,
+.mdc-text-field--focused .mdc-notched-outline__notch {
+  border-color: var(--accent-hover) !important;
+  box-shadow: 0 0 7px var(--accent-hover);
+}
+
+.dark-mode .mdc-text-field--focused .mdc-notched-outline__leading,
+.dark-mode .mdc-text-field--focused .mdc-notched-outline__trailing,
+.dark-mode .mdc-text-field--focused .mdc-notched-outline__notch {
+  border-color: #ffb3d9 !important;
+  box-shadow: 0 0 10px #ffb3d9;
+}
+
+/* ======================================================= */
+/* 📱 MOBILE OPTIMIZADO */
+/* ======================================================= */
+@media (max-width: 768px) {
+
+  .section-card {
+    padding: 1rem 1rem;       /* 🔥 Mucho más chico */
+  }
+
+  .main-title {
+    margin-top: 0.3rem;
+    font-size: 1.7rem;
+  }
+
+  .filters-container {
+    flex-direction: column;
+    width: 100%;
+  }
+
+  .filter-item {
+    width: 100%;
+  }
+
+  .form-grid {
+    max-width: 100%;
+  }
+
+  .table-section {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .table-modern {
+    min-width: 460px;  /* 🔥 mismo ancho visual que filtros y formulario */
+  }
+}
+/* --------------------------------------- */
+/* 📱 MOBILE FIX PARA INPUTS GIGANTES */
+/* --------------------------------------- */
+
+@media (max-width: 768px) {
+
+  /* Limitar el ancho del card */
+  .section-card {
+    max-width: 380px;
+    margin: 0 auto;
+    padding: 0.8rem 1rem;
+  }
+
+  /* Achicar inputs Angular Material */
+  .section-card .mat-mdc-form-field {
+    --mdc-outlined-text-field-density: -4;
+    --mdc-shape-small: 6px;
+  }
+
+  /* Separación mínima entre campos */
+  .filters-container .mat-form-field,
+  .form-grid .mat-form-field {
+    margin-bottom: 6px !important;
+  }
+}
+/* ======================================================= */
+/* 🌞 LIGHT MODE – Chips pastel                            */
+/* ======================================================= */
+
+::ng-deep mat-chip-option .mdc-evolution-chip__cell {
+  background: rgba(230,230,230,0.65) !important;
+  border-radius: 14px !important;
+  border: 1px solid rgba(0,0,0,0.10) !important;
+  padding: 2px px !important;
+  color: var(--text-strong) !important;
+  font-size: 0.82rem !important;
+  font-weight: 500;
+  transition: 0.25s ease;
+  
+}
+
+::ng-deep mat-chip-option:hover .mdc-evolution-chip__cell {
+  background: rgba(200,200,200,0.55) !important;
+}
+
+/* SELECCIONADO */
+::ng-deep mat-chip-option.mat-mdc-chip-selected .mdc-evolution-chip__cell {
+  background: var(--accent-strong) !important; /* rosa pastel */
+  border-color: var(--accent-hover) !important;
+  color: #000 !important;
+  box-shadow: 0 0 8px rgba(255,175,204,0.45);
+}
+
+/* icon/text inside chip */
+::ng-deep mat-chip-option .mdc-evolution-chip__action {
+  color: inherit !important;
+}
+
+
+/* ======================================================= */
+/* 🌙 DARK MODE – Chips pastel                             */
+/* ======================================================= */
+
+::ng-deep .dark-mode mat-chip-option .mdc-evolution-chip__cell {
+  background: rgba(255,255,255,0.12) !important;
+  border-color: rgba(255,255,255,0.25) !important;
+  color: var(--text) !important;
+}
+
+::ng-deep .dark-mode mat-chip-option:hover .mdc-evolution-chip__cell {
+  background: rgba(255,255,255,0.20) !important;
+}
+
+/* SELECCIONADO (dark) */
+::ng-deep .dark-mode mat-chip-option.mat-mdc-chip-selected .mdc-evolution-chip__cell {
+  background: var(--accent-hover) !important; /* celeste pastel */
+  border-color: var(--accent-strong) !important;
+  color: #000 !important;
+  box-shadow: 0 0 10px rgba(189,224,254,0.65);
+}

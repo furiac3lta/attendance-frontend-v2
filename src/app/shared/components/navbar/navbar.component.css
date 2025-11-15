@@ -1,0 +1,166 @@
+/* ==== BARRA PRINCIPAL ==== */
+.toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  background: var(--card-bg);
+  border-bottom: 1px solid var(--border);
+  box-shadow: var(--shadow);
+  position: sticky;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 2000;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+
+/* ==== LINKS DESKTOP ==== */
+.nav-links {
+  display: flex;
+  gap: 8px;
+}
+
+.nav-links button {
+  color: var(--text-strong);
+  font-weight: 500;
+  transition: color 0.2s ease;
+}
+
+.nav-links button:hover {
+  color: var(--accent-hover);
+}
+
+/* ==== USUARIO ==== */
+.user-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.user-info {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-weight: 500;
+  color: var(--text-strong);
+}
+
+.user-info mat-icon {
+  font-size: 22px;
+  height: 22px;
+  width: 22px;
+}
+
+/* ==== MOBILE ==== */
+.mobile-menu-btn {
+  display: none;
+}
+
+/* ======= VERSIÓN RESPONSIVE ======= */
+@media (max-width: 768px) {
+  /* Toolbar */
+  .toolbar {
+    padding: 0.5rem 0.8rem;
+  }
+
+  /* Oculta los links desktop */
+  .nav-links {
+    display: none;
+  }
+
+  /* Muestra el botón hamburguesa */
+  .mobile-menu-btn {
+    display: inline-flex;
+  }
+
+  /* ====== MENÚ MOBILE ====== */
+  .mobile-menu {
+    display: flex;
+    flex-direction: column;
+    background: var(--card-bg);
+    border-bottom: 1px solid var(--border);
+    box-shadow: var(--shadow);
+    overflow: hidden;
+    max-height: 0;
+    transition: max-height 0.35s ease;
+  }
+
+  .mobile-menu.open {
+    max-height: 320px; /* se expande suavemente */
+  }
+
+  .mobile-menu button {
+    text-align: left;
+    padding: 14px 20px;
+    font-size: 15px;
+    color: var(--text-strong);
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .mobile-menu button mat-icon {
+    font-size: 20px;
+  }
+
+  .mobile-menu button:hover {
+    background: var(--accent-hover);
+    color: white;
+  }
+}
+/* ===== Fix: ocultar menú móvil en desktop ===== */
+@media (min-width: 769px) {
+  .mobile-menu {
+    display: none !important;
+  }
+}
+
+@media (max-width: 768px) {
+  
+  /* Toolbar compacta */
+  .toolbar {
+    flex-wrap: wrap;
+    padding: 0.25rem 0.5rem;
+    gap: 4px;
+  }
+
+  /* Botón hamburguesa más pequeño */
+  .mobile-menu-btn {
+    width: 40px;
+    height: 40px;
+  }
+
+  .mobile-menu-btn mat-icon {
+    font-size: 22px;
+  }
+
+  /* Botón Home más chico */
+  .toolbar button[mat-button] {
+    min-width: unset;
+    padding: 0 8px;
+    font-size: 14px;
+  }
+
+  /* Nombre de usuario acotado */
+  .user-info {
+    font-size: 13px;
+    max-width: 100px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  /* El menú desplegable ocupa todo el ancho */
+  .mobile-menu {
+    width: 100%;
+    border-radius: 0;
+    box-sizing: border-box;
+  }
+
+  /* Evita que se desborde horizontalmente */
+  body, html {
+    overflow-x: hidden;
+  }
+}

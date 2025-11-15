@@ -1,0 +1,23 @@
+.attendance-view-card {
+  max-width: 650px;
+  margin: 2rem auto;
+  padding: 1.5rem;
+}
+
+table {
+  width: 100%;
+  margin-top: 1rem;
+}
+
+.present {
+  color: #70d6ff;
+}
+
+.absent {
+  color: #ff70a6;
+}
+
+.actions {
+  margin-top: 1.5rem;
+  text-align: right;
+}

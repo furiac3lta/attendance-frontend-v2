@@ -1,0 +1,134 @@
+/* Contenedor general de chips */
+.chips-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+  margin-bottom: 20px;
+}
+
+.chip-section {
+  flex: 1;
+  min-width: 140px;
+}
+
+.chip-title {
+  font-size: 14px;
+  margin-bottom: 6px;
+  font-weight: 600;
+}
+
+.chip-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+
+/* ======================================================= */
+/* 🌞 LIGHT MODE – Chips pastel                            */
+/* ======================================================= */
+
+::ng-deep mat-chip-option .mdc-evolution-chip__cell {
+  background: rgba(230,230,230,0.65) !important;
+  border-radius: 14px !important;
+  border: 1px solid rgba(0,0,0,0.10) !important;
+  padding: 2px px !important;
+  color: var(--text-strong) !important;
+  font-size: 0.82rem !important;
+  font-weight: 500;
+  transition: 0.25s ease;
+  
+}
+
+::ng-deep mat-chip-option:hover .mdc-evolution-chip__cell {
+  background: rgba(200,200,200,0.55) !important;
+}
+
+/* SELECCIONADO */
+::ng-deep mat-chip-option.mat-mdc-chip-selected .mdc-evolution-chip__cell {
+  background: var(--accent-strong) !important; /* rosa pastel */
+  border-color: var(--accent-hover) !important;
+  color: #000 !important;
+  box-shadow: 0 0 8px rgba(255,175,204,0.45);
+}
+
+/* icon/text inside chip */
+::ng-deep mat-chip-option .mdc-evolution-chip__action {
+  color: inherit !important;
+}
+
+
+/* ======================================================= */
+/* 🌙 DARK MODE – Chips pastel                             */
+/* ======================================================= */
+
+::ng-deep .dark-mode mat-chip-option .mdc-evolution-chip__cell {
+  background: rgba(255,255,255,0.12) !important;
+  border-color: rgba(255,255,255,0.25) !important;
+  color: var(--text) !important;
+}
+
+::ng-deep .dark-mode mat-chip-option:hover .mdc-evolution-chip__cell {
+  background: rgba(255,255,255,0.20) !important;
+}
+
+/* SELECCIONADO (dark) */
+::ng-deep .dark-mode mat-chip-option.mat-mdc-chip-selected .mdc-evolution-chip__cell {
+  background: var(--accent-hover) !important; /* celeste pastel */
+  border-color: var(--accent-strong) !important;
+  color: #000 !important;
+  box-shadow: 0 0 10px rgba(189,224,254,0.65);
+}
+/* Contenedor general del card */
+.page-card {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+/* Sección de filtros */
+.filters {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-bottom: 20px;
+}
+
+/* TABLE WRAPPER — hace que no se desborde */
+.table-scroll-wrapper {
+  width: 100%;
+  overflow-x: auto;
+  overflow-y: hidden;
+  border-radius: 10px;
+  margin-top: 10px;
+}
+
+/* La tabla debe ocupar MINIMO el ancho total */
+table {
+  width: 100%;
+  min-width: 600px; /* evita que se rompa en mobile */
+  border-collapse: collapse;
+}
+
+/* Ajustes de celdas */
+.table-modern th,
+.table-modern td {
+  padding: 12px 8px;
+  text-align: left;
+  white-space: nowrap;
+}
+
+/* Para que se vea bien en modo oscuro */
+.table-modern {
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+/* RESPONSIVE – más espacio en pantallas grandes */
+@media (min-width: 600px) {
+  .table-modern th,
+  .table-modern td {
+    padding: 14px 12px;
+  }
+}

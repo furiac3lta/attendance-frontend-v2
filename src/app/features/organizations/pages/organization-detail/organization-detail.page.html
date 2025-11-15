@@ -1,0 +1,64 @@
+<mat-card class="org-detail-wrapper" *ngIf="organization">
+
+  <h2 class="title">{{ organization.name }}</h2>
+  <mat-divider></mat-divider>
+
+  <!-- =======================
+        📌 TABLA DE INFORMACIÓN
+       ======================= -->
+  <table mat-table [dataSource]="orgBasicData" class="mat-elevation-z2 info-table">
+
+    <!-- Label -->
+    <ng-container matColumnDef="label">
+      <th mat-header-cell *matHeaderCellDef> Información </th>
+      <td mat-cell *matCellDef="let row">{{ row.label }}</td>
+    </ng-container>
+
+    <!-- Valor -->
+    <ng-container matColumnDef="value">
+      <th mat-header-cell *matHeaderCellDef> Detalle </th>
+      <td mat-cell *matCellDef="let row">{{ row.value }}</td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="['label', 'value']"></tr>
+    <tr mat-row *matRowDef="let row; columns: ['label', 'value']"></tr>
+  </table>
+
+  <!-- BOTÓN DE ACCIÓN -->
+  <div class="actions">
+    <button mat-raised-button color="primary">
+      <mat-icon>person_add</mat-icon> Asignar admin
+    </button>
+  </div>
+
+  <h3 class="subtitle">👥 Miembros</h3>
+
+  <!-- =======================
+        📌 TABLA DE USUARIOS
+       ======================= -->
+  <table mat-table [dataSource]="organization.users || []" class="mat-elevation-z2 members-table">
+
+    <!-- Nombre -->
+    <ng-container matColumnDef="name">
+      <th mat-header-cell *matHeaderCellDef> Nombre </th>
+      <td mat-cell *matCellDef="let u">{{ u.fullName }}</td>
+    </ng-container>
+
+    <!-- Rol -->
+    <ng-container matColumnDef="role">
+      <th mat-header-cell *matHeaderCellDef> Rol </th>
+      <td mat-cell *matCellDef="let u">
+        <span class="role-chip"
+              [class.admin]="u.role === 'ADMIN'"
+              [class.instructor]="u.role === 'INSTRUCTOR'"
+              [class.user]="u.role === 'USER'">
+          {{ u.role }}
+        </span>
+      </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="['name', 'role']"></tr>
+    <tr mat-row *matRowDef="let row; columns: ['name','role']"></tr>
+  </table>
+
+</mat-card>

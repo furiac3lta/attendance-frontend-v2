@@ -1,0 +1,27 @@
+.course-card {
+  max-width: 600px;
+  margin: 40px auto;
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.full-width {
+  width: 100%;
+}
+
+button {
+  margin-top: 10px;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.mat-mdc-outlined-button {
+  color: rgb(151, 142, 142)!important;
+}
+.mat-mdc-outlined-button:hover {
+  color: #a2d2ff!important;
+}

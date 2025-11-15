@@ -1,0 +1,39 @@
+<div class="login-wrapper">
+
+  <mat-card class="login-card">
+
+    <h2 class="title">Login</h2>
+
+    <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Email</mat-label>
+        <input matInput type="email" formControlName="email" autocomplete="email">
+        <mat-icon matSuffix>mail</mat-icon>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Contraseña</mat-label>
+        <input matInput type="password" formControlName="password" autocomplete="current-password">
+        <mat-icon matSuffix>lock</mat-icon>
+      </mat-form-field>
+
+      <button mat-raised-button color="primary" class="login-button" type="submit" [disabled]="loginForm.invalid">
+        <mat-icon>login</mat-icon>
+        Entrar
+      </button>
+
+    </form>
+
+  </mat-card>
+
+
+</div>
+<!-- 🌟 Footer de créditos (fuera del wrapper) -->
+<footer class="login-footer">
+  <p>
+    Sistema de asistencias desarrollado por <strong>MarceDev</strong><br>
+    <a href="https://instagram.com/marcelocolum" target="_blank">@marcelocolum</a><br>
+    © 2025 Todos los derechos reservados
+  </p>
+</footer>

@@ -1,0 +1,49 @@
+<mat-card class="attendance-container">
+
+  <h2>Lista de clases creadas - {{ selectedCourseName }}</h2>
+  <p class="date-label">{{ currentDate }}</p>
+
+ 
+  <!-- BOTONES -->
+  <div class="center-actions">
+    <button mat-raised-button color="primary" (click)="createClass()">
+      Crear nueva clase
+    </button>
+  </div>
+
+  <button mat-stroked-button color="accent" class="report-btn" (click)="goToReport()">
+    Ver reporte mensual
+  </button>
+
+  <mat-divider></mat-divider>
+
+  <!-- LISTA DE CLASES -->
+  <div *ngIf="classes.length === 0" class="no-classes">
+    ⚠️ Este curso no tiene clases creadas todavía.
+  </div>
+
+  <mat-list *ngIf="classes.length > 0" class="class-list">
+    <mat-list-item *ngFor="let c of classes" class="class-item">
+
+      <span class="class-text">
+        {{ c.name }} - {{ c.date | date:'dd/MM/yyyy' }}
+      </span>
+
+      <span class="spacer"></span>
+
+      <button mat-raised-button color="primary" *ngIf="!c.attendanceTaken"
+              (click)="goToAttendance(c.id)">
+        Tomar asistencia
+      </button>
+
+      <button mat-raised-button color="warn" *ngIf="c.attendanceTaken"
+              (click)="goToAttendance(c.id)">
+        Editar asistencia
+      </button>
+
+    </mat-list-item>
+  </mat-list>
+
+  <p *ngIf="message" class="message">{{ message }}</p>
+
+</mat-card>

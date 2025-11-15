@@ -1,0 +1,45 @@
+<div class="org-form-wrapper">
+
+  <mat-card class="org-form-card">
+
+    <h2 class="title">Nueva Organización</h2>
+
+    <form [formGroup]="orgForm" (ngSubmit)="onSubmit()" class="form-grid">
+
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Nombre *</mat-label>
+        <input matInput formControlName="name" placeholder="Irmaos Club Puerto Rico">
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Tipo *</mat-label>
+        <input matInput formControlName="type" placeholder="GIMNASIO / ESCUELA">
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Dirección</mat-label>
+        <input matInput formControlName="address" placeholder="Uruguay 162">
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Teléfono</mat-label>
+        <input matInput formControlName="phone" placeholder="2966-663880">
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Logo (URL)</mat-label>
+        <input matInput formControlName="logoUrl" placeholder="https://...">
+      </mat-form-field>
+
+      <button mat-raised-button color="primary" class="save-btn" type="submit" [disabled]="orgForm.invalid">
+        Guardar
+      </button>
+<button mat-raised-button  color="primary"  (click)="cancel()">
+        <mat-icon>cancel</mat-icon> Cancelar
+      </button>
+    </form>
+
+    <p *ngIf="message" class="message">{{ message }}</p>
+
+  </mat-card>
+</div>

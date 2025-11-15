@@ -1,0 +1,14 @@
+<h2>Subjects</h2>
+
+<form [formGroup]="form" (ngSubmit)="create()">
+  <input placeholder="Name" formControlName="name" />
+  <input placeholder="Code" formControlName="code" />
+  <button type="submit">Add</button>
+</form>
+
+<ul>
+  <li *ngFor="let s of subjects">
+    {{ s.code }} - {{ s.name }}
+    <button (click)="delete(s.id)">Delete</button>
+  </li>
+</ul>

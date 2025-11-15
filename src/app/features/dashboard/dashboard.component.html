@@ -1,0 +1,47 @@
+<mat-card class="dashboard-card">
+  <h2>Bienvenido</h2>
+  <p class="role">Rol actual: <strong>{{ role }}</strong></p>
+
+  <div class="grid">
+
+    <!-- SUPER ADMIN -->
+    <button mat-raised-button color="primary" *ngIf="role === 'SUPER_ADMIN'"
+            (click)="goToSection('/organizations')">
+      <mat-icon>business</mat-icon> Organizaciones
+    </button>
+
+    <button mat-raised-button color="accent" *ngIf="role === 'SUPER_ADMIN'"
+            (click)="goToSection('/users')">
+      <mat-icon>groups</mat-icon> Usuarios
+    </button>
+
+    <!-- ADMIN -->
+    <button mat-raised-button color="primary" *ngIf="role === 'ADMIN'"
+            (click)="goToSection('/courses')">
+      <mat-icon>menu_book</mat-icon> Cursos
+    </button>
+
+    <button mat-raised-button color="accent" *ngIf="role === 'ADMIN'"
+            (click)="goToSection('/users')">
+      <mat-icon>school</mat-icon> Alumnos e Instructores
+    </button>
+
+    <!-- INSTRUCTOR -->
+    <button mat-raised-button color="primary" *ngIf="role === 'INSTRUCTOR'"
+            (click)="goToSection('/classes')">
+      <mat-icon>class</mat-icon> Mis clases
+    </button>
+
+    <button mat-raised-button color="accent" *ngIf="role === 'INSTRUCTOR'"
+            (click)="goToSection('/attendance')">
+      <mat-icon>check_circle</mat-icon> Tomar asistencia
+    </button>
+
+    <!-- USER -->
+    <button mat-raised-button color="primary" *ngIf="role === 'USER'"
+            (click)="goToSection('/attendance')">
+      <mat-icon>visibility</mat-icon> Ver mi asistencia
+    </button>
+
+  </div>
+</mat-card>

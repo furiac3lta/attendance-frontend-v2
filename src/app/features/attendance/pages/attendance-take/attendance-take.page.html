@@ -1,0 +1,54 @@
+<mat-card class="take-card">
+
+  <h2>Tomar asistencia</h2>
+
+  <mat-divider></mat-divider>
+
+  <div class="class-info">
+    <p><strong>Clase:</strong> {{ className }}</p>
+    <p><strong>Curso:</strong> {{ courseName }}</p>
+    <p><strong>Fecha:</strong> {{ date | date:'dd/MM/yyyy' }}</p>
+  </div>
+
+  <mat-divider></mat-divider>
+
+  <div *ngIf="students.length === 0" class="loading">
+    Cargando alumnos…
+  </div>
+
+  <table mat-table [dataSource]="students" class="table-modern responsive-table" *ngIf="students.length > 0">
+
+    <!-- Alumno -->
+    <ng-container matColumnDef="name">
+      <th mat-header-cell *matHeaderCellDef> Alumno </th>
+      <td mat-cell *matCellDef="let s"> {{ s.fullName }} </td>
+    </ng-container>
+
+    <!-- Check -->
+    <ng-container matColumnDef="present">
+      <th mat-header-cell *matHeaderCellDef style="text-align:center;"> Presente </th>
+      <td mat-cell *matCellDef="let s" style="text-align:center;">
+        <mat-checkbox
+          color="primary"
+          [checked]="getMark(s.id)"
+          (change)="toggleAttendance(s.id, $event.checked)">
+        </mat-checkbox>
+      </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="['name','present']"></tr>
+    <tr mat-row *matRowDef="let row; columns: ['name','present'];"></tr>
+  </table>
+
+  <mat-divider></mat-divider>
+
+  <div class="button-container">
+    <button mat-raised-button color="primary" class="mbtn" (click)="save()">
+     <mat-icon>save</mat-icon>  Guardar
+    </button>
+    <button mat-raised-button  color="primary"  (click)="cancel()">
+        <mat-icon>cancel</mat-icon> Cancelar
+      </button>
+  </div>
+
+</mat-card>

@@ -1,0 +1,45 @@
+.org-form-wrapper {
+  display: flex;
+  justify-content: center;
+  padding: 32px;
+}
+
+.org-form-card {
+  width: 100%;
+  max-width: 450px;
+  padding: 26px;
+  border-radius: 20px;
+}
+
+.title {
+  text-align: center;
+  margin-bottom: 20px;
+  font-weight: 600;
+  color: var(--text-strong);
+}
+
+/* Grid del formulario */
+.form-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+/* Botón guardar */
+.save-btn {
+  margin-top: 8px;
+  width: 100%;
+  font-weight: 600;
+  border-radius: 12px !important;
+}
+
+/* Mensaje */
+.message {
+  margin-top: 14px;
+  text-align: center;
+  color: var(--accent);
+  font-weight: 500;
+}
+.edit-btn {
+  color: #70d6ff;
+}
