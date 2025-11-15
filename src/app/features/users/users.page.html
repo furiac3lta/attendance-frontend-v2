@@ -257,7 +257,7 @@
         </mat-paginator> -->
 <div class="custom-paginator">
 
-  <div class="page-size-control">
+ <!--  <div class="page-size-control">
     <label>Items por página:</label>
     <select [(ngModel)]="pageSize" (change)="onPageSizeChange()">
       <option [value]="5">5</option>
@@ -265,7 +265,7 @@
       <option [value]="20">20</option>
     </select>
   </div>
-
+ -->
   <div class="page-info">
     {{ (currentPage * pageSize) + 1 }} –
     {{ minValue((currentPage + 1) * pageSize, totalElements) }}
