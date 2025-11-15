@@ -26,7 +26,7 @@ export interface PageResponse<T> {
   content: T[];
   totalPages: number;
   totalElements: number;
-  number: number; // página actual (0-based)
+  number: number;
   size: number;
   first: boolean;
   last: boolean;
@@ -45,15 +45,13 @@ export class UsersService {
     };
   }
 
-  // ✅ Paginado
-findAll(params: any) {
-  return this.http.get<PageResponse<User>>(this.base, {
-    params,
-    ...this.authHeaders()
-  });
-}
-
-
+  /** ✔ Paginado + filtros */
+  findAll(params: any) {
+    return this.http.get<PageResponse<User>>(this.base, {
+      params,
+      ...this.authHeaders()
+    });
+  }
 
   create(dto: CreateUserDto): Observable<User> {
     return this.http.post<User>(`${this.base}/create`, dto, this.authHeaders());
@@ -64,27 +62,41 @@ findAll(params: any) {
   }
 
   remove(id: number): Observable<any> {
-    return this.http.delete(`${this.base}/${id}`, { ...this.authHeaders(), responseType: 'text' });
+    return this.http.delete(`${this.base}/${id}`, {
+      ...this.authHeaders(),
+      responseType: 'text'
+    });
   }
 
   assignCourses(userId: number, courseIds: number[]): Observable<string> {
-    return this.http.post(`${this.base}/${userId}/assign-courses`, courseIds, { ...this.authHeaders(), responseType: 'text' });
+    return this.http.post(
+      `${this.base}/${userId}/assign-courses`,
+      courseIds,
+      { ...this.authHeaders(), responseType: 'text' }
+    );
+  }
+
+  getOrganizations(): Observable<any[]> {
+    return this.http.get<any[]>(
+      `${environment.API_URL}/organizations`,
+      this.authHeaders()
+    );
   }
 
   getInstructors(): Observable<User[]> {
-    return this.http.get<User[]>(`${this.base}/role/INSTRUCTOR`, this.authHeaders());
+    return this.http.get<User[]>(
+      `${this.base}/role/INSTRUCTOR`,
+      this.authHeaders()
+    );
   }
 
-getOrganizations(): Observable<any[]> {
-  return this.http.get<any[]>(`${environment.API_URL}/organizations`, this.authHeaders());
-}
-
-
   getUsersByRole(role: string) {
-  return this.http.get<any[]>(`${this.base}/role/${role}`);
-}
-getAllUsersNoPage(search: string = '') {
-  return this.http.get<User[]>(`${this.base}/all`, { params: { search } });
-}
+    return this.http.get<any[]>(`${this.base}/role/${role}`);
+  }
 
+  getAllUsersNoPage(search: string = '') {
+    return this.http.get<User[]>(`${this.base}/all`, {
+      params: { search }
+    });
+  }
 }

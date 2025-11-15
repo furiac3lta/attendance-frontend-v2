@@ -247,14 +247,43 @@
         </table>
 
         <!-- PAGINADOR -->
-        <mat-paginator
+  <!--       <mat-paginator
           class="users-paginator"
           [length]="totalElements"
           [pageSize]="pageSize"
           [pageIndex]="currentPage"
           [pageSizeOptions]="[5, 10, 20]"
           (page)="onPaginatorChange($event)">
-        </mat-paginator>
+        </mat-paginator> -->
+<div class="custom-paginator">
+
+  <div class="page-size-control">
+    <label>Items por página:</label>
+    <select [(ngModel)]="pageSize" (change)="onPageSizeChange()">
+      <option [value]="5">5</option>
+      <option [value]="10">10</option>
+      <option [value]="20">20</option>
+    </select>
+  </div>
+
+  <div class="page-info">
+    {{ (currentPage * pageSize) + 1 }} –
+    {{ minValue((currentPage + 1) * pageSize, totalElements) }}
+    de {{ totalElements }}
+  </div>
+
+  <div class="page-buttons">
+    <button mat-icon-button (click)="prevPage()" [disabled]="currentPage === 0">
+      <mat-icon>chevron_left</mat-icon>
+    </button>
+
+    <button mat-icon-button (click)="nextPage()" 
+      [disabled]="currentPage + 1 >= totalPages">
+      <mat-icon>chevron_right</mat-icon>
+    </button>
+  </div>
+</div>
+
 
       </div>
     </div>

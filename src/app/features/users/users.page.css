@@ -333,3 +333,37 @@ mat-paginator {
   max-height: 300px !important;
   overflow-y: auto !important;
 }
+.custom-paginator {
+  margin-top: 20px;
+  padding: 12px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  border-top: 1px solid var(--border-color, #ddd);
+  font-size: 14px;
+}
+
+.page-size-control {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.page-size-control select {
+  padding: 6px 8px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  background: var(--bg, white);
+  outline: none;
+}
+
+.page-buttons {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.page-info {
+  white-space: nowrap;
+}

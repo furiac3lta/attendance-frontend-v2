@@ -1,7 +1,7 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, FormsModule, Validators } from '@angular/forms';
-import { UsersService, User, PageResponse } from '../../core/services/users.service';
+import { UsersService, User } from '../../core/services/users.service';
 import { CoursesService } from '../../core/services/courses.service';
 import { MaterialModule } from '../../material.module';
 import { MatChipsModule } from '@angular/material/chips';
@@ -34,15 +34,15 @@ export class UsersPage implements OnInit {
   filterOrg: number | 'ALL' = 'ALL';
   filterCourse: number | 'ALL' = 'ALL';
 
-  // Datos
   courses: any[] = [];
   organizations: any[] = [];
   selectedCourses: Record<number, number[]> = {};
 
-  // Paginación REAL
+  // PAGINACIÓN
   currentPage = 0;
   pageSize = 10;
   totalElements = 0;
+  totalPages = 0;
 
   loading = false;
 
@@ -69,14 +69,14 @@ export class UsersPage implements OnInit {
   }
 
   // ===========================================================
-  // CARGA DE USERS (PAGINADO + FILTROS)
+  // CARGA USERS (PAGINADO + FILTROS)
   // ===========================================================
   loadUsers() {
     this.loading = true;
 
     const params: any = {
       page: this.currentPage,
-      size: this.pageSize,
+      size: this.pageSize
     };
 
     if (this.searchTerm) params.search = this.searchTerm;
@@ -88,6 +88,7 @@ export class UsersPage implements OnInit {
       next: (res) => {
         this.users = res.content;
         this.totalElements = res.totalElements;
+        this.totalPages = res.totalPages;
         this.loading = false;
       },
       error: (err) => {
@@ -98,24 +99,42 @@ export class UsersPage implements OnInit {
     });
   }
 
-  // Cuando tocás un chip o buscás
   applyFilter() {
     this.currentPage = 0;
     this.loadUsers();
   }
 
   // ===========================================================
-  // PAGINADOR REAL
+  // PAGINADOR CUSTOM
   // ===========================================================
-  onPaginatorChange(e: any) {
-    this.pageSize = e.pageSize;
-    this.currentPage = e.pageIndex;
+
+  minValue(a: number, b: number): number {
+    return a < b ? a : b;
+  }
+
+  onPageSizeChange() {
+    this.currentPage = 0;
     this.loadUsers();
+  }
+
+  prevPage() {
+    if (this.currentPage > 0) {
+      this.currentPage--;
+      this.loadUsers();
+    }
+  }
+
+  nextPage() {
+    if (this.currentPage + 1 < this.totalPages) {
+      this.currentPage++;
+      this.loadUsers();
+    }
   }
 
   // ===========================================================
   // CURSOS / ORGANIZACIONES
   // ===========================================================
+
   loadCourses() {
     this.coursesSvc.findAll().subscribe({
       next: (res) => this.courses = res,
@@ -131,8 +150,9 @@ export class UsersPage implements OnInit {
   }
 
   // ===========================================================
-  // CRUD
+  // CRUD USERS
   // ===========================================================
+
   saveUser() {
     if (this.form.invalid) {
       Swal.fire('Atención', 'Completa los campos requeridos', 'warning');
@@ -191,7 +211,6 @@ export class UsersPage implements OnInit {
   deleteUser(id: number) {
     Swal.fire({
       title: '¿Eliminar este usuario?',
-      text: 'Esta acción no se puede deshacer',
       icon: 'warning',
       showCancelButton: true,
       confirmButtonText: 'Eliminar',
@@ -212,6 +231,7 @@ export class UsersPage implements OnInit {
   // ===========================================================
   // ASIGNAR CURSOS
   // ===========================================================
+
   onCoursesChange(userId: number, event: any) {
     this.selectedCourses[userId] = event.value;
 
@@ -232,9 +252,6 @@ export class UsersPage implements OnInit {
     });
   }
 
-  // ===========================================================
-  // MAPEO
-  // ===========================================================
   mapCourseNamesToIds(names: string[]): number[] {
     return this.courses
       .filter(c => names.includes(c.name))
