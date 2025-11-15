@@ -248,3 +248,72 @@ mat-paginator {
   color: #000 !important;
   box-shadow: 0 0 10px rgba(189,224,254,0.65);
 }
+/* ================================
+   🌟 PAGINADOR — ESTILO ARREGLADO
+   ================================ */
+
+/* Centrar y espaciar */
+.mat-paginator {
+  margin-top: 20px;
+  padding: 10px 0;
+  display: flex;
+  justify-content: center;
+  border-radius: 12px;
+}
+
+/* Quitar ese fondo feo flotante */
+.mat-paginator-container {
+  background: transparent !important;
+}
+
+/* Ítems por página: alineado y pequeño */
+.mat-paginator-page-size {
+  margin-left: 8px !important;
+}
+
+.mat-paginator-page-size-label {
+  font-size: 13px;
+  opacity: 0.8;
+}
+
+/* El input de page size */
+.mat-paginator-page-size-select .mat-select-trigger {
+  padding: 4px 8px !important;
+  border-radius: 8px;
+}
+
+/* Flechas más discretas */
+.mat-paginator-navigation-previous,
+.mat-paginator-navigation-next {
+  background: rgba(0,0,0,0.04);
+  border-radius: 8px;
+  margin: 0 6px;
+  padding: 4px;
+}
+
+/* Hover suave */
+.mat-paginator-navigation-previous:hover,
+.mat-paginator-navigation-next:hover {
+  background: rgba(0,0,0,0.10);
+}
+
+/* Indicador ("11–12 de 12") centrado */
+.mat-paginator-range-label {
+  font-size: 13px;
+  opacity: 0.8;
+}
+
+/* Dark mode */
+.dark-mode .mat-paginator-navigation-previous,
+.dark-mode .mat-paginator-navigation-next {
+  background: rgba(255,255,255,0.1);
+}
+
+.dark-mode .mat-paginator-navigation-previous:hover,
+.dark-mode .mat-paginator-navigation-next:hover {
+  background: rgba(255,255,255,0.2);
+}
+
+.dark-mode .mat-paginator-range-label {
+  color: #ddd;
+}
