@@ -46,11 +46,13 @@ export class UsersService {
   }
 
   // ✅ Paginado
- findAll(page: number, size: number, search: string = '') {
-  return this.http.get<PageResponse<User>>(
-    `${this.base}?page=${page}&size=${size}&search=${search}`
-  );
+findAll(params: any) {
+  return this.http.get<PageResponse<User>>(this.base, {
+    params,
+    ...this.authHeaders()
+  });
 }
+
 
 
   create(dto: CreateUserDto): Observable<User> {
