@@ -85,4 +85,7 @@
   .filter-item {
     width: 100%;
   }
+  .class-text {
+    color: aliceblue;
+  }
 }
