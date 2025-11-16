@@ -367,3 +367,50 @@ mat-paginator {
 .page-info {
   white-space: nowrap;
 }
+/* ====== TABLA RESPONSIVA ====== */
+.section-table {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.table-section {
+  min-width: 100%;
+  overflow-x: auto;
+}
+
+/* Evitar que las celdas se rompan */
+.table-modern th,
+.table-modern td {
+  white-space: nowrap;
+}
+
+/* Que los chips no revienten la tabla */
+.chip-wrapper {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  max-width: 220px;
+  overflow: hidden;
+}
+
+/* Evitar que el select se expanda demasiado */
+.course-select {
+  width: 180px;
+  min-width: 140px;
+}
+
+/* En celular, permitir scroll horizontal cómodo */
+@media (max-width: 768px) {
+  .section-table {
+    padding-bottom: 10px;
+  }
+
+  .table-section {
+    overflow-x: auto;
+    display: block;
+  }
+
+  table {
+    width: max-content !important;
+  }
+}
