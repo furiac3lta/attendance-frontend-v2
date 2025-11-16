@@ -414,3 +414,23 @@ mat-paginator {
     width: max-content !important;
   }
 }
+/* ====== BORDES VISIBLES EN INPUTS ====== */
+mat-form-field.mat-mdc-form-field {
+  --mdc-outlined-text-field-outline-color: rgba(0, 0, 0, 0.2);
+  --mdc-outlined-text-field-focus-outline-color: #ff8cbc;
+  --mdc-outlined-text-field-hover-outline-color: rgba(0, 0, 0, 0.3);
+}
+
+/* Modo oscuro */
+.dark-theme mat-form-field.mat-mdc-form-field {
+  --mdc-outlined-text-field-outline-color: rgba(255, 255, 255, 0.2);
+  --mdc-outlined-text-field-hover-outline-color: rgba(255, 255, 255, 0.35);
+  --mdc-outlined-text-field-focus-outline-color: #ff8cbc; /* rosa del sistema */
+}
+
+/* Más contraste en el borde */
+.mdc-notched-outline__leading,
+.mdc-notched-outline__notch,
+.mdc-notched-outline__trailing {
+  border-color: currentColor !important;
+}
