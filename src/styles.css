@@ -493,3 +493,41 @@ button.mat-icon-button {
     font-weight: 600;
   }
 }
+ /* ===========================================
+   🔥 BORDES SÚPER VISIBLES PARA TODOS LOS INPUTS
+   =========================================== */
+
+/* Fuerza un borde visible siempre */
+:host ::ng-deep .mat-mdc-form-field .mdc-notched-outline__leading,
+:host ::ng-deep .mat-mdc-form-field .mdc-notched-outline__trailing,
+:host ::ng-deep .mat-mdc-form-field .mdc-notched-outline__notch {
+  border-width: 2px !important;
+  border-color: rgba(120,120,120,0.45) !important;
+}
+
+/* Hover */
+:host ::ng-deep .mat-mdc-form-field:hover .mdc-notched-outline__leading,
+:host ::ng-deep .mat-mdc-form-field:hover .mdc-notched-outline__trailing,
+:host ::ng-deep .mat-mdc-form-field:hover .mdc-notched-outline__notch {
+  border-color: rgba(90,90,90,0.65) !important;
+}
+
+/* Focus rosa */
+:host ::ng-deep .mat-mdc-form-field.mat-focused .mdc-notched-outline__leading,
+:host ::ng-deep .mat-mdc-form-field.mat-focused .mdc-notched-outline__trailing,
+:host ::ng-deep .mat-mdc-form-field.mat-focused .mdc-notched-outline__notch {
+  border-color: #ff8cbc !important;
+  box-shadow: 0 0 6px #ffb4d4 !important;
+}
+:host.dark-mode ::ng-deep .mat-mdc-form-field .mdc-notched-outline__leading,
+:host.dark-mode ::ng-deep .mat-mdc-form-field .mdc-notched-outline__trailing,
+:host.dark-mode ::ng-deep .mat-mdc-form-field .mdc-notched-outline__notch {
+  border-color: rgba(255,255,255,0.35) !important;
+}
+
+:host.dark-mode ::ng-deep .mat-mdc-form-field.mat-focused .mdc-notched-outline__leading,
+:host.dark-mode ::ng-deep .mat-mdc-form-field.mat-focused .mdc-notched-outline__trailing,
+:host.dark-mode ::ng-deep .mat-mdc-form-field.mat-focused .mdc-notched-outline__notch {
+  border-color: #ff8cbc !important;
+  box-shadow: 0 0 6px #ff8cbc !important;
+}
