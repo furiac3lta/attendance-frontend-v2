@@ -92,7 +92,9 @@ button[mat-raised-button] {
 button[mat-raised-button]:hover {
   background: var(--accent-hover) !important;
 }
-
+.class-text{
+  color: var(--text)!important;
+}
 /* ======================================================= */
 /* ✏ INPUTS */
 /* ======================================================= */
@@ -345,4 +347,7 @@ button[mat-raised-button]:hover {
     background: #373237 !important;     /* leve contraste */
     color: white !important;
   }
+  .dark-mode .class-text{
+  color: var(--text)!important;
+}
 }
