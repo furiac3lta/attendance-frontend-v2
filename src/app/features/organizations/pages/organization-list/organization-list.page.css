@@ -73,6 +73,7 @@
   .actions button {
     width: 100%;
   }
+  
 }
 
 /* ===================================== */
@@ -180,6 +181,8 @@ td.mat-mdc-cell {
   max-width: 90vw !important;
   width: auto !important;
 }
-.mat-mdc-option mdc-list-item mat-mdc-option-active-ripple {
-  color: white !important;
+.mat-mdc-form-field-infix {
+  color: whitesmoke!important;
+  background-color: #777 !important;
 }
+ 

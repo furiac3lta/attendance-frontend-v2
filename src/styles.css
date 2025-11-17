@@ -142,6 +142,7 @@ button[mat-raised-button]:hover {
   width: 100%;
   border-collapse: separate;
   border-spacing: 0 8px;
+ 
 }
 
 .mat-header-cell {
@@ -219,69 +220,129 @@ button[mat-raised-button]:hover {
 /* ======================================================= */
 
 /* PANEL */
-::ng-deep .mat-mdc-select-panel {
+.mat-mdc-select-panel {
   background: var(--card-bg) !important;
   color: var(--text-strong) !important;
   border-radius: 10px !important;
 }
 
 /* OPCIONES */
-::ng-deep .mat-mdc-option {
+.mat-mdc-option {
   color: var(--text-strong) !important;
   font-size: 15px !important;
 }
 
-::ng-deep .mat-mdc-option:hover {
+.mat-mdc-option:hover {
   background: rgba(0,0,0,0.08) !important;
 }
 
-::ng-deep .mat-mdc-option.mdc-list-item--selected {
+.mat-mdc-option.mdc-list-item--selected {
   background: var(--accent-hover) !important;
   color: #000 !important;
 }
 
 /* TRIGGER (cuando está cerrado) */
-::ng-deep .mat-select-value,
-::ng-deep .mat-mdc-select-placeholder,
-::ng-deep .mat-select-arrow {
+.mat-select-value,
+.mat-mdc-select-placeholder,
+.mat-select-arrow {
   color: var(--text-strong) !important;
 }
 
 /* ================= DARK MODE ================= */
 
-.dark-mode ::ng-deep .mat-mdc-select-panel {
+.dark-mode .mat-mdc-select-panel {
   background: #2b2836 !important;
   color: #fff !important;
 }
 
-.dark-mode ::ng-deep .mat-mdc-option {
+.dark-mode .mat-mdc-option {
   color: #fff !important;
 }
 
-.dark-mode ::ng-deep .mat-mdc-option:hover {
+.dark-mode .mat-mdc-option:hover {
   background: #413c58 !important;
 }
 
-.dark-mode ::ng-deep .mat-select-value,
-.dark-mode ::ng-deep .mat-mdc-select-placeholder,
-.dark-mode ::ng-deep .mat-select-arrow {
+.dark-mode .mat-select-value,
+.dark-mode .mat-mdc-select-placeholder,
+.dark-mode .mat-select-arrow {
   color: #fff !important;
 }
+  /* ===== TABLA ===== */
+  .dark-mode .table-modern {
+    background: #2b2836 !important;     /* uniforme con cards */
+    color: white !important;
+  }
 
-/* ================= MOBILE ================= */
+  .dark-mode .mat-mdc-row {
+    background: #373237 !important;     /* leve contraste */
+    color: white !important;
+  }
+   /* ===== INPUT FIELD ===== */
+  .dark-mode .mat-mdc-text-field-wrapper {
+    background: #544b57 !important;     /* igual a inputs desktop */
+    color: white !important;
+  }
+    /* ===== SELECT TRIGGER ===== */
+  .dark-mode .mat-mdc-form-field-infix,
+  .dark-mode .mat-mdc-select-value,
+  .dark-mode .mat-mdc-select-placeholder {
+    background: #544b57 !important;     /* igual a input dark */
+    color: white !important;
+  }
+/* ================= MOBILE — DARK MODE FIX UNIFORME ================= */
 @media (max-width: 768px) {
-  ::ng-deep .cdk-overlay-pane {
+
+  /* Centrar panel */
+  .cdk-overlay-pane {
     max-width: 90% !important;
     left: 50% !important;
     transform: translateX(-50%) !important;
   }
 
-  ::ng-deep .mat-mdc-select-panel {
+  /* Panel del select */
+  .mat-mdc-select-panel {
     max-height: 260px !important;
     font-size: 14px !important;
   }
-  .mat-mdc-option {
-    background: var(--bg);
-    color: var(--text);
+
+  /* ===== SELECT OPTIONS ===== */
+  .dark-mode .mat-mdc-option {
+    background: #2b2836 !important;    /* igual al card-bg */
+    color: #ffffff !important;
+  }
+
+  .dark-mode .mat-mdc-option:hover {
+    background: #413c58 !important;     /* violeta suave */
+  }
+
+  .dark-mode .mat-mdc-option.mdc-list-item {
+    background: #2b2836 !important;
+    color: white !important;
+  }
+
+  /* ===== SELECT TRIGGER ===== */
+  .dark-mode .mat-mdc-form-field-infix,
+  .dark-mode .mat-mdc-select-value,
+  .dark-mode .mat-mdc-select-placeholder {
+    background: #544b57 !important;     /* igual a input dark */
+    color: white !important;
+  }
+
+  /* ===== INPUT FIELD ===== */
+  .dark-mode .mat-mdc-text-field-wrapper {
+    background: #544b57 !important;     /* igual a inputs desktop */
+    color: white !important;
+  }
+
+  /* ===== TABLA ===== */
+  .dark-mode .table-modern {
+    background: #2b2836 !important;     /* uniforme con cards */
+    color: white !important;
+  }
+
+  .dark-mode .mat-mdc-row {
+    background: #373237 !important;     /* leve contraste */
+    color: white !important;
   }
 }
