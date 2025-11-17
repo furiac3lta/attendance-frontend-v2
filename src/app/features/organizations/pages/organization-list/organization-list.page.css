@@ -180,3 +180,6 @@ td.mat-mdc-cell {
   max-width: 90vw !important;
   width: auto !important;
 }
+.mat-mdc-option mdc-list-item mat-mdc-option-active-ripple {
+  color: white !important;
+}
