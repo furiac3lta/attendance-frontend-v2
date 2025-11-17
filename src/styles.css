@@ -186,7 +186,7 @@ button[mat-raised-button]:hover {
    🔐 LOGIN
    ========================================================= */
 .login-wrapper {
-  min-height: calc(100vh - 64px);
+  min-height: calc(100vh - 20vh);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -316,4 +316,17 @@ body .class-text {
 
 .dark-mode body .class-text {
   color: white !important;
+}
+
+.title-h1 {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+}
+
+.title-h1 h1 {
+  margin: 0 !important;
+  text-align: center;
+  width: 100%;
+  padding: 2rem;
 }

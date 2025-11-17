@@ -1,0 +1,36 @@
+.footer-toolbar {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  z-index: 1100;
+  background: #1a1a1f !important;
+  color: #eee !important;
+  display: flex;
+  justify-content: center;
+  height: fit-content;
+}
+
+.footer-content {
+  text-align: center;
+  font-family: 'Poppins', sans-serif;
+  font-size: 13px;
+  line-height: 0.5;
+  
+}
+
+.footer-content .dev {
+  color: #ffb3d9;
+  font-weight: 600;
+}
+
+.footer-content a {
+  color: #a2d2ff;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.footer-content a:hover {
+  color: #ffc8dd;
+  text-decoration: underline;
+}

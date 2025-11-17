@@ -9,6 +9,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import Swal from 'sweetalert2';
 
+
 @Component({
   selector: 'app-login-page',
   standalone: true,
@@ -19,7 +20,8 @@ import Swal from 'sweetalert2';
     MatInputModule,
     MatIconModule,
     MatButtonModule,
-  ],
+  
+],
   templateUrl: './login.page.html',
 })
 export class LoginPage {
