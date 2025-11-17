@@ -284,6 +284,7 @@ button[mat-raised-button]:hover {
     background: #544b57 !important;     /* igual a inputs desktop */
     color: white !important;
   }
+  
     /* ===== SELECT TRIGGER ===== */
   .dark-mode .mat-mdc-form-field-infix,
   .dark-mode .mat-mdc-select-value,
