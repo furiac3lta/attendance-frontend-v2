@@ -22,27 +22,49 @@
     ⚠️ Este curso no tiene clases creadas todavía.
   </div>
 
-  <mat-list *ngIf="classes.length > 0" class="class-list">
-    <mat-list-item *ngFor="let c of classes" class="class-item">
+  <table mat-table [dataSource]="classes" class="table-modern responsive-table" *ngIf="classes.length > 0">
 
-      <span class="class-text">
-        {{ c.name }} - {{ c.date | date:'dd/MM/yyyy' }}
-      </span>
+  <!-- Nombre -->
+  <ng-container matColumnDef="name">
+    <th mat-header-cell *matHeaderCellDef> Clase </th>
+    <td mat-cell *matCellDef="let c">
+      {{ c.name }}
+    </td>
+  </ng-container>
 
-      <span class="spacer"></span>
+  <!-- Fecha -->
+  <ng-container matColumnDef="date">
+    <th mat-header-cell *matHeaderCellDef> Fecha </th>
+    <td mat-cell *matCellDef="let c">
+      {{ c.date | date:'dd/MM/yyyy' }}
+    </td>
+  </ng-container>
 
-      <button mat-raised-button color="primary" *ngIf="!c.attendanceTaken"
+  <!-- Acción -->
+  <ng-container matColumnDef="action">
+    <th mat-header-cell *matHeaderCellDef> Asistencia </th>
+    <td mat-cell *matCellDef="let c">
+
+      <button mat-raised-button color="primary"
+              *ngIf="!c.attendanceTaken"
               (click)="goToAttendance(c.id)">
         Tomar
       </button>
 
-      <button mat-raised-button color="warn" *ngIf="c.attendanceTaken"
+      <button mat-raised-button color="warn"
+              *ngIf="c.attendanceTaken"
               (click)="goToAttendance(c.id)">
         Editar
       </button>
 
-    </mat-list-item>
-  </mat-list>
+    </td>
+  </ng-container>
+
+  <!-- Filas -->
+  <tr mat-header-row *matHeaderRowDef="['name', 'date', 'action']"></tr>
+  <tr mat-row *matRowDef="let row; columns: ['name', 'date', 'action']"></tr>
+
+</table>
 
   <p *ngIf="message" class="message">{{ message }}</p>
 

@@ -54,6 +54,7 @@
 
 .class-text {
   font-size: 15px;
+  color: grey;
 }
 
 .spacer {
@@ -89,3 +90,4 @@
     color: aliceblue;
   }
 }
+

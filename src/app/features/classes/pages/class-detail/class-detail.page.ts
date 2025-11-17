@@ -16,6 +16,7 @@ import { MatDividerModule } from '@angular/material/divider';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSelectModule } from '@angular/material/select';
 import { MatInputModule } from '@angular/material/input';
+import { MatTableModule } from '@angular/material/table';
 
 @Component({
   selector: 'app-class-detail',
@@ -33,6 +34,10 @@ import { MatInputModule } from '@angular/material/input';
     MatFormFieldModule,
     MatSelectModule,
     MatInputModule,
+    MatButtonModule,
+    MatIconModule,
+    MatCardModule,
+    MatTableModule
   ],
   providers: [DatePipe],
   templateUrl: './class-detail.page.html',
