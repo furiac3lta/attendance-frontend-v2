@@ -509,3 +509,6 @@ button.mat-icon-button {
 :host ::ng-deep .mat-mdc-select-arrow {
   color: #fff !important;
 }
+.mat-mdc-option mdc-list-item mat-mdc-option-active-ripple {
+  color: white !important;
+}
