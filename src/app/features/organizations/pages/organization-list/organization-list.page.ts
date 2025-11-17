@@ -153,4 +153,6 @@ export class OrganizationListPage {
     this.userRole === 'SUPER_ADMIN'
       ? ['name', 'type', 'phone', 'address', 'admin', 'selectAdmin', 'actions']
       : ['name', 'type', 'phone', 'address', 'admin'];
-}
+
+
+    }
