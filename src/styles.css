@@ -493,3 +493,19 @@ button.mat-icon-button {
     font-weight: 600;
   }
 }
+/* 🌙 Forzar color blanco dentro del panel del mat-select */
+:host ::ng-deep .mat-mdc-select-panel,
+:host ::ng-deep .mat-mdc-select-panel .mat-mdc-option {
+  color: #fff !important;
+}
+
+/* Placeholder dentro del trigger del select (cuando está cerrado) */
+:host ::ng-deep .mat-mdc-select-value,
+:host ::ng-deep .mat-mdc-select-placeholder {
+  color: #fff !important;
+}
+
+/* Ícono de flecha también blanco */
+:host ::ng-deep .mat-mdc-select-arrow {
+  color: #fff !important;
+}
