@@ -196,7 +196,7 @@
                 <mat-chip *ngFor="let c of u.courses" class="course-chip" selected>
                   {{ c }}
                 </mat-chip>
-                <span *ngIf="!u.courses?.length" class="no-courses">Sin cursos!!</span>
+                <mat-chip *ngIf="!u.courses?.length" class="course-chip"> Sin Cursos </mat-chip>
               </mat-chip-set>
             </td>
           </ng-container>
@@ -206,7 +206,7 @@
             <th mat-header-cell *matHeaderCellDef> Asignar Cursos </th>
             <td mat-cell *matCellDef="let u">
               <mat-form-field appearance="outline" class="course-select">
-                <mat-select multiple placeholder="Seleccionar cursos"
+                <mat-select multiple placeholder="Seleccionar"
                   [value]="selectedCourses[u.id] || []"
                   (selectionChange)="onCoursesChange(u.id, $event)">
                   <mat-option *ngFor="let c of courses" [value]="c.id">

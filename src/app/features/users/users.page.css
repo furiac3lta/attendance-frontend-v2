@@ -473,3 +473,6 @@ mat-form-field.mat-mdc-form-field {
   border-color: #ff8cbc !important;
   box-shadow: 0 0 6px #ff8cbc !important;
 }
+.dark-mode .no-courses {
+  color: #aaa;
+}
