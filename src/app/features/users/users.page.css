@@ -2,7 +2,7 @@
 /* 📌 CONTENEDOR PRINCIPAL */
 /* ======================================================= */
 .users-page {
-  max-width: 1100px;
+  max-width: 90%;
   margin: 0 auto;
   display: flex;
   flex-direction: column;
@@ -28,6 +28,7 @@
     4px 4px 14px rgba(0,0,0,0.25),
     -4px -4px 14px rgba(255,255,255,0.05);
   transition: 0.25s ease;
+  margin-bottom: 1.5rem;
 }
 
 .section-title {
@@ -179,6 +180,7 @@ mat-paginator {
     max-width: 380px;
     margin: 0 auto;
     padding: 0.8rem 1rem;
+    margin-bottom: 1.5rem;
   }
 
   /* Achicar inputs Angular Material */
