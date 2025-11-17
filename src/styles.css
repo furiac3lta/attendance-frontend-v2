@@ -512,3 +512,31 @@ button.mat-icon-button {
 .mat-mdc-option mdc-list-item mat-mdc-option-active-ripple {
   color: white !important;
 }
+/* ===== FIX GLOBAL PARA EL PANEL DE MAT-SELECT ===== */
+
+/* Panel general */
+::ng-deep .mat-mdc-select-panel {
+  background: var(--card-bg) !important; 
+  color: var(--text) !important;
+}
+
+/* Items dentro del panel */
+::ng-deep .mat-mdc-option {
+  color: var(--text) !important;
+}
+
+/* Hover */
+::ng-deep .mat-mdc-option:hover,
+::ng-deep .mat-mdc-option.mdc-list-item--activated {
+  background: rgba(255,255,255,0.1) !important;
+}
+
+/* Dark mode */
+.dark-mode ::ng-deep .mat-mdc-select-panel {
+  background: #1a1a1a !important;
+  color: #fff !important;
+}
+
+.dark-mode ::ng-deep .mat-mdc-option {
+  color: #fff !important;
+}
