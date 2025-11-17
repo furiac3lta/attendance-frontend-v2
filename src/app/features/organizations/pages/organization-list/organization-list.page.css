@@ -156,6 +156,7 @@ table th {
   width: 140px !important;
   max-width: 100% !important;
   min-width: 110px;
+  color : grey
 }
 
 .actions-inline {
