@@ -280,4 +280,8 @@ button[mat-raised-button]:hover {
     max-height: 260px !important;
     font-size: 14px !important;
   }
+  .mat-mdc-option {
+    background: var(--bg);
+    color: var(--text);
+  }
 }
