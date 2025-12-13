@@ -10,6 +10,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatIcon } from '@angular/material/icon';
+import { RouterLink } from '@angular/router';
 import Swal from 'sweetalert2';
 
 @Component({
@@ -23,7 +24,8 @@ import Swal from 'sweetalert2';
     MatButtonModule,
     MatCardModule,
     MatDividerModule,
-    MatIcon
+    MatIcon,
+    RouterLink
   ],
   templateUrl: './attendance-take.page.html',
   styleUrls: ['./attendance-take.page.css'],

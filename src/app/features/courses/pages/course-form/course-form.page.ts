@@ -1,8 +1,12 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ReactiveFormsModule, FormBuilder, Validators } from '@angular/forms';
+import {
+  ReactiveFormsModule,
+  FormBuilder,
+  Validators
+} from '@angular/forms';
+import { ActivatedRoute, Router } from '@angular/router';
 import { CoursesService } from '../../../../core/services/courses.service';
-import { Router } from '@angular/router';
 
 // Material
 import { MatCardModule } from '@angular/material/card';
@@ -28,13 +32,19 @@ import Swal from 'sweetalert2';
   templateUrl: './course-form.page.html',
   styleUrls: ['./course-form.page.css']
 })
-export class CourseFormPage {
+export class CourseFormPage implements OnInit {
 
   private fb = inject(FormBuilder);
   private router = inject(Router);
+  private route = inject(ActivatedRoute);
   private coursesSvc = inject(CoursesService);
 
-  // Formulario con validaciones
+  // 🔹 Estado
+  courseId: number | null = null;
+  isEditMode = false;
+  loading = false;
+
+  // 🔹 Formulario
   form = this.fb.group({
     name: ['', Validators.required],
     description: [''],
@@ -42,8 +52,45 @@ export class CourseFormPage {
     instructorId: [1]
   });
 
-  // Crear curso
-  createCourse() {
+  // 🔹 Init
+  ngOnInit(): void {
+    const idParam = this.route.snapshot.paramMap.get('id');
+
+    if (idParam) {
+      this.courseId = Number(idParam);
+      this.isEditMode = true;
+      this.loadCourse(this.courseId);
+    }
+  }
+
+  // 🔹 Cargar curso para edición
+  loadCourse(id: number): void {
+    this.loading = true;
+
+    this.coursesSvc.getById(id).subscribe({
+      next: (course) => {
+        this.form.patchValue({
+          name: course.name,
+          description: course.description,
+          universityProgram: course.universityProgram,
+          instructorId: course.instructorId ?? 1
+        });
+        this.loading = false;
+      },
+      error: () => {
+        this.loading = false;
+        Swal.fire({
+          icon: 'error',
+          title: 'Error',
+          text: 'No se pudo cargar el curso.',
+          heightAuto: false
+        }).then(() => this.router.navigate(['/courses']));
+      }
+    });
+  }
+
+  // 🔹 Guardar (crear o editar)
+  saveCourse(): void {
     if (this.form.invalid) {
       Swal.fire({
         icon: 'warning',
@@ -54,38 +101,40 @@ export class CourseFormPage {
       return;
     }
 
-    const dto = this.form.value;
-
     const payload = {
-      name: dto.name ?? '',
-      description: dto.description ?? '',
-      universityProgram: dto.universityProgram ?? '',
-      instructorId: dto.instructorId ?? 1
+      name: this.form.value.name ?? '',
+      description: this.form.value.description ?? '',
+      universityProgram: this.form.value.universityProgram ?? '',
+      instructorId: this.form.value.instructorId ?? 1
     };
 
-    this.coursesSvc.create(payload).subscribe({
+    const request$ =
+      this.isEditMode && this.courseId
+        ? this.coursesSvc.update(this.courseId, payload)
+        : this.coursesSvc.create(payload);
+
+    request$.subscribe({
       next: () => {
         Swal.fire({
           icon: 'success',
-          title: 'Curso creado',
-          text: 'El curso fue creado correctamente.',
+          title: this.isEditMode ? 'Curso actualizado' : 'Curso creado',
+          text: 'La operación se realizó correctamente.',
           heightAuto: false
-        }).then(() => {
-          this.router.navigate(['/courses']);
-        });
+        }).then(() => this.router.navigate(['/courses']));
       },
       error: (err) => {
-        console.error('❌ Error al crear curso:', err);
+        console.error('❌ Error guardando curso:', err);
         Swal.fire({
           icon: 'error',
           title: 'Error',
-          text: 'No se pudo crear el curso. Intentá nuevamente.',
+          text: 'No se pudo guardar el curso.',
           heightAuto: false
         });
       }
     });
   }
 
+  // 🔹 Cancelar
   cancel(): void {
     this.router.navigate(['/courses']);
   }

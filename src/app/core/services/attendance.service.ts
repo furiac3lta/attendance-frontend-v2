@@ -25,16 +25,17 @@ export class AttendanceService {
   }
 
   /** ✅ Asistencia existente por clase (DTO → AttendanceMark) */
- getSessionAttendance(classId: number): Observable<AttendanceMark[]> {
+getSessionAttendance(classId: number): Observable<AttendanceMark[]> {
   return this.http.get<any[]>(`${this.apiUrl}/class/${classId}`).pipe(
     map((list: any[]) =>
-      (list ?? []).map((a: any) => ({
+      (list ?? []).map(a => ({
         userId: a.studentId,
         present: !!a.attended
       }))
     )
   );
 }
+
 
 
   /** ✅ Crear/actualizar asistencia para la clase (sessionId = classId) */

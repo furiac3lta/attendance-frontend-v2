@@ -1,11 +1,14 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
-import { FormsModule } from '@angular/forms'; // 👈 AGREGAR
+import { FormsModule } from '@angular/forms';
+
 import { CoursesService } from '../../../../core/services/courses.service';
 import { Course } from '../../models/course.model';
 import { UsersService } from '../../../../core/services/users.service';
 import { User } from '../../../../core/services/users.service';
+
+// Material
 import { MatTableModule } from '@angular/material/table';
 import { MatSelectModule } from '@angular/material/select';
 import { MatButtonModule } from '@angular/material/button';
@@ -36,32 +39,38 @@ import { MatCard } from '@angular/material/card';
 export class CourseListPage implements OnInit {
 
   courses: Course[] = [];
-  message = '';
-  loading = true;
-  instructors: any[] = [];
+  instructors: User[] = [];
 
+  loading = true;
+  message = '';
 
   constructor(
     private router: Router,
     private coursesSvc: CoursesService,
-    private usersSvc: UsersService // ← agregar esto
+    private usersSvc: UsersService
+  ) { }
 
-  ) {}
-
+  // 🔹 INIT
   ngOnInit(): void {
     this.loadCourses();
-    this.loadInstructors();
 
+    // 👉 SOLO ADMIN / SUPER_ADMIN
+    if (this.canEdit()) {
+      this.loadInstructors();
+    }
   }
 
+  // 🔹 Cargar cursos
   loadCourses(): void {
+    this.loading = true;
+
     this.coursesSvc.findAll().subscribe({
       next: (res: Course[]) => {
-        this.loading = false;
         this.courses = res.map((c: any) => ({
-        ...c,
-        selectedInstructorId: c.instructorId ?? null
-      }));
+          ...c,
+          selectedInstructorId: c.instructorId ?? null
+        }));
+        this.loading = false;
       },
       error: () => {
         this.message = '❌ Error al obtener los cursos';
@@ -70,50 +79,53 @@ export class CourseListPage implements OnInit {
     });
   }
 
+  // 🔹 Cargar instructores (solo ADMIN / SUPER_ADMIN)
+  loadInstructors(): void {
+    this.usersSvc.getInstructors().subscribe({
+      next: (res: User[]) => this.instructors = res ?? [],
+      error: (err) => console.error('❌ Error cargando instructores:', err)
+    });
+  }
+
+  // 🔹 Permisos
+  canEdit(): boolean {
+    const role = sessionStorage.getItem('role');
+    if (!role) return false;
+    const normalized = role.replace('ROLE_', '').toUpperCase();
+    return normalized === 'SUPER_ADMIN' || normalized === 'ADMIN';
+  }
+
+
   canTakeAttendance(): boolean {
     const role = sessionStorage.getItem('role')?.replace('ROLE_', '') ?? '';
     return ['SUPER_ADMIN', 'ADMIN', 'INSTRUCTOR'].includes(role.toUpperCase());
   }
 
-  // ✅ Va a la pantalla de clases del curso (crear/seleccionar clase)
-  goToAttendance(courseId: number) {
-    this.router.navigate([`/attendance/class/${courseId}`]);
-  }
-
+  // 🔹 Navegación
   goToCreateCourse(): void {
     this.router.navigate(['/courses/new']);
   }
-  loadInstructors(): void {
-  this.usersSvc.getInstructors().subscribe({
-  next: (res: User[]) => this.instructors = res ?? [],
-  error: (err: any) => console.error(err)
-  });
-}
-onAssignInstructor(courseId: number, event: any) {
-  const instructorId = Number(event.target.value);
-  this.coursesSvc.assignInstructor(courseId, instructorId).subscribe({
-    next: () => {
-     // console.log("✅ Instructor asignado");
-      this.loadCourses();
-    },
-    error: (err) => console.error("❌ Error asignando instructor:", err)
-  });
-}
 
-saveInstructor(courseId: number, instructorId: number | null): void {
-  if (!instructorId) return;
+  goToEdit(courseId: number): void {
+    this.router.navigate(['/courses/edit', courseId]);
+  }
 
-  this.coursesSvc.assignInstructor(courseId, instructorId).subscribe({
-    next: () => {
-     // console.log("✅ Instructor asignado");
-      this.loadCourses();
-    },
-    error: (err) => console.error("❌ Error asignando instructor", err),
-  });
-}
-goToReport(courseId: number) {
-  this.router.navigate(['/attendance/report', courseId]);
-}
+  goToAttendance(courseId: number): void {
+    this.router.navigate([`/attendance/class/${courseId}`]);
+  }
 
+  goToReport(courseId: number): void {
+    this.router.navigate(['/attendance/report', courseId]);
+  }
 
+  // 🔹 Asignar instructor (solo ADMIN / SUPER_ADMIN)
+  saveInstructor(courseId: number, instructorId: number | null): void {
+    if (!this.canEdit() || !instructorId) return;
+
+    this.coursesSvc.assignInstructor(courseId, instructorId).subscribe({
+      next: () => this.loadCourses(),
+      error: (err) =>
+        console.error('❌ Error asignando instructor:', err),
+    });
+  }
 }

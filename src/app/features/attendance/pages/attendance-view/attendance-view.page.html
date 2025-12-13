@@ -4,12 +4,22 @@
 
   <mat-divider></mat-divider>
 
-  <table mat-table [dataSource]="records" class="table-modern responsive-table">
+  <div *ngIf="loading" class="loading">
+    Cargando asistencia…
+  </div>
+
+  <table
+    mat-table
+    [dataSource]="records"
+    class="table-modern responsive-table"
+    *ngIf="!loading && records.length > 0">
 
     <!-- Alumno -->
     <ng-container matColumnDef="fullName">
       <th mat-header-cell *matHeaderCellDef> Alumno </th>
-      <td mat-cell *matCellDef="let r">{{ r.fullName }}</td>
+      <td mat-cell *matCellDef="let r">
+        {{ r.fullName }}
+      </td>
     </ng-container>
 
     <!-- Presente -->
@@ -22,10 +32,40 @@
       </td>
     </ng-container>
 
-    <tr mat-header-row *matHeaderRowDef="['fullName', 'present']"></tr>
-    <tr mat-row *matRowDef="let row; columns: ['fullName', 'present'];"></tr>
+    <!-- Tomada por -->
+    <ng-container matColumnDef="takenBy">
+      <th mat-header-cell *matHeaderCellDef> Tomada por </th>
+      <td mat-cell *matCellDef="let r">
+        <span *ngIf="r.takenByName; else noUser">
+          {{ r.takenByName }} ({{ r.takenByRole }})
+        </span>
+        <ng-template #noUser>
+          <span class="text-muted">—</span>
+        </ng-template>
+      </td>
+    </ng-container>
+
+    <!-- Fecha -->
+    <ng-container matColumnDef="takenAt">
+      <th mat-header-cell *matHeaderCellDef> Fecha </th>
+      <td mat-cell *matCellDef="let r">
+        <span *ngIf="r.takenAt; else noDate">
+          {{ r.takenAt | date:'dd/MM/yyyy HH:mm' }}
+        </span>
+        <ng-template #noDate>
+          <span class="text-muted">—</span>
+        </ng-template>
+      </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
 
   </table>
+
+  <div *ngIf="!loading && records.length === 0" class="empty">
+    No hay asistencias registradas.
+  </div>
 
   <div class="actions">
     <button mat-raised-button color="primary" (click)="goBack()">

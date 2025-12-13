@@ -22,31 +22,31 @@ export const routes: Routes = [
       },
 
       // Organizaciones (ejemplo)
-     {
-  path: 'organizations',
-  canActivate: [roleGuard],
-  data: { roles: ['SUPER_ADMIN'] },
-  children: [
-    {
-      path: '',
-      loadComponent: () =>
-        import('./features/organizations/pages/organization-list/organization-list.page')
-          .then(m => m.OrganizationListPage),
-    },
-    {
-      path: 'new',
-      loadComponent: () =>
-        import('./features/organizations/pages/organization-form/organization-form.page')
-          .then(m => m.OrganizationFormPage),
-    },
-    {
-      path: ':id',
-      loadComponent: () =>
-        import('./features/organizations/pages/organization-detail/organization-detail.page')
-          .then(m => m.OrganizationDetailPage),
-    },
-  ],
-},
+      {
+        path: 'organizations',
+        canActivate: [roleGuard],
+        data: { roles: ['SUPER_ADMIN'] },
+        children: [
+          {
+            path: '',
+            loadComponent: () =>
+              import('./features/organizations/pages/organization-list/organization-list.page')
+                .then(m => m.OrganizationListPage),
+          },
+          {
+            path: 'new',
+            loadComponent: () =>
+              import('./features/organizations/pages/organization-form/organization-form.page')
+                .then(m => m.OrganizationFormPage),
+          },
+          {
+            path: ':id',
+            loadComponent: () =>
+              import('./features/organizations/pages/organization-detail/organization-detail.page')
+                .then(m => m.OrganizationDetailPage),
+          },
+        ],
+      },
 
 
       // Cursos
@@ -61,6 +61,14 @@ export const routes: Routes = [
         canActivate: [roleGuard],
         data: { roles: ['SUPER_ADMIN', 'ADMIN'] },
         loadComponent: () => import('./features/courses/pages/course-form/course-form.page').then(m => m.CourseFormPage),
+      },
+      {
+        path: 'courses/edit/:id',
+        canActivate: [roleGuard],
+        data: { roles: ['SUPER_ADMIN', 'ADMIN'] },
+        loadComponent: () =>
+          import('./features/courses/pages/course-form/course-form.page')
+            .then(m => m.CourseFormPage),
       },
 
       // ✅ Asistencia
@@ -88,6 +96,7 @@ export const routes: Routes = [
         data: { roles: ['SUPER_ADMIN', 'ADMIN', 'INSTRUCTOR'] },
         loadComponent: () => import('./features/attendance/pages/course-report/course-report.page').then(m => m.CourseReportPage),
       },
+
 
       // Registro
       {

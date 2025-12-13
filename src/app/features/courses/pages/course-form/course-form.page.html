@@ -1,30 +1,67 @@
 <mat-card class="course-card">
-  <h2>Crear Curso</h2>
 
-  <form [formGroup]="form" (ngSubmit)="createCourse()">
+  <!-- 🟢 Título dinámico -->
+  <h2 class="title">
+    {{ isEditMode ? 'Editar Curso' : 'Crear Curso' }}
+  </h2>
+
+  <form [formGroup]="form" (ngSubmit)="saveCourse()">
+
+    <!-- Nombre -->
     <mat-form-field appearance="outline" class="full-width">
       <mat-label>Nombre del curso</mat-label>
-      <input matInput formControlName="name" required />
+      <input
+        matInput
+        formControlName="name"
+        required
+      />
+      <mat-error *ngIf="form.get('name')?.hasError('required')">
+        El nombre es obligatorio
+      </mat-error>
     </mat-form-field>
 
+    <!-- Descripción -->
     <mat-form-field appearance="outline" class="full-width">
       <mat-label>Descripción</mat-label>
-      <input matInput formControlName="description" />
+      <input
+        matInput
+        formControlName="description"
+      />
     </mat-form-field>
 
+    <!-- Programa -->
     <mat-form-field appearance="outline" class="full-width">
       <mat-label>Programa Universitario</mat-label>
-      <input matInput formControlName="universityProgram" />
+      <input
+        matInput
+        formControlName="universityProgram"
+      />
     </mat-form-field>
 
+    <!-- Acciones -->
     <div class="actions">
-      <button mat-raised-button color="primary" type="submit" [disabled]="form.invalid">
-        <mat-icon>save</mat-icon> Guardar
+
+      <button
+        mat-raised-button
+        color="primary"
+        type="submit"
+        [disabled]="form.invalid"
+      >
+        <mat-icon>{{ isEditMode ? 'edit' : 'save' }}</mat-icon>
+        {{ isEditMode ? 'Actualizar' : 'Guardar' }}
       </button>
 
-      <button mat-stroked-button  type="button" (click)="cancel()">
-        <mat-icon>cancel</mat-icon> Cancelar
+      <button
+        mat-stroked-button
+        type="button"
+        (click)="cancel()"
+      >
+        <mat-icon>cancel</mat-icon>
+        Cancelar
       </button>
+
     </div>
+
   </form>
+
 </mat-card>

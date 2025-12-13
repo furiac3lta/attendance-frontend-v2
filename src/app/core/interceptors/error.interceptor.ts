@@ -13,20 +13,17 @@ export class ErrorInterceptor implements HttpInterceptor {
     return next.handle(req).pipe(
       catchError((err: HttpErrorResponse) => {
 
+        // 🔐 AUTH → lo maneja jwtInterceptor
+        if (err.status === 401 || err.status === 403) {
+          return throwError(() => err);
+        }
+
         let message = 'Error desconocido';
         let title = 'Error';
 
         if (err.status === 0) {
           title = 'Sin conexión';
           message = 'No se pudo conectar con el servidor.';
-        }
-        else if (err.status === 401) {
-          title = 'Sesión inválida';
-          message = 'Tu sesión expiró. Inicia sesión nuevamente.';
-        }
-        else if (err.status === 403) {
-          title = 'Acceso denegado';
-          message = 'No tienes permiso para acceder a esta sección.';
         }
         else if (err.status === 404) {
           title = 'Recurso no encontrado';
@@ -37,7 +34,7 @@ export class ErrorInterceptor implements HttpInterceptor {
           message = 'Ocurrió un error en el servidor.';
         }
 
-        // SWEETALERT GLOBAL
+        // 🟡 Solo errores reales de negocio
         Swal.fire({
           icon: 'error',
           title,
