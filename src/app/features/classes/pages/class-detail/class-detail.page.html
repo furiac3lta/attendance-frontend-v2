@@ -3,8 +3,6 @@
   <h2>Lista de clases creadas - {{ selectedCourseName }}</h2>
   <p class="date-label">{{ currentDate }}</p>
 
- 
-  <!-- BOTONES -->
   <div class="center-actions">
     <button mat-raised-button color="primary" (click)="createClass()">
       Crear nueva clase
@@ -17,55 +15,78 @@
 
   <mat-divider></mat-divider>
 
-  <!-- LISTA DE CLASES -->
-  <div *ngIf="classes.length === 0" class="no-classes">
-    ⚠️ Este curso no tiene clases creadas todavía.
-  </div>
+  <table mat-table [dataSource]="classes" *ngIf="classes.length > 0">
 
-  <table mat-table [dataSource]="classes" class="table-modern responsive-table" *ngIf="classes.length > 0">
+    <!-- Clase -->
+    <ng-container matColumnDef="name">
+      <th mat-header-cell *matHeaderCellDef>Clase</th>
+      <td mat-cell *matCellDef="let c">{{ c.name }}</td>
+    </ng-container>
 
-  <!-- Nombre -->
-  <ng-container matColumnDef="name">
-    <th mat-header-cell *matHeaderCellDef> Clase </th>
-    <td mat-cell *matCellDef="let c">
-      {{ c.name }}
-    </td>
-  </ng-container>
+    <!-- Fecha -->
+    <ng-container matColumnDef="date">
+      <th mat-header-cell *matHeaderCellDef>Fecha</th>
+      <td mat-cell *matCellDef="let c">
+        {{ c.date | date:'dd/MM/yyyy' }}
+      </td>
+    </ng-container>
 
-  <!-- Fecha -->
-  <ng-container matColumnDef="date">
-    <th mat-header-cell *matHeaderCellDef> Fecha </th>
-    <td mat-cell *matCellDef="let c">
-      {{ c.date | date:'dd/MM/yyyy' }}
-    </td>
-  </ng-container>
+    <!-- Tomada por -->
+ <ng-container matColumnDef="takenBy">
+  <th mat-header-cell *matHeaderCellDef>Tomada por</th>
+  <td mat-cell *matCellDef="let c">
 
-  <!-- Acción -->
-  <ng-container matColumnDef="action">
-    <th mat-header-cell *matHeaderCellDef> Asistencia </th>
-    <td mat-cell *matCellDef="let c">
+    <ng-container *ngIf="c.attendanceTaken; else noAttendance">
+      <div class="taken-by">
+        <div>
+          <strong>{{ c.takenByName }}</strong>
+          <span class="role-badge role-{{ c.takenByRole }}">
+            {{ c.takenByRole }}
+          </span>
+        </div>
+        <span class="taken-at">
+          {{ c.takenAt | date:'dd/MM/yyyy HH:mm' }}
+        </span>
+      </div>
+    </ng-container>
 
-      <button mat-raised-button color="primary"
-              *ngIf="!c.attendanceTaken"
-              (click)="goToAttendance(c.id)">
-        Tomar
-      </button>
+    <ng-template #noAttendance>
+      <span class="no-attendance">No tomada</span>
+    </ng-template>
 
-      <button mat-raised-button color="warn"
-              *ngIf="c.attendanceTaken"
-              (click)="goToAttendance(c.id)">
-        Editar
-      </button>
+  </td>
+</ng-container>
 
-    </td>
-  </ng-container>
 
-  <!-- Filas -->
-  <tr mat-header-row *matHeaderRowDef="['name', 'date', 'action']"></tr>
-  <tr mat-row *matRowDef="let row; columns: ['name', 'date', 'action']"></tr>
+    <!-- Acción -->
+    <ng-container matColumnDef="action">
+      <th mat-header-cell *matHeaderCellDef>Asistencia</th>
+      <td mat-cell *matCellDef="let c">
 
-</table>
+        <button mat-raised-button color="primary"
+                *ngIf="!c.attendanceTaken"
+                (click)="goToAttendance(c.id)">
+          Tomar
+        </button>
 
-  <p *ngIf="message" class="message">{{ message }}</p>
+        <button mat-raised-button color="warn"
+                *ngIf="c.attendanceTaken"
+                (click)="goToAttendance(c.id)">
+          Editar
+        </button>
+
+        <button mat-raised-button color="accent"
+                *ngIf="c.attendanceTaken"
+                (click)="viewAttendance(c.id)">
+          Ver
+        </button>
+
+      </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="['name','date','takenBy','action']"></tr>
+    <tr mat-row *matRowDef="let row; columns: ['name','date','takenBy','action']"></tr>
+
+  </table>
 
 </mat-card>

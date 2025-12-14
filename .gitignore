@@ -1,0 +1,57 @@
+# =========================
+# Node / Angular
+# =========================
+node_modules/
+dist/
+dist-ssr/
+.angular/
+coverage/
+
+# =========================
+# Environment files
+# =========================
+
+
+
+# =========================
+# Logs
+# =========================
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# =========================
+# IDE / Editors
+# =========================
+.vscode/
+!.vscode/extensions.json
+.idea/
+*.iml
+
+# =========================
+# OS files
+# =========================
+.DS_Store
+Thumbs.db
+
+# =========================
+# Angular cache / build
+# =========================
+.cache/
+.eslintcache
+.vite/
+
+# =========================
+# Temporary files
+# =========================
+*.log
+*.tmp
+*.temp
+
+# =========================
+# Optional: test output
+# =========================
+cypress/videos/
+cypress/screenshots/
+

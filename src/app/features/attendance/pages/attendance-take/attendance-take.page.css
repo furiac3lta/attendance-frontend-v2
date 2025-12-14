@@ -1,20 +1,83 @@
+/* ============================= */
+/* Contenedor principal          */
+/* ============================= */
+
 .take-card {
   padding: 1.5rem;
   max-width: 750px;
   margin: auto;
 }
 
+/* ============================= */
+/* Info de la clase              */
+/* ============================= */
+
 .class-info p {
   margin: 2px 0;
 }
+
+/* ============================= */
+/* Loading                       */
+/* ============================= */
+
+.loading {
+  text-align: center;
+  padding: 1.5rem;
+  font-style: italic;
+}
+
+/* ============================= */
+/* Tabla alumnos                 */
+/* ============================= */
+
+.student-cell {
+  padding: 12px 8px;
+}
+
+.student-info {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.student-name {
+  font-weight: 500;
+}
+
+/* ============================= */
+/* Icono estado de pago          */
+/* ============================= */
+
+.payment-icon {
+  font-size: 18px;
+  vertical-align: middle;
+}
+
+/* ✔️ Al día */
+.payment-icon.paid {
+  color: #2e7d32;
+}
+
+/* ❌ Cuota vencida */
+.payment-icon.unpaid {
+  color: #c62828;
+}
+
+/* Hover sutil */
+.student-info:hover .payment-icon {
+  transform: scale(1.1);
+  transition: transform 0.15s ease;
+}
+
+/* ============================= */
+/* Botones                       */
+/* ============================= */
 
 .button-container {
   text-align: center;
   margin-top: 1rem;
 }
 
-.loading {
+.center {
   text-align: center;
-  padding: 1.5rem;
-  font-style: italic;
 }

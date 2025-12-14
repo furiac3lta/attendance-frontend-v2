@@ -1,79 +1,45 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule, DatePipe } from '@angular/common';
-import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 
 import { ClassesService, ClassSessionDto } from '../../../../core/services/classes.service';
 import { CoursesService } from '../../../../core/services/courses.service';
 import { AttendanceService } from '../../../../core/services/attendance.service';
 
-/* Angular Material */
+/* Material */
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
-import { MatListModule } from '@angular/material/list';
-import { MatIconModule } from '@angular/material/icon';
 import { MatDividerModule } from '@angular/material/divider';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatSelectModule } from '@angular/material/select';
-import { MatInputModule } from '@angular/material/input';
 import { MatTableModule } from '@angular/material/table';
+import { MatIconModule } from '@angular/material/icon';
 
 @Component({
   selector: 'app-class-detail',
   standalone: true,
   imports: [
     CommonModule,
-    FormsModule,
-
-    // Material
     MatCardModule,
     MatButtonModule,
-    MatListModule,
-    MatIconModule,
     MatDividerModule,
-    MatFormFieldModule,
-    MatSelectModule,
-    MatInputModule,
-    MatButtonModule,
-    MatIconModule,
-    MatCardModule,
-    MatTableModule
+    MatTableModule,
+    MatIconModule
   ],
   providers: [DatePipe],
   templateUrl: './class-detail.page.html',
-  styleUrls: ['./class-detail.page.css'],
+  styleUrls: ['./class-detail.page.css']
 })
 export class ClassDetailPage implements OnInit {
 
-  /* ================================ */
-  /* VARIABLES */
-  /* ================================ */
   courseId!: number;
   selectedCourseName = '';
-  classes: (ClassSessionDto & { attendanceTaken?: boolean })[] = [];
-  message = '';
   currentDate = '';
 
-  /* filtros */
-  selectedMonth!: number;
-  selectedYear!: number;
-
-  months = [
-    { value: 1, label: 'Enero' },
-    { value: 2, label: 'Febrero' },
-    { value: 3, label: 'Marzo' },
-    { value: 4, label: 'Abril' },
-    { value: 5, label: 'Mayo' },
-    { value: 6, label: 'Junio' },
-    { value: 7, label: 'Julio' },
-    { value: 8, label: 'Agosto' },
-    { value: 9, label: 'Septiembre' },
-    { value: 10, label: 'Octubre' },
-    { value: 11, label: 'Noviembre' },
-    { value: 12, label: 'Diciembre' },
-  ];
-
-  years = [2023, 2024, 2025, 2026, 2027];
+  classes: (ClassSessionDto & {
+    attendanceTaken?: boolean;
+    takenByName?: string;
+    takenByRole?: string;
+    takenAt?: string;
+  })[] = [];
 
   constructor(
     private route: ActivatedRoute,
@@ -84,10 +50,10 @@ export class ClassDetailPage implements OnInit {
     private datePipe: DatePipe
   ) {}
 
-  /* ================================ */
-  /* INIT */
-  /* ================================ */
   ngOnInit(): void {
+    this.courseId = Number(this.route.snapshot.paramMap.get('courseId'));
+    if (!this.courseId) return;
+
     this.currentDate =
       this.datePipe.transform(
         new Date(),
@@ -95,84 +61,62 @@ export class ClassDetailPage implements OnInit {
         'es-AR'
       ) ?? '';
 
-    this.courseId = Number(this.route.snapshot.paramMap.get('courseId'));
-    if (!this.courseId) {
-      this.message = 'Curso inválido';
-      return;
-    }
-
-    this.selectedMonth = new Date().getMonth() + 1;
-    this.selectedYear = new Date().getFullYear();
-
-    this.loadCourse(this.courseId);
-    this.loadClasses(this.courseId);
+    this.loadCourse();
+    this.loadClasses();
   }
 
-  /* ================================ */
-  /* CARGAS */
-  /* ================================ */
-  loadCourse(courseId: number) {
-    this.coursesSvc.findById(courseId).subscribe({
-      next: (res) => (this.selectedCourseName = res?.name ?? 'Curso'),
-      error: (err) => console.error('❌ Error cargando curso:', err),
+  loadCourse(): void {
+    this.coursesSvc.findById(this.courseId).subscribe({
+      next: res => this.selectedCourseName = res?.name ?? ''
     });
   }
 
-  loadClasses(courseId: number) {
-    this.classesSvc.getByCourseId(courseId).subscribe({
-      next: (res) => {
-        const list =
-          (res ?? []) as (ClassSessionDto & { attendanceTaken?: boolean })[];
-        this.classes = list;
+  loadClasses(): void {
+    this.classesSvc.getByCourseId(this.courseId).subscribe({
+      next: classes => {
+        this.classes = classes ?? [];
 
-        // ✔ Chequear si ya tiene asistencia
-        this.classes.forEach((c) => {
-          this.attendanceSvc.getSessionAttendance(c.id).subscribe((marks) => {
-            c.attendanceTaken = (marks?.length ?? 0) > 0;
+        this.classes.forEach(c => {
+          // 🔥 USAR EL MÉTODO CORRECTO
+          this.attendanceSvc.getByClassId(c.id).subscribe({
+            next: (records: any[]) => {
+              if (records.length > 0) {
+                const first = records[0];
+                c.attendanceTaken = true;
+                c.takenByName = first.takenByName;
+                c.takenByRole = first.takenByRole;
+                c.takenAt = first.takenAt;
+              } else {
+                c.attendanceTaken = false;
+              }
+            },
+            error: () => c.attendanceTaken = false
           });
         });
-      },
-      error: (err) =>
-        console.error('❌ Error cargando clases del curso:', err),
+      }
     });
   }
 
-  /* ================================ */
-  /* ACCIONES */
-  /* ================================ */
-  createClass() {
-    const payload = {
-      name: `Clase del ${this.datePipe.transform(
-        new Date(),
-        'dd/MM/yyyy',
-        'es-AR'
-      )}`,
-      date: new Date().toISOString().split('T')[0],
-      courseId: this.courseId,
-    };
-
-    this.classesSvc.createClass(payload).subscribe({
-      next: (res) => this.router.navigate(['/attendance/take', res.id]),
-      error: (err) => {
-        console.error('❌ Error al crear clase:', err);
-        this.message = 'Error al crear clase';
-      },
-    });
-  }
-
-  reloadReport() {
-    this.loadClasses(this.courseId);
-  }
-
-  goToAttendance(classId: number) {
+  goToAttendance(classId: number): void {
     this.router.navigate(['/attendance/take', classId]);
   }
 
-  viewAttendance(classId: number) {
+  viewAttendance(classId: number): void {
     this.router.navigate(['/attendance/view', classId]);
   }
 
-  goToReport() {
+  createClass(): void {
+    // 👉 USÁ EL MÉTODO REAL QUE YA TENÉS
+    this.classesSvc.createClass({
+      name: 'Clase nueva',
+      courseId: this.courseId,
+      date: new Date().toISOString().split('T')[0]
+    }).subscribe({
+      next: (res: any) => this.goToAttendance(res.id)
+    });
+  }
+
+  goToReport(): void {
     this.router.navigate(['/attendance/report', this.courseId]);
   }
 }
