@@ -8,61 +8,102 @@
   <div class="users-layout">
 
     <!-- ===================== -->
-    <!-- 🔍 BUSCADOR / FILTROS -->
+    <!-- 🟣 ALTA / EDICIÓN -->
+    <!-- ===================== -->
+    <div class="section-card user-form-card">
+
+      <h3 class="section-title">
+        <mat-icon>{{ editingUserId ? 'edit' : 'person_add' }}</mat-icon>
+        {{ editingUserId ? 'Editar usuario' : 'Crear usuario' }}
+      </h3>
+
+      <form [formGroup]="form" (ngSubmit)="saveUser()" class="form-grid">
+
+        <mat-form-field appearance="outline">
+          <mat-label>Nombre completo</mat-label>
+          <input matInput formControlName="username">
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Email</mat-label>
+          <input matInput formControlName="email">
+        </mat-form-field>
+
+        <!-- Password solo al crear -->
+        <mat-form-field appearance="outline" *ngIf="!editingUserId">
+          <mat-label>Contraseña</mat-label>
+          <input matInput type="password" formControlName="password">
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Rol</mat-label>
+          <mat-select formControlName="role">
+            <mat-option value="USER">Usuario</mat-option>
+            <mat-option value="INSTRUCTOR">Instructor</mat-option>
+            <mat-option value="ADMIN">Administrador</mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Cursos</mat-label>
+          <mat-select formControlName="courseIds" multiple>
+            <mat-option *ngFor="let c of courses" [value]="c.id">
+              {{ c.name }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <!-- BOTONES -->
+        <div class="form-actions">
+          <button mat-raised-button color="primary" type="submit">
+            {{ editingUserId ? 'Guardar cambios' : 'Crear usuario' }}
+          </button>
+
+          <button
+            *ngIf="editingUserId"
+            mat-stroked-button
+            color="warn"
+            type="button"
+            (click)="cancelEdit()">
+            Cancelar
+          </button>
+        </div>
+
+      </form>
+    </div>
+
+    <!-- ===================== -->
+    <!-- 🔍 FILTROS -->
     <!-- ===================== -->
     <div class="section-card">
+
       <h3 class="section-title">Buscador</h3>
 
       <div class="filters-chip-container">
 
-        <!-- Buscar -->
         <mat-form-field appearance="outline" class="filter-text">
           <mat-label>Buscar...</mat-label>
-          <input
-            matInput
-            [(ngModel)]="searchTerm"
-            (input)="applyFilter()">
+          <input matInput [(ngModel)]="searchTerm" (input)="applyFilter()">
           <mat-icon matSuffix>search</mat-icon>
         </mat-form-field>
 
-        <!-- Rol -->
         <div class="chip-filter-block">
-          <h2 class="chip-title">Rol:</h2>
-          <mat-chip-listbox
-            class="chip-row"
-            [(ngModel)]="filterRole"
-            (ngModelChange)="applyFilter()">
-
+          <span class="chip-title">Rol:</span>
+          <mat-chip-listbox [(ngModel)]="filterRole" (ngModelChange)="applyFilter()">
             <mat-chip-option value="ALL">Todos</mat-chip-option>
             <mat-chip-option value="USER">Usuario</mat-chip-option>
             <mat-chip-option value="INSTRUCTOR">Instructor</mat-chip-option>
             <mat-chip-option value="ADMIN">Administrador</mat-chip-option>
-
-            <mat-chip-option
-              value="SUPER_ADMIN"
-              *ngIf="currentRole === 'SUPER_ADMIN'">
-              Super Admin
-            </mat-chip-option>
-
           </mat-chip-listbox>
         </div>
 
-        <!-- Curso -->
         <div class="chip-filter-block">
-          <h2 class="chip-title">Curso:</h2>
-          <mat-chip-listbox
-            class="chip-row"
-            [(ngModel)]="filterCourse"
-            (ngModelChange)="applyFilter()">
-
+          <span class="chip-title">Curso:</span>
+          <mat-chip-listbox [(ngModel)]="filterCourse" (ngModelChange)="applyFilter()">
             <mat-chip-option value="ALL">Todos</mat-chip-option>
-
-            <mat-chip-option
-              *ngFor="let c of courses"
-              [value]="c.id">
+            <mat-chip-option *ngFor="let c of courses" [value]="c.id">
               {{ c.name }}
             </mat-chip-option>
-
           </mat-chip-listbox>
         </div>
 
@@ -70,17 +111,15 @@
     </div>
 
     <!-- ===================== -->
-    <!-- 📋 LISTADO DE USUARIOS -->
+    <!-- 📋 TABLA -->
     <!-- ===================== -->
     <div class="section-card section-table">
+
       <h3 class="section-title">Listado de usuarios</h3>
 
       <div class="table-section">
 
-        <table
-          mat-table
-          [dataSource]="users"
-          class="table-modern responsive-table">
+        <table mat-table [dataSource]="users" class="table-modern">
 
           <!-- NOMBRE -->
           <ng-container matColumnDef="fullName">
@@ -104,46 +143,34 @@
           <ng-container matColumnDef="organization">
             <th mat-header-cell *matHeaderCellDef>Organización</th>
             <td mat-cell *matCellDef="let u">
-              {{ u.organizationName || 'Sin asignar' }}
+              {{ u.organizationName || '—' }}
             </td>
           </ng-container>
 
           <!-- CURSOS -->
-          <ng-container matColumnDef="cursosAsignados">
+          <ng-container matColumnDef="courses">
             <th mat-header-cell *matHeaderCellDef>Cursos</th>
             <td mat-cell *matCellDef="let u">
               <mat-chip-set>
-                <mat-chip *ngFor="let c of u.courses">
-                  {{ c }}
-                </mat-chip>
-                <mat-chip *ngIf="!u.courses?.length">
-                  Sin cursos
-                </mat-chip>
+                <mat-chip *ngFor="let c of u.courses">{{ c }}</mat-chip>
+                <mat-chip *ngIf="!u.courses?.length">Sin cursos</mat-chip>
               </mat-chip-set>
             </td>
           </ng-container>
 
-          <!-- 💰 CUOTA -->
+          <!-- CUOTA -->
           <ng-container matColumnDef="paid">
             <th mat-header-cell *matHeaderCellDef>Cuota</th>
             <td mat-cell *matCellDef="let u" class="quota-cell">
 
-              <!-- SOLO si hay curso filtrado -->
-              <ng-container *ngIf="filterCourse !== 'ALL'; else noCourse">
-
+              <ng-container *ngIf="filterCourse !== 'ALL'; else dash">
                 <mat-icon
-                  [ngClass]="paymentStatus[u.id] ? 'paid-ok' : 'paid-bad'"
-                  matTooltip="{{ paymentStatus[u.id] ? 'Cuota al día' : 'Cuota pendiente' }}">
+                  [ngClass]="paymentStatus[u.id] ? 'paid-ok' : 'paid-bad'">
                   {{ paymentStatus[u.id] ? 'check_circle' : 'cancel' }}
                 </mat-icon>
-
               </ng-container>
 
-              <!-- Cuando NO hay curso -->
-              <ng-template #noCourse>
-                <span class="text-muted">—</span>
-              </ng-template>
-
+              <ng-template #dash>—</ng-template>
             </td>
           </ng-container>
 
@@ -151,51 +178,48 @@
           <ng-container matColumnDef="actions">
             <th mat-header-cell *matHeaderCellDef>Acciones</th>
             <td mat-cell *matCellDef="let u">
-
               <button mat-icon-button (click)="editUser(u)">
                 <mat-icon>edit</mat-icon>
               </button>
-
               <button mat-icon-button color="warn" (click)="deleteUser(u.id)">
                 <mat-icon>delete</mat-icon>
               </button>
-
-              <button
-                mat-icon-button
-                color="primary"
-                matTooltip="Registrar pago"
-                (click)="goToRegisterPayment(u)">
+              <button mat-icon-button color="primary" (click)="goToRegisterPayment(u)">
                 <mat-icon>payments</mat-icon>
               </button>
-
             </td>
           </ng-container>
 
-          <!-- HEADER -->
           <tr mat-header-row *matHeaderRowDef="[
-            'fullName',
-            'email',
-            'role',
-            'organization',
-            'cursosAsignados',
-            'paid',
-            'actions'
+            'fullName','email','role','organization','courses','paid','actions'
           ]"></tr>
 
-          <!-- ROW -->
           <tr mat-row *matRowDef="let row; columns: [
-            'fullName',
-            'email',
-            'role',
-            'organization',
-            'cursosAsignados',
-            'paid',
-            'actions'
+            'fullName','email','role','organization','courses','paid','actions'
           ]"></tr>
 
         </table>
 
       </div>
+
+      <!-- ===================== -->
+      <!-- 📄 PAGINACIÓN -->
+      <!-- ===================== -->
+      <div class="pagination-bar">
+        <button mat-stroked-button (click)="prevPage()" [disabled]="currentPage === 0">
+          ◀ Anterior
+        </button>
+
+        <span>
+          Página {{ currentPage + 1 }} de {{ totalPages }} · {{ totalElements }} usuarios
+        </span>
+
+        <button mat-stroked-button (click)="nextPage()"
+                [disabled]="currentPage + 1 >= totalPages">
+          Siguiente ▶
+        </button>
+      </div>
+
     </div>
 
   </div>

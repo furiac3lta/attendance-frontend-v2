@@ -238,6 +238,10 @@ loadPaymentStatus(courseId: number): void {
       }
     });
 }
+cancelEdit(): void {
+  this.editingUserId = null;
+  this.form.reset({ role: 'USER', courseIds: [] });
+}
 
   // =========================
   // 💰 REGISTRAR PAGO
@@ -266,4 +270,47 @@ loadPaymentStatus(courseId: number): void {
       }
     });
   }
+  // =========================
+// 💾 GUARDAR USUARIO (ALTA / EDICIÓN)
+// =========================
+saveUser(): void {
+
+  if (this.form.invalid) {
+    Swal.fire('Atención', 'Completa los campos requeridos', 'warning');
+    return;
+  }
+
+  const dto = this.form.value;
+
+  const payload: any = {
+    fullName: dto.username,
+    email: dto.email || `${dto.username}@dojo.com`,
+    role: dto.role,
+    courseIds: dto.courseIds || []
+  };
+
+  // Password solo en alta
+  if (!this.editingUserId && dto.password) {
+    payload.password = dto.password;
+  }
+
+  const request$ = this.editingUserId
+    ? this.usersSvc.update(this.editingUserId, payload)
+    : this.usersSvc.create(payload);
+
+  request$.subscribe({
+   next: () => {
+  Swal.fire('Éxito', 'Usuario guardado correctamente', 'success');
+  this.cancelEdit();
+
+  this.currentPage = 0;   // 🔥 CLAVE
+  this.loadUsers();
+}
+,
+    error: () => {
+      Swal.fire('Error', 'No se pudo guardar el usuario', 'error');
+    }
+  });
+}
+
 }

@@ -493,3 +493,34 @@ mat-icon.unpaid {
 .paid-bad{
   color: red;
 }
+.form-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 16px;
+}
+
+.full-width {
+  grid-column: 1 / -1;
+}
+
+.form-actions {
+  grid-column: 1 / -1;
+  display: flex;
+  gap: 12px;
+  justify-content: flex-end;
+}
+
+.pagination-bar {
+  margin-top: 16px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.paid-ok {
+  color: #4caf50;
+}
+
+.paid-bad {
+  color: #f44336;
+}
