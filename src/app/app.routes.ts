@@ -97,7 +97,13 @@ export const routes: Routes = [
         loadComponent: () => import('./features/attendance/pages/course-report/course-report.page').then(m => m.CourseReportPage),
       },
 
-
+{
+  path: 'payments/new',
+  loadComponent: () =>
+    import('./features/payments/pages/payment-create/payment-create')
+      .then(m => m.PaymentCreatePage)
+}
+,
       // Registro
       {
         path: 'register',

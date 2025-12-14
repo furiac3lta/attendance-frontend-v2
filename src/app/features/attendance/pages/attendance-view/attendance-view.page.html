@@ -1,6 +1,11 @@
 <mat-card class="attendance-view-card">
 
-  <h2>Asistencia de la clase</h2>
+  <h1 class="title"> Asistencia - {{ courseName }}</h1>
+ 
+ <h2> {{ titleLabel }}</h2>
+ <h4></h4>
+
+
 
   <mat-divider></mat-divider>
 
@@ -14,7 +19,9 @@
     class="table-modern responsive-table"
     *ngIf="!loading && records.length > 0">
 
-    <!-- Alumno -->
+    <!-- ===================== -->
+    <!-- Alumno                -->
+    <!-- ===================== -->
     <ng-container matColumnDef="fullName">
       <th mat-header-cell *matHeaderCellDef> Alumno </th>
       <td mat-cell *matCellDef="let r">
@@ -22,7 +29,24 @@
       </td>
     </ng-container>
 
-    <!-- Presente -->
+    <!-- ===================== -->
+    <!-- Estado de pago        -->
+    <!-- ===================== -->
+<ng-container matColumnDef="paid">
+  <th mat-header-cell *matHeaderCellDef> Cuota </th>
+  <td mat-cell *matCellDef="let r">
+    <mat-icon
+      [ngClass]="r.paid ? 'paid-ok' : 'paid-bad'"
+      matTooltip="{{ r.paid ? 'Cuota al día' : 'Cuota vencida' }}">
+      {{ r.paid ? 'check_circle' : 'cancel' }}
+    </mat-icon>
+  </td>
+</ng-container>
+
+
+    <!-- ===================== -->
+    <!-- Presente              -->
+    <!-- ===================== -->
     <ng-container matColumnDef="present">
       <th mat-header-cell *matHeaderCellDef> Presente </th>
       <td mat-cell *matCellDef="let r">
@@ -32,7 +56,9 @@
       </td>
     </ng-container>
 
-    <!-- Tomada por -->
+    <!-- ===================== -->
+    <!-- Tomada por            -->
+    <!-- ===================== -->
     <ng-container matColumnDef="takenBy">
       <th mat-header-cell *matHeaderCellDef> Tomada por </th>
       <td mat-cell *matCellDef="let r">
@@ -45,7 +71,9 @@
       </td>
     </ng-container>
 
-    <!-- Fecha -->
+    <!-- ===================== -->
+    <!-- Fecha                 -->
+    <!-- ===================== -->
     <ng-container matColumnDef="takenAt">
       <th mat-header-cell *matHeaderCellDef> Fecha </th>
       <td mat-cell *matCellDef="let r">

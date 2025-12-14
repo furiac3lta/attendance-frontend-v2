@@ -476,3 +476,20 @@ mat-form-field.mat-mdc-form-field {
 .dark-mode .no-courses {
   color: #aaa;
 }
+.quota-cell {
+  text-align: center;
+}
+
+mat-icon.paid {
+  color: #4caf50; /* verde */
+}
+
+mat-icon.unpaid {
+  color: #f44336; /* rojo */
+}
+.paid-ok{
+  color: green;
+}
+.paid-bad{
+  color: red;
+}

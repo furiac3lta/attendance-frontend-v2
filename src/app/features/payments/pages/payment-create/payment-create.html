@@ -1,0 +1,66 @@
+<mat-card class="payment-card">
+
+  <h2>Registrar pago</h2>
+
+  <form [formGroup]="form">
+
+    <!-- Alumno -->
+    <mat-form-field appearance="outline" class="full">
+      <mat-label>Alumno</mat-label>
+      <input matInput [value]="studentName" disabled>
+    </mat-form-field>
+
+    <!-- Curso -->
+    <mat-form-field appearance="outline" class="full">
+      <mat-label>Curso</mat-label>
+      <input matInput [value]="courseName" disabled>
+    </mat-form-field>
+
+    <!-- Monto -->
+    <mat-form-field appearance="outline" class="full">
+      <mat-label>Monto</mat-label>
+      <input matInput type="number" formControlName="amount">
+    </mat-form-field>
+
+    <!-- Método -->
+    <mat-form-field appearance="outline" class="full">
+      <mat-label>Método de pago</mat-label>
+      <mat-select formControlName="method">
+        <mat-option *ngFor="let m of paymentMethods" [value]="m.value">
+          {{ m.label }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <!-- Mes / Año -->
+    <div class="row">
+      <mat-form-field appearance="outline">
+        <mat-label>Mes</mat-label>
+        <input matInput type="number" formControlName="month">
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Año</mat-label>
+        <input matInput type="number" formControlName="year">
+      </mat-form-field>
+    </div>
+
+    <!-- Acciones -->
+    <div class="actions">
+      <button
+        mat-raised-button
+        color="primary"
+        (click)="submit()"
+        [disabled]="loading">
+        <mat-icon>save</mat-icon>
+        Guardar
+      </button>
+
+      <button mat-button type="button" (click)="cancel()">
+        Cancelar
+      </button>
+    </div>
+
+  </form>
+
+</mat-card>

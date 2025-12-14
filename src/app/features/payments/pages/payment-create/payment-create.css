@@ -1,0 +1,21 @@
+.payment-card {
+  max-width: 500px;
+  margin: auto;
+  padding: 1.5rem;
+}
+
+.full {
+  width: 100%;
+}
+
+.row {
+  display: flex;
+  gap: 12px;
+}
+
+.actions {
+  margin-top: 1rem;
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+}

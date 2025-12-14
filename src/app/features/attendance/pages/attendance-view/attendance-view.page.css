@@ -21,3 +21,22 @@ table {
   margin-top: 1.5rem;
   text-align: right;
 }
+.attendance-title {
+  font-size: 18px;
+  font-weight: 500;
+  margin-bottom: 12px;
+  color: #444;
+}
+
+@media (max-width: 768px) {
+  .attendance-title {
+    font-size: 16px;
+  }
+}
+.paid-ok {
+  color: #2ecc71; /* verde */
+}
+
+.paid-bad {
+  color: #e74c3c; /* rojo */
+}
