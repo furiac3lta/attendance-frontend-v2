@@ -7,6 +7,7 @@ import { CoursesService } from '../../../../core/services/courses.service';
 import { Course } from '../../models/course.model';
 import { UsersService } from '../../../../core/services/users.service';
 import { User } from '../../../../core/services/users.service';
+import { InstructorDTO } from '../../../../core/models/instructorDTO';
 
 // Material
 import { MatTableModule } from '@angular/material/table';
@@ -32,6 +33,7 @@ import { MatCard } from '@angular/material/card';
     MatDividerModule,
     MatProgressSpinnerModule,
     MatCard
+
   ],
   templateUrl: './course-list.page.html',
   styleUrls: ['./course-list.page.css'],
@@ -40,6 +42,10 @@ export class CourseListPage implements OnInit {
 
   courses: Course[] = [];
   instructors: User[] = [];
+
+
+  /** 🔥 instructores disponibles por curso */
+availableInstructors: Record<number, InstructorDTO[]> = {};
 
   loading = true;
   message = '';
@@ -128,4 +134,18 @@ export class CourseListPage implements OnInit {
         console.error('❌ Error asignando instructor:', err),
     });
   }
+// 🔥 ESTE MÉTODO NO EXISTÍA → ERROR
+ loadAvailableInstructors(courseId: number): void {
+  this.coursesSvc.getAvailableInstructors(courseId).subscribe({
+    next: (instructors) => {
+      this.availableInstructors[courseId] = instructors;
+    },
+    error: (err) => {
+      console.error('Error cargando instructores', err);
+      this.availableInstructors[courseId] = [];
+    }
+  });
+}
+
+  
 }

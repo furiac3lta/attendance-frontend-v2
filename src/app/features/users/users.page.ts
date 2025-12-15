@@ -282,35 +282,74 @@ saveUser(): void {
 
   const dto = this.form.value;
 
-  const payload: any = {
+  const userPayload: any = {
     fullName: dto.username,
     email: dto.email || `${dto.username}@dojo.com`,
     role: dto.role,
-    courseIds: dto.courseIds || []
+    organizationId: dto.organizationId ?? null
   };
 
-  // Password solo en alta
-  if (!this.editingUserId && dto.password) {
-    payload.password = dto.password;
+  const courseIds: number[] = dto.courseIds || [];
+
+  // =========================
+  // ✏️ EDICIÓN
+  // =========================
+  if (this.editingUserId) {
+
+    this.usersSvc.update(this.editingUserId, userPayload).subscribe({
+      next: () => {
+
+        // 🔥 SEGUNDA LLAMADA: asignar cursos
+        this.usersSvc.assignCourses(this.editingUserId!, courseIds).subscribe({
+          next: () => {
+            Swal.fire('Éxito', 'Usuario actualizado', 'success');
+            this.cancelEdit();
+            this.currentPage = 0;
+            this.loadUsers();
+          },
+          error: () => {
+            Swal.fire('Error', 'No se pudieron asignar los cursos', 'error');
+          }
+        });
+
+      },
+      error: () => {
+        Swal.fire('Error', 'No se pudo actualizar el usuario', 'error');
+      }
+    });
+
+    return;
   }
 
-  const request$ = this.editingUserId
-    ? this.usersSvc.update(this.editingUserId, payload)
-    : this.usersSvc.create(payload);
+  // =========================
+  // 🆕 ALTA
+  // =========================
+  if (dto.password) {
+    userPayload.password = dto.password;
+  }
 
-  request$.subscribe({
-   next: () => {
-  Swal.fire('Éxito', 'Usuario guardado correctamente', 'success');
-  this.cancelEdit();
+  this.usersSvc.create(userPayload).subscribe({
+    next: (createdUser: any) => {
 
-  this.currentPage = 0;   // 🔥 CLAVE
-  this.loadUsers();
-}
-,
+      if (courseIds.length === 0) {
+        Swal.fire('Éxito', 'Usuario creado', 'success');
+        this.loadUsers();
+        return;
+      }
+
+      this.usersSvc.assignCourses(createdUser.id, courseIds).subscribe({
+        next: () => {
+          Swal.fire('Éxito', 'Usuario creado con cursos', 'success');
+          this.loadUsers();
+        }
+      });
+
+    },
     error: () => {
-      Swal.fire('Error', 'No se pudo guardar el usuario', 'error');
+      Swal.fire('Error', 'No se pudo crear el usuario', 'error');
     }
   });
 }
+
 
 }

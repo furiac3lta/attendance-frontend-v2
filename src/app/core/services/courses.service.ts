@@ -4,11 +4,21 @@ import { environment } from '../../../environments/environment';
 import { Observable } from 'rxjs';
 import { User } from '../models/user.models'; // ← Ajustar ruta según tu proyecto
 import { Router } from '@angular/router';
+import { InstructorDTO } from '../models/instructorDTO';
 
 @Injectable({ providedIn: 'root' })
 export class CoursesService {
 
   private readonly apiUrl = `${environment.API_URL}/courses`;
+  
+private authHeaders() {
+  const token = sessionStorage.getItem('token') || '';
+  return {
+    headers: {
+      Authorization: `Bearer ${token}`
+    }
+  };
+}
 
   constructor(private http: HttpClient) {}
 
@@ -46,5 +56,10 @@ getInstructors() {
   getById(id: number): Observable<any> {
     return this.http.get<any>(`${this.apiUrl}/${id}`);
   }
-
+getAvailableInstructors(courseId: number) {
+  return this.http.get<InstructorDTO[]>(
+    `${environment.API_URL}/courses/${courseId}/available-instructors`,
+    this.authHeaders()
+  );
+}
 }
