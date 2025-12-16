@@ -1,47 +1,112 @@
-<mat-card class="dashboard-card">
-  <h2>Bienvenido</h2>
-  <p class="role">Rol actual: <strong>{{ role }}</strong></p>
+<div class="dashboard-wrapper" *ngIf="dashboard">
 
-  <div class="grid">
+  <header class="dashboard-header">
+    <div class="header-body">
+      <h1>Dashboard de asistencia</h1>
+      <p>Presupuesto y recaudación versus lo esperado.</p>
+    </div>
+    <div class="highlight">
+      <span class="label">Recaudación total</span>
+      <strong>{{ dashboard.totalRevenue | currency:'USD':'symbol':'1.0-0' }}</strong>
+      <span class="muted">Ingresos consolidados</span>
+    </div>
+  </header>
 
-    <!-- SUPER ADMIN -->
-    <button mat-raised-button color="primary" *ngIf="role === 'SUPER_ADMIN'"
-            (click)="goToSection('/organizations')">
-      <mat-icon>business</mat-icon> Organizaciones
-    </button>
-
-    <button mat-raised-button color="accent" *ngIf="role === 'SUPER_ADMIN'"
-            (click)="goToSection('/users')">
-      <mat-icon>groups</mat-icon> Usuarios
-    </button>
-
-    <!-- ADMIN -->
-    <button mat-raised-button color="primary" *ngIf="role === 'ADMIN'"
-            (click)="goToSection('/courses')">
-      <mat-icon>menu_book</mat-icon> Cursos
-    </button>
-
-    <button mat-raised-button color="accent" *ngIf="role === 'ADMIN'"
-            (click)="goToSection('/users')">
-      <mat-icon>school</mat-icon> Alumnos e Instructores
-    </button>
-
-    <!-- INSTRUCTOR -->
-    <button mat-raised-button color="primary" *ngIf="role === 'INSTRUCTOR'"
-            (click)="goToSection('/classes')">
-      <mat-icon>class</mat-icon> Mis clases
-    </button>
-
-    <button mat-raised-button color="accent" *ngIf="role === 'INSTRUCTOR'"
-            (click)="goToSection('/attendance')">
-      <mat-icon>check_circle</mat-icon> Tomar asistencia
-    </button>
-
-    <!-- USER -->
-    <button mat-raised-button color="primary" *ngIf="role === 'USER'"
-            (click)="goToSection('/attendance')">
-      <mat-icon>visibility</mat-icon> Ver mi asistencia
-    </button>
-
+  <div class="period-bar">
+    <span class="chip">Mes</span>
+    <span class="period-value">{{ currentMonthLabel }}</span>
+    <span class="chip">Año</span>
+    <span class="period-value">{{ currentYear }}</span>
+    <div class="period-divider"></div>
+    <span class="period-label">Resumen general</span>
   </div>
-</mat-card>
+
+  <!-- ===== RESUMEN ===== -->
+  <section class="stats-grid">
+    <article class="stat-card">
+      <div class="icon blue">
+        <mat-icon>groups</mat-icon>
+      </div>
+      <div>
+        <p class="label">Alumnos activos</p>
+        <h3>{{ dashboard.totalActiveStudents }}</h3>
+        <p class="muted">Alumnos con asistencia vigente</p>
+      </div>
+    </article>
+
+    <article class="stat-card">
+      <div class="icon green">
+        <mat-icon>payments</mat-icon>
+      </div>
+      <div>
+        <p class="label">Pagaron</p>
+        <h3>{{ dashboard.paidStudents }}</h3>
+        <p class="muted">Estudiantes al día</p>
+      </div>
+    </article>
+
+    <article class="stat-card">
+      <div class="icon yellow">
+        <mat-icon>report_problem</mat-icon>
+      </div>
+      <div>
+        <p class="label">Con deuda</p>
+        <h3>{{ dashboard.debtStudents }}</h3>
+        <p class="muted">Seguimiento pendiente</p>
+      </div>
+    </article>
+
+    <article class="stat-card">
+      <div class="icon purple">
+        <mat-icon>show_chart</mat-icon>
+      </div>
+      <div>
+        <p class="label">Ticket promedio</p>
+        <h3>
+          {{
+            ticketAverage !== null
+              ? (ticketAverage | currency:'USD':'symbol':'1.0-0')
+              : 'N/A'
+          }}
+        </h3>
+        <p class="muted">Estimado por alumno</p>
+      </div>
+    </article>
+  </section>
+
+  <!-- ===== GRAFICOS ===== -->
+  <section class="charts-grid">
+    <article class="panel">
+      <div class="panel-header">
+        <div>
+          <p class="eyebrow">Ingresos</p>
+          <h3>Recaudación por curso</h3>
+        </div>
+      </div>
+      <div class="chart-container">
+        <canvas
+          baseChart
+          [data]="revenueByCourseData"
+          [type]="'bar'">
+        </canvas>
+      </div>
+    </article>
+
+    <article class="panel">
+      <div class="panel-header">
+        <div>
+          <p class="eyebrow">Pagos</p>
+          <h3>Métodos de pago</h3>
+        </div>
+      </div>
+      <div class="chart-container pie">
+        <canvas
+          baseChart
+          [data]="paymentMethodsData"
+          [type]="'pie'">
+        </canvas>
+      </div>
+    </article>
+  </section>
+
+</div>

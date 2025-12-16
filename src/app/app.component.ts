@@ -6,13 +6,15 @@ import { Footer } from './shared/footer/footer';
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet, NavbarComponent, LoaderComponent],
+  imports: [RouterOutlet, NavbarComponent, LoaderComponent, Footer],
   template: `
     <app-loader></app-loader>
 
     <app-navbar></app-navbar>
 
     <router-outlet></router-outlet>
+
+    <app-footer></app-footer>
   `,
 })
 export class AppComponent {}

@@ -10,10 +10,15 @@
   </button>
 
   <!-- HOME -->
-  <button mat-button routerLink="/" *ngIf="isLoggedIn">
-    <mat-icon>home</mat-icon>
-    Home
-  </button>
+  <!-- HOME -->
+<button
+  mat-button
+  routerLink="/"
+  *ngIf="isLoggedIn && !isInstructor">
+  <mat-icon>home</mat-icon>
+  Home
+</button>
+
 
   <span class="spacer"></span>
 

@@ -39,62 +39,83 @@ export class LoginPage {
     });
   }
 
-  onSubmit(): void {
-    if (this.loginForm.invalid) {
-      Swal.fire({
-        icon: 'warning',
-        title: 'Formulario incompleto',
-        text: 'Completá todos los campos correctamente.',
-        heightAuto: false
-      });
-      return;
-    }
+ onSubmit(): void {
+  if (this.loginForm.invalid) {
+    Swal.fire({
+      icon: 'warning',
+      title: 'Formulario incompleto',
+      text: 'Completá todos los campos correctamente.',
+      heightAuto: false
+    });
+    return;
+  }
 
-    this.isLoading = true;
+  this.isLoading = true;
 
-    this.authService.login(this.loginForm.value).subscribe({
-      next: (res) => {
-        // Guardamos token y rol
-        sessionStorage.setItem('token', res.token);
-        sessionStorage.setItem('role', res.type);
+  this.authService.login(this.loginForm.value).subscribe({
+    next: (res) => {
+      this.isLoading = false;
 
-        const role = res.type?.replace(/^ROLE_/, '').toUpperCase();
+      // Guardamos token y rol
+      sessionStorage.setItem('token', res.token);
+      sessionStorage.setItem('role', res.type);
 
-        Swal.fire({
-          icon: 'success',
-          title: 'Bienvenido',
-          text: `Hola ${role.replace('_', ' ')}`,
-          timer: 1500,
-          showConfirmButton: false,
-          heightAuto: false
-        });
+      const role = res.type?.toUpperCase(); // ADMIN | SUPER_ADMIN | INSTRUCTOR | USER
 
-        // Redirige al dashboard
-        this.router.navigate(['/dashboard']);
-      },
-
-      error: (err) => {
-        console.error('❌ Error de login:', err);
-
-        let message = '❌ Error de conexión con el servidor.';
-
-        if (err.status === 401) {
-          message = '⚠️ Usuario o contraseña incorrectos.';
-        } else if (err.status === 403) {
-          message = '⛔ Tu cuenta no tiene permisos para ingresar.';
-        }
-
+      // 🚫 BLOQUEO EXTRA POR SEGURIDAD (USER)
+      if (role === 'USER') {
         Swal.fire({
           icon: 'error',
-          title: 'Error al iniciar sesión',
-          text: message,
+          title: 'Acceso restringido',
+          text: 'Tu cuenta no tiene permisos para ingresar al sistema.',
           heightAuto: false
         });
-      },
+        sessionStorage.clear();
+        return;
+      }
 
-      complete: () => {
-        this.isLoading = false;
-      },
-    });
-  }
+      // ✅ Mensaje OK
+      Swal.fire({
+        icon: 'success',
+        title: 'Bienvenido',
+        text: `Acceso concedido`,
+        timer: 1200,
+        showConfirmButton: false,
+        heightAuto: false
+      });
+
+      // 🎯 REDIRECCIÓN POR ROL
+      if (role === 'INSTRUCTOR') {
+        this.router.navigate(['/courses']);
+      } else if (role === 'ADMIN' || role === 'SUPER_ADMIN') {
+        this.router.navigate(['/dashboard']);
+      } else {
+        // fallback de seguridad
+        this.router.navigate(['/']);
+      }
+    },
+
+    error: (err) => {
+      this.isLoading = false;
+
+      console.error('❌ Error de login:', err);
+
+      let message = '❌ Error de conexión con el servidor.';
+
+      if (err.status === 401) {
+        message = '⚠️ Usuario o contraseña incorrectos.';
+      } else if (err.status === 403) {
+        message = '⛔ Tu cuenta no tiene permisos para ingresar.';
+      }
+
+      Swal.fire({
+        icon: 'error',
+        title: 'Error al iniciar sesión',
+        text: message,
+        heightAuto: false
+      });
+    }
+  });
+}
+
 }

@@ -4,33 +4,64 @@
   left: 0;
   width: 100%;
   z-index: 1100;
-  background: #1a1a1f !important;
-  color: #eee !important;
+
+  background: var(--card-bg);
+  border-top: 1px solid var(--border);
+  box-shadow: var(--shadow);
+
   display: flex;
   justify-content: center;
-  height: fit-content;
+  align-items: center;
+
+  padding: 4px 16px;      /* 🔽 Compacto */
+  min-height: 80px;       /* Altura controlada */
+
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
 }
 
 .footer-content {
   text-align: center;
-  font-family: 'Poppins', sans-serif;
+  font-family: var(--font-main), sans-serif;
   font-size: 13px;
-  line-height: 0.5;
-  
+  line-height: 1.6;       /* 🔥 clave para centrar */
+  color: var(--text);
+}
+
+/* 🔥 EL FIX REAL: eliminar márgenes de <p> */
+.footer-content p {
+  margin: 2px 0;
 }
 
 .footer-content .dev {
-  color: #ffb3d9;
+  color: var(--text-strong);
   font-weight: 600;
 }
 
 .footer-content a {
-  color: #a2d2ff;
+  color: var(--text-strong);
   text-decoration: none;
   font-weight: 500;
+  transition: color 0.2s ease;
 }
 
 .footer-content a:hover {
-  color: #ffc8dd;
+  color: var(--accent-hover);
   text-decoration: underline;
+}
+
+/* 📱 Mobile */
+@media (max-width: 600px) {
+  .footer-toolbar {
+    padding: 6px 12px;
+    min-height: 52px;
+  }
+
+  .footer-content {
+    font-size: 12px;
+  }
+
+  .footer-content p {
+    margin: 1px 0;
+  }
 }

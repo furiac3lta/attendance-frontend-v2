@@ -40,6 +40,14 @@ export class NavbarComponent implements OnInit, OnDestroy {
   private subRole?: Subscription;
   private subLogin?: Subscription;
 
+  get isInstructor(): boolean {
+  return this.userRole === 'INSTRUCTOR';
+}
+
+get isAdminOrSuper(): boolean {
+  return this.userRole === 'ADMIN' || this.userRole === 'SUPER_ADMIN';
+}
+
   constructor(private auth: AuthService, private router: Router) {}
 
   ngOnInit(): void {
