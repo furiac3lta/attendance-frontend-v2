@@ -4,7 +4,6 @@ import { Router, RouterLink, RouterLinkActive } from '@angular/router';
 import { jwtDecode } from 'jwt-decode';
 import { Subscription } from 'rxjs';
 import { AuthService } from '../../../core/services/auth.service';
-
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
@@ -30,9 +29,15 @@ interface DecodedToken {
 })
 export class NavbarComponent implements OnInit, OnDestroy {
 
+  // =========================
+  // STATE
+  // =========================
   isLoggedIn = false;
   userName: string | null = null;
   userRole: string | null = null;
+
+  // 👉 NUEVO
+  organizationName: string | null = null;
 
   isDark = false;
   menuOpen = false;
@@ -40,16 +45,25 @@ export class NavbarComponent implements OnInit, OnDestroy {
   private subRole?: Subscription;
   private subLogin?: Subscription;
 
+  // =========================
+  // GETTERS
+  // =========================
   get isInstructor(): boolean {
-  return this.userRole === 'INSTRUCTOR';
-}
+    return this.userRole === 'INSTRUCTOR';
+  }
 
-get isAdminOrSuper(): boolean {
-  return this.userRole === 'ADMIN' || this.userRole === 'SUPER_ADMIN';
-}
+  get isAdminOrSuper(): boolean {
+    return this.userRole === 'ADMIN' || this.userRole === 'SUPER_ADMIN';
+  }
 
-  constructor(private auth: AuthService, private router: Router) {}
+  constructor(
+    private auth: AuthService,
+    private router: Router
+  ) {}
 
+  // =========================
+  // LIFECYCLE
+  // =========================
   ngOnInit(): void {
     // Dark mode restore
     this.isDark = localStorage.getItem('dark') === '1';
@@ -70,30 +84,59 @@ get isAdminOrSuper(): boolean {
     this.loadUserInfo();
   }
 
-  toggleDark() {
+  ngOnDestroy(): void {
+    this.subRole?.unsubscribe();
+    this.subLogin?.unsubscribe();
+  }
+
+  // =========================
+  // UI ACTIONS
+  // =========================
+  toggleDark(): void {
     this.isDark = !this.isDark;
     document.body.classList.toggle('dark-mode', this.isDark);
     localStorage.setItem('dark', this.isDark ? '1' : '0');
   }
 
+  logout(): void {
+    this.auth.logout();
+    this.router.navigate(['/login']);
+  }
+
+  // =========================
+  // USER INFO
+  // =========================
   loadUserInfo(): void {
     this.userRole = this.auth.getRole() || null;
+
     const user = this.auth.getUser();
 
-    if (user?.fullName) {
-      this.userName = user.fullName.split(' ')[0];
+    if (user) {
+      // Nombre
+      if (user.fullName) {
+        this.userName = user.fullName.split(' ')[0];
+      }
+
+      // 👉 Organización
+      this.organizationName = user.organizationName ?? null;
       return;
     }
 
+    // Fallback por token
     const token = this.auth.getToken();
     if (token) {
       try {
         const decoded = jwtDecode<DecodedToken>(token);
         this.userName = decoded.sub?.split('@')[0] ?? 'Usuario';
-      } catch {}
+      } catch {
+        this.userName = 'Usuario';
+      }
     }
   }
 
+  // =========================
+  // PERMISOS
+  // =========================
   canSee(link: string): boolean {
     const access = {
       SUPER_ADMIN: ['organizations', 'users', 'courses', 'attendance'],
@@ -102,17 +145,7 @@ get isAdminOrSuper(): boolean {
       USER:        ['attendance']
     };
 
-const role = this.userRole as keyof typeof access;
-
-  return role ? access[role].includes(link) : false;  }
-
-  logout(): void {
-    this.auth.logout();
-    this.router.navigate(['/login']);
-  }
-
-  ngOnDestroy(): void {
-    this.subRole?.unsubscribe();
-    this.subLogin?.unsubscribe();
+    const role = this.userRole as keyof typeof access;
+    return role ? access[role].includes(link) : false;
   }
 }

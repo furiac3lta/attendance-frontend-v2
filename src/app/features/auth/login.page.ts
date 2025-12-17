@@ -20,8 +20,8 @@ import Swal from 'sweetalert2';
     MatInputModule,
     MatIconModule,
     MatButtonModule,
-  
-],
+
+  ],
   templateUrl: './login.page.html',
 })
 export class LoginPage {
@@ -39,83 +39,89 @@ export class LoginPage {
     });
   }
 
- onSubmit(): void {
-  if (this.loginForm.invalid) {
-    Swal.fire({
-      icon: 'warning',
-      title: 'Formulario incompleto',
-      text: 'Completá todos los campos correctamente.',
-      heightAuto: false
-    });
-    return;
-  }
+  onSubmit(): void {
+    if (this.loginForm.invalid) {
+      Swal.fire({
+        icon: 'warning',
+        title: 'Formulario incompleto',
+        text: 'Completá todos los campos correctamente.',
+        heightAuto: false
+      });
+      return;
+    }
 
-  this.isLoading = true;
+    this.isLoading = true;
 
-  this.authService.login(this.loginForm.value).subscribe({
-    next: (res) => {
-      this.isLoading = false;
+    this.authService.login(this.loginForm.value).subscribe({
+      next: (res) => {
+        this.isLoading = false;
 
-      // Guardamos token y rol
-      sessionStorage.setItem('token', res.token);
-      sessionStorage.setItem('role', res.type);
+        // Guardamos token y rol
+        sessionStorage.setItem('token', res.token);
+        sessionStorage.setItem('role', res.type);
 
-      const role = res.type?.toUpperCase(); // ADMIN | SUPER_ADMIN | INSTRUCTOR | USER
+        const role = res.type?.toUpperCase(); // ADMIN | SUPER_ADMIN | INSTRUCTOR | USER
 
-      // 🚫 BLOQUEO EXTRA POR SEGURIDAD (USER)
-      if (role === 'USER') {
+        // 🚫 BLOQUEO EXTRA POR SEGURIDAD (USER)
+        if (role === 'USER') {
+          Swal.fire({
+            icon: 'error',
+            title: 'Acceso restringido',
+            text: 'Tu cuenta no tiene permisos para ingresar al sistema.',
+            heightAuto: false
+          });
+          sessionStorage.clear();
+          return;
+        }
+
+        // ✅ Mensaje OK
         Swal.fire({
-          icon: 'error',
-          title: 'Acceso restringido',
-          text: 'Tu cuenta no tiene permisos para ingresar al sistema.',
+          icon: 'success',
+          title: 'Bienvenido',
+          text: `Acceso concedido`,
+          timer: 1200,
+          showConfirmButton: false,
           heightAuto: false
         });
-        sessionStorage.clear();
-        return;
+
+        // 🎯 REDIRECCIÓN POR ROL
+        switch (role) {
+          case 'SUPER_ADMIN':
+            this.router.navigate(['/dashboard/admin']);
+            break;
+          case 'ADMIN':
+            this.router.navigate(['/dashboard']);
+            break;
+          case 'INSTRUCTOR':
+            this.router.navigate(['/courses']);
+            break;
+          default:
+            this.router.navigate(['/']);
+            break;
+        }
+      },
+
+      error: (err) => {
+        this.isLoading = false;
+
+        console.error('❌ Error de login:', err);
+
+        let message = '❌ Error de conexión con el servidor.';
+
+        if (err.status === 401) {
+          message = '⚠️ Usuario o contraseña incorrectos.';
+        } else if (err.status === 403) {
+          message = '⛔ Tu cuenta no tiene permisos para ingresar.';
+        }
+
+        Swal.fire({
+          icon: 'error',
+          title: 'Error al iniciar sesión',
+          text: message,
+          heightAuto: false
+        });
       }
-
-      // ✅ Mensaje OK
-      Swal.fire({
-        icon: 'success',
-        title: 'Bienvenido',
-        text: `Acceso concedido`,
-        timer: 1200,
-        showConfirmButton: false,
-        heightAuto: false
-      });
-
-      // 🎯 REDIRECCIÓN POR ROL
-      if (role === 'INSTRUCTOR') {
-        this.router.navigate(['/courses']);
-      } else if (role === 'ADMIN' || role === 'SUPER_ADMIN') {
-        this.router.navigate(['/dashboard']);
-      } else {
-        // fallback de seguridad
-        this.router.navigate(['/']);
-      }
-    },
-
-    error: (err) => {
-      this.isLoading = false;
-
-      console.error('❌ Error de login:', err);
-
-      let message = '❌ Error de conexión con el servidor.';
-
-      if (err.status === 401) {
-        message = '⚠️ Usuario o contraseña incorrectos.';
-      } else if (err.status === 403) {
-        message = '⛔ Tu cuenta no tiene permisos para ingresar.';
-      }
-
-      Swal.fire({
-        icon: 'error',
-        title: 'Error al iniciar sesión',
-        text: message,
-        heightAuto: false
-      });
-    }
-  });
-}
+    });
+  }
 
 }

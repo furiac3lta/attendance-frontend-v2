@@ -1,0 +1,79 @@
+<div class="page" *ngIf="data as d">
+
+ <div class="page" *ngIf="data as d">
+
+  <header class="head">
+    <div>
+      <h1>Dashboard de la organización</h1>
+      <p class="sub">
+        Organización:
+        <strong>{{ organizationName }}</strong>
+      </p>
+    </div>
+
+    <span class="pill">
+      Con deuda {{ unpaidPercent }}% sobre alumnos activos
+    </span>
+  </header>
+
+
+  <section class="grid">
+    <article class="card">
+      <div class="kpi">
+        <span class="icon">👥</span>
+        <div>
+          <p class="label">Alumnos activos</p>
+          <h2>{{ d.activeStudents }}</h2>
+          <p class="muted">Con asistencia vigente</p>
+        </div>
+      </div>
+    </article>
+
+    <article class="card ok">
+      <div class="kpi">
+        <span class="icon">✅</span>
+        <div>
+          <p class="label">Pagaron</p>
+          <h2>{{ d.paidStudents }}</h2>
+          <p class="muted">Pagos registrados este mes</p>
+        </div>
+      </div>
+    </article>
+
+    <article class="card warn">
+      <div class="kpi">
+        <span class="icon">⚠️</span>
+        <div>
+          <p class="label">No pagaron</p>
+          <h2>{{ d.unpaidStudents }}</h2>
+          <p class="muted">Con deuda este mes</p>
+        </div>
+      </div>
+    </article>
+
+    <article class="card money">
+      <div class="kpi">
+        <span class="icon">💰</span>
+        <div>
+          <p class="label">Recaudación</p>
+          <h2>{{ d.totalIncome | currency:'$':'symbol':'1.0-0' }}</h2>
+          <p class="muted">Pagos confirmados</p>
+        </div>
+      </div>
+    </article>
+
+    <article class="card">
+      <div class="kpi">
+        <span class="icon">📈</span>
+        <div>
+          <p class="label">Ticket promedio</p>
+          <h2>
+            {{ ticketAverage !== null ? (ticketAverage | currency:'$':'symbol':'1.0-0') : '—' }}
+          </h2>
+          <p class="muted">Por alumno activo</p>
+        </div>
+      </div>
+    </article>
+  </section>
+
+</div>
