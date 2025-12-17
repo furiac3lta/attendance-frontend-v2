@@ -4,94 +4,112 @@ import { RegisterComponent } from './features/auth/register/register.component';
 
 export const routes: Routes = [
 
+  // =========================
+  // AUTH
+  // =========================
   {
     path: 'login',
     loadComponent: () =>
-      import('./features/auth/login.page').then(m => m.LoginPage)
+      import('./features/auth/login.page')
+        .then(m => m.LoginPage)
   },
 
+  // =========================
+  // APP PROTEGIDA
+  // =========================
   {
     path: '',
     children: [
-// 🔥 ADMIN (ve dinero)
-{
-  path: 'dashboard/admin',
-  canActivate: [roleGuard],
-  data: { roles: ['ADMIN'] },
-  loadComponent: () =>
-    import('./features/dashboard-admin/admin-dashboard.page')
-      .then(m => m.AdminDashboardPage)
-},
-// app.routes.ts (o donde tengas tus routes)
 
-{
-  // ✅ ADMIN (organización) - VE dinero/pagos reales
-  path: 'dashboard/admin',
-  canActivate: [roleGuard],
-  data: { roles: ['ADMIN'] },
-  loadComponent: () =>
-    import('./features/dashboard-admin/admin-dashboard.page')
-      .then(m => m.AdminDashboardPage)
-},
+      // =========================
+      // ADMIN → DASHBOARD REAL
+      // =========================
+      {
+        path: 'dashboard/admin',
+        canActivate: [roleGuard],
+        data: { roles: ['ADMIN'] },
+        loadComponent: () =>
+          import('./features/dashboard-admin/admin-dashboard.page')
+            .then(m => m.AdminDashboardPage)
+      },
 
-{
-  // ✅ SUPER_ADMIN (sistema) - NO VE dinero
-  path: 'dashboard',
-  canActivate: [roleGuard],
-  data: { roles: ['SUPER_ADMIN'] },
-  loadComponent: () =>
-    import('./features/dashboard/dashboard.component')
-      .then(m => m.DashboardComponent)
-},
+      // =========================
+      // SUPER_ADMIN → SISTEMA
+      // =========================
+      {
+        path: 'dashboard',
+        canActivate: [roleGuard],
+        data: { roles: ['SUPER_ADMIN'] },
+        loadComponent: () =>
+          import('./features/dashboard/dashboard.component')
+            .then(m => m.DashboardComponent)
+      },
 
+      // =========================
+      // USUARIOS (ADMIN + SUPER_ADMIN)
+      // =========================
+      {
+        path: 'users',
+        canActivate: [roleGuard],
+        data: { roles: ['SUPER_ADMIN', 'ADMIN'] },
+        loadComponent: () =>
+          import('./features/users/users.page')
+            .then(m => m.UsersPage)
+      },
 
-    {
-  path: 'organizations',
-  canActivate: [roleGuard],
-  data: { roles: ['SUPER_ADMIN'] },
-  loadComponent: () =>
-    import('./features/organizations/pages/organization-list/organization-list.page')
-      .then(m => m.OrganizationListPage)
-},
+      // =========================
+      // ORGANIZACIONES
+      // =========================
+      {
+        path: 'organizations',
+        canActivate: [roleGuard],
+        data: { roles: ['SUPER_ADMIN'] },
+        loadComponent: () =>
+          import('./features/organizations/pages/organization-list/organization-list.page')
+            .then(m => m.OrganizationListPage)
+      },
 
-
+      // =========================
+      // CURSOS
+      // =========================
       {
         path: 'courses',
         canActivate: [roleGuard],
         data: { roles: ['SUPER_ADMIN', 'ADMIN', 'INSTRUCTOR'] },
         loadComponent: () =>
           import('./features/courses/pages/course-list/courses.list.page')
-            .then(m => m.CourseListPage),
+            .then(m => m.CourseListPage)
       },
 
-     {
-  path: 'organizations',
-  canActivate: [roleGuard],
-  data: { roles: ['SUPER_ADMIN'] },
-  loadComponent: () =>
-    import('./features/organizations/pages/organization-list/organization-list.page')
-      .then(m => m.OrganizationListPage)
-},
-
-
+      // =========================
+      // PAGOS
+      // =========================
       {
         path: 'payments/new',
         canActivate: [roleGuard],
-        data: { roles: ['SUPER_ADMIN', 'ADMIN'] },
+        data: { roles: ['ADMIN'] },
         loadComponent: () =>
           import('./features/payments/pages/payment-create/payment-create')
             .then(m => m.PaymentCreatePage)
       },
 
+      // =========================
+      // REGISTRO
+      // =========================
       {
         path: 'register',
         canActivate: [roleGuard],
         data: { roles: ['SUPER_ADMIN', 'ADMIN'] },
-        component: RegisterComponent,
-      },
+        component: RegisterComponent
+      }
     ]
   },
 
-  // ✅ CAMBIO CLAVE
-  { path: '**', redirectTo: 'login' }
+  // =========================
+  // FALLBACK
+  // =========================
+  {
+    path: '**',
+    redirectTo: 'login'
+  }
 ];

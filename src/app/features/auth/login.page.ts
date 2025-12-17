@@ -87,7 +87,7 @@ export class LoginPage {
         // 🎯 REDIRECCIÓN POR ROL
         switch (role) {
           case 'SUPER_ADMIN':
-            this.router.navigate(['/dashboard/admin']);
+            this.router.navigate(['/']);
             break;
           case 'ADMIN':
             this.router.navigate(['/dashboard']);
