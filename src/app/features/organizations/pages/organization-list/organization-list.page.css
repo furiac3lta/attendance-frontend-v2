@@ -18,13 +18,6 @@
   margin-top: 1rem;
 }
 
-.table-scroll-wrapper {
-  width: 100%;
-  overflow-x: auto;
-  -webkit-overflow-scrolling: touch;
-  scrollbar-width: thin;
-}
-
 .table-modern {
   width: 100%;
   min-width: 750px;
@@ -54,12 +47,6 @@
 
   .page-card {
     padding: 1.4rem;
-  }
-
-  .table-scroll-wrapper {
-    max-width: 100%;
-    overflow-x: auto;
-    padding-bottom: 10px;
   }
 
   .table-modern {

@@ -1,15 +1,16 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import Swal from 'sweetalert2';
-
+import { RouterLink } from '@angular/router';
 import { DashboardService } from '../../core/services/dashboard.service';
 import { AdminDashboard } from '../../core/models/admin-dashboard.model';
 import { AuthService } from '../../core/services/auth.service';
+import { MatIconModule } from '@angular/material/icon';
 
 @Component({
   selector: 'app-admin-dashboard-page',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, MatIconModule, RouterLink],
   templateUrl: './admin-dashboard.page.html',
   styleUrls: ['./admin-dashboard.page.css'],
 })
@@ -30,7 +31,9 @@ export class AdminDashboardPage implements OnInit {
 
     // ✅ ORGANIZACIÓN DEL ADMIN LOGUEADO
     this.organizationName =
-      user?.organization?.name ?? 'Sin organización';
+      user?.organizationName ??
+      user?.organization?.name ??
+      'Sin organización';
 
     this.role = (this.auth.getRole() ?? '').toUpperCase();
 

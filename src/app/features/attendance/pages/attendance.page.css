@@ -44,3 +44,11 @@
 .mbtn {
   padding: 10px 16px;
 }
+
+.paid-ok {
+  color: #2dd4bf;
+}
+
+.paid-bad {
+  color: #fb7185;
+}

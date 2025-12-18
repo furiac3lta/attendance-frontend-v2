@@ -1,11 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
+import { MatIconModule } from '@angular/material/icon';
 
 @Component({
   selector: 'app-attendance-page',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, MatIconModule],
   templateUrl: './attendance.page.html',
 })
 export class AttendancePage implements OnInit {

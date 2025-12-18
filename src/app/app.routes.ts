@@ -32,6 +32,14 @@ export const routes: Routes = [
           import('./features/dashboard-admin/admin-dashboard.page')
             .then(m => m.AdminDashboardPage)
       },
+      {
+        path: 'dashboard/morosos',
+        canActivate: [roleGuard],
+        data: { roles: ['ADMIN', 'SUPER_ADMIN'] },
+        loadComponent: () =>
+          import('./features/debtors/pages/debtor-list/debtor-list.page')
+            .then(m => m.DebtorListPage)
+      },
 
       // =========================
       // SUPER_ADMIN → SISTEMA
@@ -80,6 +88,66 @@ export const routes: Routes = [
           import('./features/courses/pages/course-list/courses.list.page')
             .then(m => m.CourseListPage)
       },
+      {
+        path: 'courses/new',
+        canActivate: [roleGuard],
+        data: { roles: ['SUPER_ADMIN', 'ADMIN'] },
+        loadComponent: () =>
+          import('./features/courses/pages/course-form/course-form.page')
+            .then(m => m.CourseFormPage)
+      },
+      {
+        path: 'courses/edit/:id',
+        canActivate: [roleGuard],
+        data: { roles: ['SUPER_ADMIN', 'ADMIN'] },
+        loadComponent: () =>
+          import('./features/courses/pages/course-form/course-form.page')
+            .then(m => m.CourseFormPage)
+      },
+
+      // =========================
+      // ASISTENCIAS
+      // =========================
+      {
+        path: 'attendance',
+        canActivate: [roleGuard],
+        data: { roles: ['SUPER_ADMIN', 'ADMIN', 'INSTRUCTOR'] },
+        loadComponent: () =>
+          import('./features/attendance/pages/attendance.page')
+            .then(m => m.AttendancePage)
+      },
+      {
+        path: 'attendance/class/:courseId',
+        canActivate: [roleGuard],
+        data: { roles: ['SUPER_ADMIN', 'ADMIN', 'INSTRUCTOR'] },
+        loadComponent: () =>
+          import('./features/classes/pages/class-detail/class-detail.page')
+            .then(m => m.ClassDetailPage)
+      },
+      {
+        path: 'attendance/take/:classId',
+        canActivate: [roleGuard],
+        data: { roles: ['SUPER_ADMIN', 'ADMIN', 'INSTRUCTOR'] },
+        loadComponent: () =>
+          import('./features/attendance/pages/attendance-take/attendance-take.page')
+            .then(m => m.AttendanceTakePage)
+      },
+      {
+        path: 'attendance/view/:classId',
+        canActivate: [roleGuard],
+        data: { roles: ['SUPER_ADMIN', 'ADMIN', 'INSTRUCTOR'] },
+        loadComponent: () =>
+          import('./features/attendance/pages/attendance-view/attendance-view.page')
+            .then(m => m.AttendanceViewPage)
+      },
+      {
+        path: 'attendance/report/:courseId',
+        canActivate: [roleGuard],
+        data: { roles: ['SUPER_ADMIN', 'ADMIN', 'INSTRUCTOR'] },
+        loadComponent: () =>
+          import('./features/attendance/pages/course-report/course-report.page')
+            .then(m => m.CourseReportPage)
+      },
 
       // =========================
       // PAGOS
@@ -104,7 +172,6 @@ export const routes: Routes = [
       }
     ]
   },
-
   // =========================
   // FALLBACK
   // =========================

@@ -1,43 +1,40 @@
 <h3>Asistencias registradas</h3>
 
 <!-- TABLA -->
-<table
-  mat-table
-  *ngIf="attendances && attendances.length > 0"
-  class="table-modern responsive-table"
-  border="1"
-  cellpadding="6"
-  cellspacing="0"
-  style="width: 100%; border-collapse: collapse; margin-top: 10px;"
->
-  <thead style="background-color: #f5f5f5;">
-    <tr>
-      <th>ID</th>
-      <th>Fecha</th>
-      <th>Clase</th>
-      <th>Alumno</th>
-      <th>Curso</th>
-      <th>Instructor</th>
-      <th>Asistió</th>
-      <th>Organización</th>
-    </tr>
-  </thead>
+<div class="table-wrapper" *ngIf="attendances && attendances.length > 0">
+  <table
+    class="table-modern responsive-table">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Fecha</th>
+        <th>Clase</th>
+        <th>Alumno</th>
+        <th>Curso</th>
+        <th>Instructor</th>
+        <th>Asistió</th>
+        <th>Organización</th>
+      </tr>
+    </thead>
 
-  <tbody>
-    <tr *ngFor="let a of attendances">
-      <td>{{ a.id }}</td>
-      <td>{{ a.classDate }}</td>
-      <td>{{ a.className }}</td>
-      <td>{{ a.studentName }}</td>
-      <td>{{ a.courseName }}</td>
-      <td>{{ a.instructorName }}</td>
-      <td style="text-align: center;">
-        {{ a.attended ? '✅' : '❌' }}
-      </td>
-      <td>{{ a.organizationName }}</td>
-    </tr>
-  </tbody>
-</table>
+    <tbody>
+      <tr *ngFor="let a of attendances">
+        <td>{{ a.id }}</td>
+        <td>{{ a.classDate }}</td>
+        <td>{{ a.className }}</td>
+        <td>{{ a.studentName }}</td>
+        <td>{{ a.courseName }}</td>
+        <td>{{ a.instructorName }}</td>
+        <td class="center">
+          <mat-icon [ngClass]="a.attended ? 'paid-ok' : 'paid-bad'">
+            {{ a.attended ? 'check_circle' : 'cancel' }}
+          </mat-icon>
+        </td>
+        <td>{{ a.organizationName }}</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
 
 <!-- CUANDO NO HAY ASISTENCIAS -->
 <div *ngIf="attendances && attendances.length === 0" style="margin-top: 20px;">

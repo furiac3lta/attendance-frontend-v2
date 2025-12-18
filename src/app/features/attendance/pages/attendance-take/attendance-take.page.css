@@ -3,9 +3,10 @@
 /* ============================= */
 
 .take-card {
-  padding: 1.5rem;
-  max-width: 750px;
-  margin: auto;
+  padding: 2.5rem 3rem;
+  max-width: 920px;
+  margin: 2rem auto;
+  border-radius: 36px;
 }
 
 /* ============================= */
@@ -13,7 +14,9 @@
 /* ============================= */
 
 .class-info p {
-  margin: 2px 0;
+  margin: 3px 0;
+  color: var(--text);
+  font-weight: 500;
 }
 
 /* ============================= */
@@ -30,10 +33,6 @@
 /* Tabla alumnos                 */
 /* ============================= */
 
-.student-cell {
-  padding: 12px 8px;
-}
-
 .student-info {
   display: flex;
   align-items: center;
@@ -41,7 +40,8 @@
 }
 
 .student-name {
-  font-weight: 500;
+  font-weight: 600;
+  color: var(--text-strong);
 }
 
 /* ============================= */
@@ -49,18 +49,19 @@
 /* ============================= */
 
 .payment-icon {
-  font-size: 18px;
+  font-size: 22px;
   vertical-align: middle;
+  filter: drop-shadow(0 6px 10px rgba(0,0,0,0.12));
 }
 
 /* ✔️ Al día */
 .payment-icon.paid {
-  color: #2e7d32;
+  color: #2dd4bf;
 }
 
 /* ❌ Cuota vencida */
 .payment-icon.unpaid {
-  color: #c62828;
+  color: #fb7185;
 }
 
 /* Hover sutil */
@@ -75,9 +76,44 @@
 
 .button-container {
   text-align: center;
-  margin-top: 1rem;
+  margin-top: 2rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  justify-content: center;
+}
+
+.button-container button {
+  min-width: 150px;
 }
 
 .center {
   text-align: center;
+}
+
+/* ============================= */
+/* Botón asistencia (icono)      */
+/* ============================= */
+
+.presence-icon {
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  padding: 4px;
+}
+
+.presence-icon:focus-visible {
+  outline: 2px solid var(--accent-hover);
+  border-radius: 999px;
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  border: 0;
 }

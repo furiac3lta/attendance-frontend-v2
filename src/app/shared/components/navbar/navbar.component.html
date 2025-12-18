@@ -9,14 +9,16 @@
     <mat-icon>{{ menuOpen ? 'close' : 'menu' }}</mat-icon>
   </button>
 
-  <!-- HOME (NO para instructor) -->
-  <button
-    mat-button
-    routerLink="/"
-    *ngIf="isLoggedIn && !isInstructor">
-    <mat-icon>home</mat-icon>
-    Home
-  </button>
+ 
+<!-- HOME (NO para instructor) -->
+<button
+  mat-button
+  [routerLink]="homeRoute"
+  *ngIf="isLoggedIn && !isInstructor">
+  <mat-icon>home</mat-icon>
+  Home
+</button>
+
 
   <span class="spacer"></span>
 

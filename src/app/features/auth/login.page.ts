@@ -56,7 +56,9 @@ export class LoginPage {
       next: (res) => {
         this.isLoading = false;
 
-        // Guardamos token y rol
+        // Guardamos token y rol (ambos storages para compatibilidad)
+        localStorage.setItem('token', res.token);
+        localStorage.setItem('role', res.type);
         sessionStorage.setItem('token', res.token);
         sessionStorage.setItem('role', res.type);
 
@@ -71,6 +73,7 @@ export class LoginPage {
             heightAuto: false
           });
           sessionStorage.clear();
+          localStorage.clear();
           return;
         }
 
@@ -87,10 +90,10 @@ export class LoginPage {
         // 🎯 REDIRECCIÓN POR ROL
         switch (role) {
           case 'SUPER_ADMIN':
-            this.router.navigate(['/']);
+            this.router.navigate(['/organization']);
             break;
           case 'ADMIN':
-            this.router.navigate(['/dashboard']);
+            this.router.navigate(['/dashboard/admin']);
             break;
           case 'INSTRUCTOR':
             this.router.navigate(['/courses']);

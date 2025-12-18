@@ -35,13 +35,15 @@ export const roleGuard: CanActivateFn = (route, state) => {
   if (allowedRoles.includes(role)) return true;
 
   // ❌ Acceso denegado → SweetAlert2 elegante
-  Swal.fire({
-    title: '⛔ Acceso denegado',
-    text: 'No tenés permiso para acceder a esta sección.',
-    icon: 'error',
-    confirmButtonText: 'Entendido',
-    heightAuto: false
-  });
+Swal.fire({
+  title: '⛔ Acceso denegado',
+  text: 'No tenés permiso para acceder a esta sección.',
+  icon: 'error',
+  confirmButtonText: 'Entendido',
+  heightAuto: false
+}).then(() => {
+  router.navigate(['/dashboard/admin']);});
 
-  return false; // NO redirige, solo bloquea
+return false;
+
 };

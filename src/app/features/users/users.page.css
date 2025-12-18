@@ -72,17 +72,45 @@
   align-items: center;
 }
 
+.pagination-bar {
+  padding: 0 15%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
 /* ======================================================= */
 /* 📋 TABLA */
 /* ======================================================= */
 .table-section {
   width: 100%;
-  max-width: 900px;
   margin: 0 auto;
 }
 
 .section-table .table-section {
   margin-top: 0.4rem;
+}
+
+.users-table-block {
+  background: transparent;
+  box-shadow: none;
+  padding: 0;
+}
+
+.users-table-block .table-header {
+  padding: 0 15%;
+  margin-bottom: 12px;
+}
+
+.users-table-block .section-title {
+  margin: 0;
+}
+
+.table-subtitle {
+  margin: 2px 0 0;
+  color: rgba(59,59,79,0.65);
+  font-size: 14px;
 }
 
 .no-courses {
@@ -113,6 +141,18 @@ mat-paginator {
   margin-top: 15px;
   display: flex;
   justify-content: center;
+}
+
+.icon-edit {
+  color: #ff4db2;
+}
+
+.icon-delete {
+  color: #ff4e4e;
+}
+
+.icon-payment {
+  color: #7c3aed;
 }
 
 /* ======================================================= */
@@ -159,13 +199,13 @@ mat-paginator {
     max-width: 100%;
   }
 
-  .table-section {
-    overflow-x: auto;
-    -webkit-overflow-scrolling: touch;
-  }
-
   .table-modern {
     min-width: 460px;  /* 🔥 mismo ancho visual que filtros y formulario */
+  }
+
+  .users-table-block .table-header,
+  .pagination-bar {
+    padding: 0;
   }
 }
 /* --------------------------------------- */

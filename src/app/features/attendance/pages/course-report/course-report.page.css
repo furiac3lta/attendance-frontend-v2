@@ -94,15 +94,6 @@
   margin-bottom: 20px;
 }
 
-/* TABLE WRAPPER — hace que no se desborde */
-.table-scroll-wrapper {
-  width: 100%;
-  overflow-x: auto;
-  overflow-y: hidden;
-  border-radius: 10px;
-  margin-top: 10px;
-}
-
 /* La tabla debe ocupar MINIMO el ancho total */
 table {
   width: 100%;

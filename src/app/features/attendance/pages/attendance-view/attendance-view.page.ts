@@ -49,11 +49,13 @@ export class AttendanceViewPage implements OnInit {
   classDate?: string;
   courseName?: string;
   titleLabel = '';
+  takenByName?: string;
+  takenByRole?: string;
 
   records: AttendanceRecord[] = [];
   loading = true;
 
-  displayedColumns = ['fullName', 'paid', 'present', 'takenBy', 'takenAt'];
+  displayedColumns = ['fullName', 'paid', 'present', 'takenAt'];
 
   constructor(
     private route: ActivatedRoute,
@@ -89,6 +91,8 @@ export class AttendanceViewPage implements OnInit {
         this.classDate = res[0].takenAt;
         this.courseName = res[0].courseName;
         this.courseId = res[0].courseId;
+        this.takenByName = res[0].takenByName;
+        this.takenByRole = res[0].takenByRole;
 
         // 🔹 título formateado y capitalizado
         const date = new Date(this.classDate!);

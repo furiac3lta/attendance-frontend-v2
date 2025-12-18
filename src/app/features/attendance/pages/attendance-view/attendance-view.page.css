@@ -1,42 +1,52 @@
 .attendance-view-card {
-  max-width: 650px;
+  max-width: 880px;
   margin: 2rem auto;
-  padding: 1.5rem;
+  padding: 2.5rem 3rem;
+  border-radius: 36px;
+}
+
+.title {
+  margin-bottom: 0.4rem;
+  color: var(--text-strong);
+}
+
+.taken-by {
+  color: var(--text);
+  opacity: 0.75;
+  margin: 4px 0 12px;
 }
 
 table {
   width: 100%;
-  margin-top: 1rem;
-}
-
-.present {
-  color: #70d6ff;
-}
-
-.absent {
-  color: #ff70a6;
-}
-
-.actions {
   margin-top: 1.5rem;
-  text-align: right;
-}
-.attendance-title {
-  font-size: 18px;
-  font-weight: 500;
-  margin-bottom: 12px;
-  color: #444;
 }
 
-@media (max-width: 768px) {
-  .attendance-title {
-    font-size: 16px;
-  }
-}
 .paid-ok {
-  color: #2ecc71; /* verde */
+  color: #2dd4bf;
 }
 
 .paid-bad {
-  color: #e74c3c; /* rojo */
+  color: #fb7185;
+}
+
+.paid-ok,
+.paid-bad {
+  font-size: 24px;
+  filter: drop-shadow(0 6px 10px rgba(0,0,0,0.12));
+}
+
+.actions {
+  margin-top: 2rem;
+  text-align: right;
+}
+
+@media (max-width: 768px) {
+  .attendance-view-card {
+    padding: 1.5rem;
+  }
+
+  .paid-ok,
+  .paid-bad {
+    font-size: 20px;
+  }
 }

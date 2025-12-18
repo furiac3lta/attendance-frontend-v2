@@ -113,12 +113,16 @@
     <!-- ===================== -->
     <!-- 📋 TABLA -->
     <!-- ===================== -->
-    <div class="section-card section-table">
+    <div class="users-table-block">
 
-      <h3 class="section-title">Listado de usuarios</h3>
+      <div class="table-header">
+        <h3 class="section-title">Listado de usuarios</h3>
+        <p class="table-subtitle">Usuarios registrados en la organización</p>
+      </div>
 
       <div class="table-section">
 
+        <div class="table-wrapper">
         <table mat-table [dataSource]="users" class="table-modern">
 
           <!-- NOMBRE -->
@@ -179,13 +183,13 @@
             <th mat-header-cell *matHeaderCellDef>Acciones</th>
             <td mat-cell *matCellDef="let u">
               <button mat-icon-button (click)="editUser(u)">
-                <mat-icon>edit</mat-icon>
+                <mat-icon class="icon-edit">edit</mat-icon>
               </button>
-              <button mat-icon-button color="warn" (click)="deleteUser(u.id)">
-                <mat-icon>delete</mat-icon>
+              <button mat-icon-button (click)="deleteUser(u.id)">
+                <mat-icon class="icon-delete">delete</mat-icon>
               </button>
-              <button mat-icon-button color="primary" (click)="goToRegisterPayment(u)">
-                <mat-icon>payments</mat-icon>
+              <button mat-icon-button (click)="goToRegisterPayment(u)">
+                <mat-icon class="icon-payment">payments</mat-icon>
               </button>
             </td>
           </ng-container>
@@ -199,6 +203,7 @@
           ]"></tr>
 
         </table>
+        </div>
 
       </div>
 

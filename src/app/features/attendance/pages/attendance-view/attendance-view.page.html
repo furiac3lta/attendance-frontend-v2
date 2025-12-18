@@ -1,9 +1,10 @@
 <mat-card class="attendance-view-card">
 
   <h1 class="title"> Asistencia - {{ courseName }}</h1>
- 
- <h2> {{ titleLabel }}</h2>
- <h4></h4>
+  <h2>{{ titleLabel }}</h2>
+  <p class="taken-by" *ngIf="takenByName">
+    Tomada por {{ takenByName }} ({{ takenByRole }})
+  </p>
 
 
 
@@ -13,83 +14,69 @@
     Cargando asistencia…
   </div>
 
-  <table
-    mat-table
-    [dataSource]="records"
-    class="table-modern responsive-table"
-    *ngIf="!loading && records.length > 0">
+  <div class="table-wrapper" *ngIf="!loading && records.length > 0">
+    <table
+      mat-table
+      [dataSource]="records"
+      class="table-modern">
 
-    <!-- ===================== -->
-    <!-- Alumno                -->
-    <!-- ===================== -->
-    <ng-container matColumnDef="fullName">
-      <th mat-header-cell *matHeaderCellDef> Alumno </th>
-      <td mat-cell *matCellDef="let r">
-        {{ r.fullName }}
-      </td>
-    </ng-container>
+      <!-- ===================== -->
+      <!-- Alumno                -->
+      <!-- ===================== -->
+      <ng-container matColumnDef="fullName">
+        <th mat-header-cell *matHeaderCellDef> Alumno </th>
+        <td mat-cell *matCellDef="let r">
+          {{ r.fullName }}
+        </td>
+      </ng-container>
 
-    <!-- ===================== -->
-    <!-- Estado de pago        -->
-    <!-- ===================== -->
-<ng-container matColumnDef="paid">
-  <th mat-header-cell *matHeaderCellDef> Cuota </th>
-  <td mat-cell *matCellDef="let r">
-    <mat-icon
-      [ngClass]="r.paid ? 'paid-ok' : 'paid-bad'"
-      matTooltip="{{ r.paid ? 'Cuota al día' : 'Cuota vencida' }}">
-      {{ r.paid ? 'check_circle' : 'cancel' }}
-    </mat-icon>
-  </td>
-</ng-container>
+      <!-- ===================== -->
+      <!-- Estado de pago        -->
+      <!-- ===================== -->
+      <ng-container matColumnDef="paid">
+        <th mat-header-cell *matHeaderCellDef> Cuota </th>
+        <td mat-cell *matCellDef="let r">
+          <mat-icon
+            [ngClass]="r.paid ? 'paid-ok' : 'paid-bad'"
+            matTooltip="{{ r.paid ? 'Cuota al día' : 'Cuota vencida' }}">
+            {{ r.paid ? 'check_circle' : 'cancel' }}
+          </mat-icon>
+        </td>
+      </ng-container>
 
+      <!-- ===================== -->
+      <!-- Presente              -->
+      <!-- ===================== -->
+      <ng-container matColumnDef="present">
+        <th mat-header-cell *matHeaderCellDef> Presente </th>
+        <td mat-cell *matCellDef="let r">
+          <mat-icon
+            [ngClass]="r.present ? 'paid-ok' : 'paid-bad'">
+            {{ r.present ? 'check_circle' : 'cancel' }}
+          </mat-icon>
+        </td>
+      </ng-container>
 
-    <!-- ===================== -->
-    <!-- Presente              -->
-    <!-- ===================== -->
-    <ng-container matColumnDef="present">
-      <th mat-header-cell *matHeaderCellDef> Presente </th>
-      <td mat-cell *matCellDef="let r">
-        <mat-icon [ngClass]="r.present ? 'present' : 'absent'">
-          {{ r.present ? 'check_circle' : 'cancel' }}
-        </mat-icon>
-      </td>
-    </ng-container>
+      <!-- ===================== -->
+      <!-- Fecha                 -->
+      <!-- ===================== -->
+      <ng-container matColumnDef="takenAt">
+        <th mat-header-cell *matHeaderCellDef> Fecha </th>
+        <td mat-cell *matCellDef="let r">
+          <span *ngIf="r.takenAt; else noDate">
+            {{ r.takenAt | date:'dd/MM/yyyy HH:mm' }}
+          </span>
+          <ng-template #noDate>
+            <span class="text-muted">—</span>
+          </ng-template>
+        </td>
+      </ng-container>
 
-    <!-- ===================== -->
-    <!-- Tomada por            -->
-    <!-- ===================== -->
-    <ng-container matColumnDef="takenBy">
-      <th mat-header-cell *matHeaderCellDef> Tomada por </th>
-      <td mat-cell *matCellDef="let r">
-        <span *ngIf="r.takenByName; else noUser">
-          {{ r.takenByName }} ({{ r.takenByRole }})
-        </span>
-        <ng-template #noUser>
-          <span class="text-muted">—</span>
-        </ng-template>
-      </td>
-    </ng-container>
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
 
-    <!-- ===================== -->
-    <!-- Fecha                 -->
-    <!-- ===================== -->
-    <ng-container matColumnDef="takenAt">
-      <th mat-header-cell *matHeaderCellDef> Fecha </th>
-      <td mat-cell *matCellDef="let r">
-        <span *ngIf="r.takenAt; else noDate">
-          {{ r.takenAt | date:'dd/MM/yyyy HH:mm' }}
-        </span>
-        <ng-template #noDate>
-          <span class="text-muted">—</span>
-        </ng-template>
-      </td>
-    </ng-container>
-
-    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-
-  </table>
+    </table>
+  </div>
 
   <div *ngIf="!loading && records.length === 0" class="empty">
     No hay asistencias registradas.

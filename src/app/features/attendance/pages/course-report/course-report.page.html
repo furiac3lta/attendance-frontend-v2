@@ -38,15 +38,13 @@
   </div>
   <div class="report-section">
 
-    <div class="table-scroll-wrapper">
-       <!-- 📊 TABLA -->
-  <div class="table-section">
-    <h3 class="subtitle">
-      {{ getMonthLabel(month) }} {{ year }}
-    </h3>
+    <div class="table-section">
+      <h3 class="subtitle">
+        {{ getMonthLabel(month) }} {{ year }}
+      </h3>
 
-    <div class="table-scroll-wrapper">
-      <table mat-table [dataSource]="stats" class="table-modern responsive-table">
+      <div class="table-wrapper">
+        <table mat-table [dataSource]="stats" class="table-modern">
 
         <!-- Alumno -->
         <ng-container matColumnDef="studentName">
@@ -87,8 +85,7 @@
         <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
         <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
       </table>
-    </div>
-  </div>
+      </div>
     </div>
   </div>
 

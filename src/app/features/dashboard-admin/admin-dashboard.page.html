@@ -1,78 +1,110 @@
-<div class="page" *ngIf="data as d">
+<div class="admin-dashboard" *ngIf="data as d">
 
- <div class="page" *ngIf="data as d">
-
-  <header class="head">
+  <header class="hero">
     <div>
-      <h1>Dashboard de la organización</h1>
-      <p class="sub">
-        Organización:
-        <strong>{{ organizationName }}</strong>
+      <h1 class="eyebrow">Hola, {{ organizationName }}</h1>
+      <h2>Panel de desempeño</h2    >
+      <p class="muted">
+        Métricas rápidas para tu organización. Datos actualizados del último corte.
       </p>
     </div>
 
-    <span class="pill">
-      Con deuda {{ unpaidPercent }}% sobre alumnos activos
-    </span>
+    <div class="hero-pill">
+      <p class="label">Con deuda</p>
+      <h3>{{ unpaidPercent }}%</h3>
+      <span>{{ d.unpaidStudents }} alumnos de {{ d.activeStudents }}</span>
+    </div>
   </header>
 
-
-  <section class="grid">
-    <article class="card">
-      <div class="kpi">
-        <span class="icon">👥</span>
-        <div>
-          <p class="label">Alumnos activos</p>
-          <h2>{{ d.activeStudents }}</h2>
-          <p class="muted">Con asistencia vigente</p>
-        </div>
+  <section class="kpi-grid">
+    <article class="kpi-card">
+      <div class="kpi-head">
+        <mat-icon class="icon primary">groups</mat-icon>
+        <span class="badge positive">+2.4%</span>
       </div>
+      <p class="label">Alumnos activos</p>
+      <h2>{{ d.activeStudents }}</h2>
+      <small>Con asistencia vigente</small>
     </article>
 
-    <article class="card ok">
-      <div class="kpi">
-        <span class="icon">✅</span>
-        <div>
-          <p class="label">Pagaron</p>
-          <h2>{{ d.paidStudents }}</h2>
-          <p class="muted">Pagos registrados este mes</p>
-        </div>
+    <article class="kpi-card">
+      <div class="kpi-head">
+        <mat-icon class="icon success">check_circle</mat-icon>
+        <span class="badge positive">+5 alumnos</span>
       </div>
+      <p class="label">Pagaron</p>
+      <h2>{{ d.paidStudents }}</h2>
+      <small>Pagos confirmados</small>
     </article>
 
-    <article class="card warn">
-      <div class="kpi">
-        <span class="icon">⚠️</span>
-        <div>
-          <p class="label">No pagaron</p>
-          <h2>{{ d.unpaidStudents }}</h2>
-          <p class="muted">Con deuda este mes</p>
-        </div>
+    <article class="kpi-card">
+      <div class="kpi-head">
+        <mat-icon class="icon warn">warning</mat-icon>
+        <span class="badge negative">-3%</span>
       </div>
+      <p class="label">Con deuda</p>
+      <h2>{{ d.unpaidStudents }}</h2>
+      <small>Seguimiento pendiente</small>
     </article>
 
-    <article class="card money">
-      <div class="kpi">
-        <span class="icon">💰</span>
-        <div>
-          <p class="label">Recaudación</p>
-          <h2>{{ d.totalIncome | currency:'$':'symbol':'1.0-0' }}</h2>
-          <p class="muted">Pagos confirmados</p>
-        </div>
+    <article class="kpi-card wide">
+      <div class="kpi-head">
+        <mat-icon class="icon royal">payments</mat-icon>
+        <span class="badge positive">+$12K</span>
       </div>
+      <p class="label">Recaudación</p>
+      <h2>{{ d.totalIncome | currency:'$':'symbol':'1.0-0' }}</h2>
+      <div class="mini-chart">
+        <span class="dot"></span>
+        <span class="line"></span>
+        <span class="dot"></span>
+        <span class="line"></span>
+        <span class="dot"></span>
+      </div>
+      <small>Últimos 30 días</small>
     </article>
 
-    <article class="card">
-      <div class="kpi">
-        <span class="icon">📈</span>
-        <div>
-          <p class="label">Ticket promedio</p>
-          <h2>
-            {{ ticketAverage !== null ? (ticketAverage | currency:'$':'symbol':'1.0-0') : '—' }}
-          </h2>
-          <p class="muted">Por alumno activo</p>
-        </div>
+    <article class="kpi-card wide">
+      <div class="kpi-head">
+        <mat-icon class="icon accent">equalizer</mat-icon>
+        <span class="badge neutral">estable</span>
       </div>
+      <p class="label">Ticket promedio</p>
+      <h2>
+        {{
+          ticketAverage !== null
+            ? (ticketAverage | currency:'$':'symbol':'1.0-0')
+            : '—'
+        }}
+      </h2>
+      <small>Promedio por alumno</small>
+      <div class="progress">
+        <div class="progress-bar" [style.width.%]="ticketAverage ? 75 : 15"></div>
+      </div>
+    </article>
+  </section>
+
+  <section class="quick-list">
+    <article class="quick-card">
+      <div>
+        <p class="label">Acciones sugeridas</p>
+        <h4>Seguimiento a morosos</h4>
+        <p class="muted">Contactá a los alumnos pendientes antes del cierre.</p>
+      </div>
+<button
+  type="button"
+  routerLink="/dashboard/morosos">
+  Ver lista
+</button>
+    </article>
+
+    <article class="quick-card">
+      <div>
+        <p class="label">Reporte rápido</p>
+        <h4>Descargar resumen mensual</h4>
+        <p class="muted">Ideal para compartir con tu equipo.</p>
+      </div>
+      <button type="button">Descargar</button>
     </article>
   </section>
 
