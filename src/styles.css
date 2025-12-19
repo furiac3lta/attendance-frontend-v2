@@ -417,7 +417,10 @@ button[mat-raised-button]:hover {
 }
 .dark-mode .kpi-card p.label,
 .dark-mode .kpi-card small,
-.dark-mode .kpi-card label {
+.dark-mode .kpi-card label{
+  color: rgba(248, 250, 252, 0.75)!important;
+}
+.dark-mode h2{
   color: rgba(248, 250, 252, 0.75)!important;
 }
 /* =========================================================
