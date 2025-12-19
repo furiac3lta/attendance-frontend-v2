@@ -5,8 +5,11 @@
 .take-card {
   padding: 2.5rem 3rem;
   max-width: 920px;
-  margin: 2rem auto;
-  border-radius: 36px;
+  margin: 2.5rem auto 1.5rem;
+  border-radius: 0;
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+  box-shadow: none;
 }
 
 /* ============================= */
@@ -51,17 +54,17 @@
 .payment-icon {
   font-size: 22px;
   vertical-align: middle;
-  filter: drop-shadow(0 6px 10px rgba(0,0,0,0.12));
+  filter: none;
 }
 
 /* ✔️ Al día */
 .payment-icon.paid {
-  color: #2dd4bf;
+  color: var(--success);
 }
 
 /* ❌ Cuota vencida */
 .payment-icon.unpaid {
-  color: #fb7185;
+  color: var(--danger);
 }
 
 /* Hover sutil */
@@ -116,4 +119,31 @@
   overflow: hidden;
   clip: rect(0, 0, 0, 0);
   border: 0;
+}
+/* ===================================== */
+/* 🧩 CONTENEDOR PRINCIPAL               */
+/* ===================================== */
+.page-card {
+  width: 80%;
+  margin: 24px auto 0;
+  padding: 3rem 2rem 0 2rem;
+  position: relative;
+  overflow: visible !important;
+}
+
+.table-section {
+  width: 100%;
+  margin: 0 auto;
+  padding: 0;
+}
+
+.actions-inline {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.table-wrapper {
+  padding-left: 0;
+  padding-right: 0;
 }

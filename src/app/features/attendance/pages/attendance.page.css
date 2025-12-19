@@ -1,19 +1,14 @@
-.attendance-wrapper {
-  max-width: 800px;
-  margin: 30px auto;
-  background: #fff;
-  padding: 25px;
-  border-radius: 10px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+body.attendance-page {
+  padding-top: 64px;
 }
 
 .subtitle {
-  color: #555;
+  color: var(--text-muted);
   margin-bottom: 20px;
 }
 
 .no-students {
-  color: #ff70a6;
+  color: var(--secondary);
   font-style: italic;
 }
 
@@ -23,9 +18,10 @@
   margin-bottom: 15px;
 }
 
-.table th, .table td {
+.table th,
+.table td {
   padding: 10px;
-  border-bottom: 1px solid #ddd;
+  border-bottom: 1px solid var(--divider);
 }
 
 .actions {
@@ -35,20 +31,50 @@
 .message {
   margin-top: 10px;
   font-weight: 500;
+  color: var(--text);
 }
 
 .loading {
   text-align: center;
   font-style: italic;
 }
+
 .mbtn {
   padding: 10px 16px;
 }
 
 .paid-ok {
-  color: #2dd4bf;
+  color: var(--success);
 }
 
 .paid-bad {
-  color: #fb7185;
+  color: var(--danger);
+}
+
+/* ===================================== */
+/* 🧩 CONTENEDOR PRINCIPAL               */
+/* ===================================== */
+.page-card {
+  width: 80%;
+  margin: 24px auto 0;
+  padding: 3rem 2rem 0 2rem;
+  position: relative;
+  overflow: visible !important;
+}
+
+.table-section {
+  width: 100%;
+  margin: 0 auto;
+  padding: 0;
+}
+
+.actions-inline {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.table-wrapper {
+  padding-left: 0;
+  padding-right: 0;
 }

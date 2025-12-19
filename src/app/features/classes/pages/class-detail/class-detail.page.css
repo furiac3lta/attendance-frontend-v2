@@ -3,8 +3,11 @@
 /* ============================= */
 .attendance-container {
   max-width: 900px;
-  margin: 0 auto;
+  margin: 2.5rem auto 1.5rem;
   padding: 24px;
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+  border-radius: 0;
 }
 
 /* ============================= */
@@ -12,7 +15,7 @@
 /* ============================= */
 .date-label {
   font-size: 0.85rem;
-  color: #777;
+  color: var(--text-muted);
   margin-bottom: 12px;
 }
 
@@ -39,15 +42,16 @@ table {
 
 th {
   font-weight: 600;
-  color: #555;
+  color: var(--text-strong);
 }
 
 td {
   vertical-align: middle;
+  color: var(--text);
 }
 
 tr.mat-row:hover {
-  background: #fafafa;
+  background: var(--table-hover);
 }
 
 /* ============================= */
@@ -68,23 +72,25 @@ tr.mat-row:hover {
   font-size: 0.7rem;
   padding: 2px 8px;
   border-radius: 12px;
-  background: #e0e0e0;
+  background: var(--surface-alt);
+  color: var(--text-strong);
   margin-left: 6px;
+  border: 1px solid var(--border);
 }
 
 .role-INSTRUCTOR {
-  background: #e3f2fd;
-  color: #1565c0;
+  background: var(--info);
+  color: #051822;
 }
 
 .role-ADMIN {
-  background: #fce4ec;
-  color: #ad1457;
+  background: var(--secondary);
+  color: #fff;
 }
 
 .taken-at {
   font-size: 0.75rem;
-  color: #777;
+  color: var(--text-muted);
 }
 
 /* ============================= */
@@ -92,7 +98,7 @@ tr.mat-row:hover {
 /* ============================= */
 .no-attendance {
   font-size: 0.85rem;
-  color: #aaa;
+  color: var(--text-muted);
   font-style: italic;
 }
 

@@ -3,7 +3,10 @@
   <!-- ===================== -->
   <!-- TÍTULO -->
   <!-- ===================== -->
-  <h2 class="title main-title">Gestión de Usuarios</h2>
+  <div class="page-head">
+    <h2 class="page-head__title">Gestión de Usuarios</h2>
+    <div class="page-head__actions"></div>
+  </div>
 
   <div class="users-layout">
 
@@ -75,7 +78,7 @@
     <!-- ===================== -->
     <!-- 🔍 FILTROS -->
     <!-- ===================== -->
-    <div class="section-card">
+    <div class="section-card filters-card">
 
       <h3 class="section-title">Buscador</h3>
 
@@ -110,20 +113,24 @@
       </div>
     </div>
 
-    <!-- ===================== -->
-    <!-- 📋 TABLA -->
-    <!-- ===================== -->
-    <div class="users-table-block">
+  </div>
 
-      <div class="table-header">
-        <h3 class="section-title">Listado de usuarios</h3>
-        <p class="table-subtitle">Usuarios registrados en la organización</p>
-      </div>
+</mat-card>
 
-      <div class="table-section">
+<!-- ===================== -->
+<!-- 📋 TABLA (fuera del card principal) -->
+<!-- ===================== -->
+<section class="users-table-block">
 
-        <div class="table-wrapper">
-        <table mat-table [dataSource]="users" class="table-modern">
+  <div class="table-header">
+    <h3 class="section-title">Listado de usuarios</h3>
+    <p class="table-subtitle">Usuarios registrados en la organización</p>
+  </div>
+
+  <div class="table-section">
+
+    <div class="table-wrapper">
+      <table mat-table [dataSource]="users" class="table-modern">
 
           <!-- NOMBRE -->
           <ng-container matColumnDef="fullName">
@@ -198,34 +205,31 @@
             'fullName','email','role','organization','courses','paid','actions'
           ]"></tr>
 
-          <tr mat-row *matRowDef="let row; columns: [
-            'fullName','email','role','organization','courses','paid','actions'
-          ]"></tr>
+        <tr mat-row *matRowDef="let row; columns: [
+          'fullName','email','role','organization','courses','paid','actions'
+        ]"></tr>
 
-        </table>
-        </div>
-
-      </div>
-
-      <!-- ===================== -->
-      <!-- 📄 PAGINACIÓN -->
-      <!-- ===================== -->
-      <div class="pagination-bar">
-        <button mat-stroked-button (click)="prevPage()" [disabled]="currentPage === 0">
-          ◀ Anterior
-        </button>
-
-        <span>
-          Página {{ currentPage + 1 }} de {{ totalPages }} · {{ totalElements }} usuarios
-        </span>
-
-        <button mat-stroked-button (click)="nextPage()"
-                [disabled]="currentPage + 1 >= totalPages">
-          Siguiente ▶
-        </button>
-      </div>
-
+      </table>
     </div>
 
   </div>
-</mat-card>
+
+  <!-- ===================== -->
+  <!-- 📄 PAGINACIÓN -->
+  <!-- ===================== -->
+  <div class="pagination-bar">
+    <button mat-stroked-button (click)="prevPage()" [disabled]="currentPage === 0">
+      ◀ Anterior
+    </button>
+
+    <span>
+      Página {{ currentPage + 1 }} de {{ totalPages }} · {{ totalElements }} usuarios
+    </span>
+
+    <button mat-stroked-button (click)="nextPage()"
+            [disabled]="currentPage + 1 >= totalPages">
+      Siguiente ▶
+    </button>
+  </div>
+
+</section>

@@ -4,6 +4,7 @@
   flex-wrap: wrap;
   gap: 14px;
   margin-bottom: 20px;
+  padding: 0 36px;
 }
 
 .chip-section {
@@ -15,6 +16,7 @@
   font-size: 14px;
   margin-bottom: 6px;
   font-weight: 600;
+  color: var(--text-strong);
 }
 
 .chip-list {
@@ -29,61 +31,37 @@
 /* ======================================================= */
 
 ::ng-deep mat-chip-option .mdc-evolution-chip__cell {
-  background: rgba(230,230,230,0.65) !important;
+  background: var(--surface-alt) !important;
   border-radius: 14px !important;
-  border: 1px solid rgba(0,0,0,0.10) !important;
-  padding: 2px px !important;
+  border: 1px solid var(--border) !important;
+  padding: 2px 10px !important;
   color: var(--text-strong) !important;
   font-size: 0.82rem !important;
   font-weight: 500;
-  transition: 0.25s ease;
-  
+  transition: background 0.25s ease, border-color 0.25s ease;
 }
 
 ::ng-deep mat-chip-option:hover .mdc-evolution-chip__cell {
-  background: rgba(200,200,200,0.55) !important;
+  background: var(--surface) !important;
 }
 
 /* SELECCIONADO */
 ::ng-deep mat-chip-option.mat-mdc-chip-selected .mdc-evolution-chip__cell {
-  background: var(--accent-strong) !important; /* rosa pastel */
-  border-color: var(--accent-hover) !important;
-  color: #000 !important;
-  box-shadow: 0 0 8px rgba(255,175,204,0.45);
+  background: var(--primary) !important;
+  border-color: var(--primary-soft) !important;
+  color: #fff !important;
+  box-shadow: none;
 }
 
 /* icon/text inside chip */
 ::ng-deep mat-chip-option .mdc-evolution-chip__action {
   color: inherit !important;
 }
-
-
-/* ======================================================= */
-/* 🌙 DARK MODE – Chips pastel                             */
-/* ======================================================= */
-
-::ng-deep .dark-mode mat-chip-option .mdc-evolution-chip__cell {
-  background: rgba(255,255,255,0.12) !important;
-  border-color: rgba(255,255,255,0.25) !important;
-  color: var(--text) !important;
-}
-
-::ng-deep .dark-mode mat-chip-option:hover .mdc-evolution-chip__cell {
-  background: rgba(255,255,255,0.20) !important;
-}
-
-/* SELECCIONADO (dark) */
-::ng-deep .dark-mode mat-chip-option.mat-mdc-chip-selected .mdc-evolution-chip__cell {
-  background: var(--accent-hover) !important; /* celeste pastel */
-  border-color: var(--accent-strong) !important;
-  color: #000 !important;
-  box-shadow: 0 0 10px rgba(189,224,254,0.65);
-}
 /* Contenedor general del card */
 .page-card {
-  max-width: 900px;
-  margin: 0 auto;
-  padding: 20px;
+  width: 80%;
+  margin: 24px auto 0;
+  padding: 64px 0 40px;
 }
 
 /* Sección de filtros */
@@ -94,10 +72,22 @@
   margin-bottom: 20px;
 }
 
+.table-section {
+  width: 100%;
+  margin: 0 auto;
+  padding: 0 36px;
+  box-sizing: border-box;
+}
+
+.table-section .subtitle {
+  margin: 0 0 12px 0;
+  color: var(--text-muted);
+}
+
 /* La tabla debe ocupar MINIMO el ancho total */
 table {
   width: 100%;
-  min-width: 600px; /* evita que se rompa en mobile */
+  min-width: 600px;
   border-collapse: collapse;
 }
 
@@ -109,11 +99,10 @@ table {
   white-space: nowrap;
 }
 
-/* Para que se vea bien en modo oscuro */
 .table-modern {
-  background: rgba(255, 255, 255, 0.05);
-  border-radius: 10px;
-  overflow: hidden;
+  background: var(--card-bg);
+  border-radius: 0;
+  border: 1px solid var(--border);
 }
 
 /* RESPONSIVE – más espacio en pantallas grandes */
@@ -121,5 +110,12 @@ table {
   .table-modern th,
   .table-modern td {
     padding: 14px 12px;
+  }
+}
+
+@media (max-width: 768px) {
+  .chips-container,
+  .table-section {
+    padding: 0;
   }
 }

@@ -2,100 +2,24 @@
 /* 🧩 CONTENEDOR PRINCIPAL               */
 /* ===================================== */
 .page-card {
-  padding: 3rem;
-  margin-top: 1rem;
+  width: 80%;
+  margin: 24px auto 0;
+  padding: 3rem 2rem 0 2rem;
   position: relative;
+  overflow: visible !important;
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+  box-shadow: none;
 }
 
-/* ===================================== */
-/* ACCIONES SUPERIORES                   */
-/* ===================================== */
-.actions {
-  margin-bottom: 1rem;
-  display: flex;
-  gap: 10px;
-}
-
-/* ===================================== */
-/* TABLA                                 */
-/* ===================================== */
 .table-section {
-  display: flex;
-  justify-content: center;
   width: 100%;
-  margin-top: 1rem;
+  margin: 0 auto;
+  padding: 0;
 }
 
-.table-modern {
-  width: 100%;
-  min-width: 850px;
-  border-collapse: collapse;
-}
-
-.assign-select {
-  min-width: 160px;
-}
-
-/* ===================================== */
-/* INLINE ACTIONS                        */
-/* ===================================== */
 .actions-inline {
   display: flex;
   align-items: center;
   gap: 10px;
-}
-
-/* ===================================== */
-/* ICONOS – PALETA                       */
-/* ===================================== */
-
-/* Guardar (violeta) */
-.icon-save {
-  color: #7c3aed !important;
-  transition: 0.2s ease;
-}
-
-.icon-save:hover {
-  color: #5b21b6 !important;
-  transform: scale(1.15);
-}
-
-/* Asistencia (rosa) */
-.icon-attendance {
-  color: #FF4DB2 !important;
-  transition: 0.2s ease;
-}
-
-.icon-attendance:hover {
-  color: #d9368e !important;
-  transform: scale(1.15);
-}
-
-/* Reporte (rojo suave) */
-.icon-report {
-  color: #ff4e4e !important;
-  transition: 0.2s ease;
-}
-
-.icon-report:hover {
-  color: #d63a3a !important;
-  transform: scale(1.15);
-}
-
-/* ===================================== */
-/* TEXTO / ESTADOS                       */
-/* ===================================== */
-.text-muted {
-  color: #777;
-}
-
-/* Hover tabla */
-.mat-row:hover {
-  background: #f5f5f5;
-  transition: 0.2s ease;
-}
-
-/* Tamaño iconos */
-.mat-icon {
-  font-size: 22px !important;
 }

@@ -1,8 +1,11 @@
 .attendance-view-card {
   max-width: 880px;
-  margin: 2rem auto;
+  margin: 2.5rem auto 1.5rem;
   padding: 2.5rem 3rem;
-  border-radius: 36px;
+  border-radius: 0;
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+  box-shadow: none;
 }
 
 .title {
@@ -22,11 +25,11 @@ table {
 }
 
 .paid-ok {
-  color: #2dd4bf;
+  color: var(--success);
 }
 
 .paid-bad {
-  color: #fb7185;
+  color: var(--danger);
 }
 
 .paid-ok,
@@ -49,4 +52,31 @@ table {
   .paid-bad {
     font-size: 20px;
   }
+}
+/* ===================================== */
+/* 🧩 CONTENEDOR PRINCIPAL               */
+/* ===================================== */
+.page-card {
+  width: 80%;
+  margin: 24px auto 0;
+  padding: 3rem 2rem 0 2rem;
+  position: relative;
+  overflow: visible !important;
+}
+
+.table-section {
+  width: 100%;
+  margin: 0 auto;
+  padding: 0;
+}
+
+.actions-inline {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.table-wrapper {
+  padding-left: 0;
+  padding-right: 0;
 }

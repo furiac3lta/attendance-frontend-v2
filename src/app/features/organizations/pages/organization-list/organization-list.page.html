@@ -1,21 +1,22 @@
 <mat-card class="page-card">
 
-  <h2 class="title">Gestión de Organizaciones</h2>
+  <div class="page-head">
+    <h2 class="page-head__title">Gestión de Organizaciones</h2>
+
+    <div class="page-head__actions">
+      <button
+        *ngIf="userRole === 'SUPER_ADMIN'"
+        mat-raised-button
+        color="primary"
+        routerLink="/organizations/new">
+        <mat-icon>add</mat-icon> Nueva Organización
+      </button>
+    </div>
+  </div>
 
   <!-- ⚠️ ALERTA si no hay -->
   <div *ngIf="!organizations.length" class="alert alert-info">
     No hay organizaciones registradas.
-  </div>
-
-  <!-- Botón agregar organización -->
-  <div class="actions">
-    <button
-      *ngIf="userRole === 'SUPER_ADMIN'"
-      mat-raised-button
-      color="primary"
-      routerLink="/organizations/new">
-      <mat-icon>add</mat-icon> Nueva Organización
-    </button>
   </div>
 
   <!-- 📊 TABLA -->

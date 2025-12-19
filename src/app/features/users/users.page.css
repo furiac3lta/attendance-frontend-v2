@@ -2,11 +2,28 @@
 /* 📌 CONTENEDOR PRINCIPAL */
 /* ======================================================= */
 .users-page {
-  max-width: 90%;
-  margin: 0 auto;
+  width: 80%;
+  margin: 24px auto 0;
+  padding: 64px 0 80px;
   display: flex;
   flex-direction: column;
-  gap: 2rem;
+  gap: 24px;
+}
+
+.users-layout {
+  display: grid;
+  grid-template-columns: minmax(320px, 1.1fr) minmax(320px, 0.9fr);
+  gap: 24px;
+}
+
+.users-layout .section-card {
+  margin: 0;
+}
+
+.users-layout .filters-card {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 }
 
 .main-title {
@@ -20,14 +37,12 @@
 /* ======================================================= */
 /* 📦 SECCIONES (Buscador / Alta / Tabla) */
 /* ======================================================= */
-.section-card {
+.users-page .section-card {
   background: var(--card-bg);
-  padding: 1.4rem 1.8rem;            /* 🔥 Mucho más compacto */
-  box-shadow:
-    4px 4px 14px rgba(0,0,0,0.25),
-    -4px -4px 14px rgba(255,255,255,0.05);
-  transition: 0.25s ease;
-  margin-bottom: 1.5rem;
+  padding: 1.6rem 1.8rem;
+  border-radius: 0;
+  box-shadow: none;
+  border: 1px solid var(--border);
 }
 
 .section-title {
@@ -86,6 +101,7 @@
 .table-section {
   width: 100%;
   margin: 0 auto;
+  padding: 0;
 }
 
 .section-table .table-section {
@@ -93,13 +109,17 @@
 }
 
 .users-table-block {
-  background: transparent;
+  background: var(--card-bg);
   box-shadow: none;
-  padding: 0;
+  padding: 24px 0 24px;
+  border-radius: 0;
+  border: 1px solid var(--border);
+  margin: 24px auto 0;
+  width: 80%;
 }
 
 .users-table-block .table-header {
-  padding: 0 15%;
+  padding: 0 0 16px 36px;
   margin-bottom: 12px;
 }
 
@@ -109,8 +129,18 @@
 
 .table-subtitle {
   margin: 2px 0 0;
-  color: rgba(59,59,79,0.65);
+  color: var(--text-muted);
   font-size: 14px;
+}
+
+.users-table-block .table-wrapper {
+  padding: 0;
+}
+
+.users-table-block .table-wrapper .table-modern,
+.users-table-block .table-wrapper .mat-mdc-table {
+  width: 100%;
+  min-width: 100%;
 }
 
 .no-courses {
@@ -129,7 +159,9 @@
   font-size: 12px;
   padding: 4px 10px;
   border-radius: 12px;
-  background-color: #e0e0e0;
+  background: var(--surface-alt);
+  color: var(--text);
+  border: 1px solid var(--border);
   white-space: nowrap;
 }
 
@@ -144,15 +176,15 @@ mat-paginator {
 }
 
 .icon-edit {
-  color: #ff4db2;
+  color: var(--secondary);
 }
 
 .icon-delete {
-  color: #ff4e4e;
+  color: var(--danger);
 }
 
 .icon-payment {
-  color: #7c3aed;
+  color: var(--accent);
 }
 
 /* ======================================================= */
@@ -161,15 +193,15 @@ mat-paginator {
 .mdc-text-field--focused .mdc-notched-outline__leading,
 .mdc-text-field--focused .mdc-notched-outline__trailing,
 .mdc-text-field--focused .mdc-notched-outline__notch {
-  border-color: var(--accent-hover) !important;
-  box-shadow: 0 0 7px var(--accent-hover);
+  border-color: var(--primary) !important;
+  box-shadow: none;
 }
 
 .dark-mode .mdc-text-field--focused .mdc-notched-outline__leading,
 .dark-mode .mdc-text-field--focused .mdc-notched-outline__trailing,
 .dark-mode .mdc-text-field--focused .mdc-notched-outline__notch {
-  border-color: #ffb3d9 !important;
-  box-shadow: 0 0 10px #ffb3d9;
+  border-color: var(--primary) !important;
+  box-shadow: none;
 }
 
 /* ======================================================= */
@@ -177,13 +209,17 @@ mat-paginator {
 /* ======================================================= */
 @media (max-width: 768px) {
 
-  .section-card {
-    padding: 1rem 1rem;       /* 🔥 Mucho más chico */
+  .users-page {
+    padding: 24px 0 60px;
+    width: 100%;
   }
 
-  .main-title {
-    margin-top: 0.3rem;
-    font-size: 1.7rem;
+  .users-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .section-card {
+    padding: 1.2rem;
   }
 
   .filters-container {
@@ -199,95 +235,35 @@ mat-paginator {
     max-width: 100%;
   }
 
-  .table-modern {
-    min-width: 460px;  /* 🔥 mismo ancho visual que filtros y formulario */
-  }
-
-  .users-table-block .table-header,
-  .pagination-bar {
-    padding: 0;
-  }
-}
-/* --------------------------------------- */
-/* 📱 MOBILE FIX PARA INPUTS GIGANTES */
-/* --------------------------------------- */
-
-@media (max-width: 768px) {
-
-  /* Limitar el ancho del card */
-  .section-card {
-    max-width: 380px;
-    margin: 0 auto;
-    padding: 0.8rem 1rem;
-    margin-bottom: 1.5rem;
-  }
-
-  /* Achicar inputs Angular Material */
-  .section-card .mat-mdc-form-field {
-    --mdc-outlined-text-field-density: -4;
-    --mdc-shape-small: 6px;
-  }
-
-  /* Separación mínima entre campos */
-  .filters-container .mat-form-field,
-  .form-grid .mat-form-field {
-    margin-bottom: 6px !important;
-  }
 }
 /* ======================================================= */
-/* 🌞 LIGHT MODE – Chips pastel                            */
+/* 🎯 CHIPS – ESTILO UNIFICADO                             */
 /* ======================================================= */
 
 ::ng-deep mat-chip-option .mdc-evolution-chip__cell {
-  background: rgba(230,230,230,0.65) !important;
+  background: var(--surface-alt) !important;
   border-radius: 14px !important;
-  border: 1px solid rgba(0,0,0,0.10) !important;
-  padding: 2px px !important;
+  border: 1px solid var(--border) !important;
+  padding: 2px 10px !important;
   color: var(--text-strong) !important;
   font-size: 0.82rem !important;
   font-weight: 500;
-  transition: 0.25s ease;
-  
+  transition: background 0.25s ease;
 }
 
 ::ng-deep mat-chip-option:hover .mdc-evolution-chip__cell {
-  background: rgba(200,200,200,0.55) !important;
+  background: var(--surface) !important;
 }
 
-/* SELECCIONADO */
 ::ng-deep mat-chip-option.mat-mdc-chip-selected .mdc-evolution-chip__cell {
-  background: var(--accent-strong) !important; /* rosa pastel */
-  border-color: var(--accent-hover) !important;
-  color: #000 !important;
-  box-shadow: 0 0 8px rgba(255,175,204,0.45);
+  background: var(--primary) !important;
+  border-color: var(--primary-soft) !important;
+  color: #fff !important;
+  box-shadow: none;
 }
 
-/* icon/text inside chip */
 ::ng-deep mat-chip-option .mdc-evolution-chip__action {
   color: inherit !important;
-}
-
-
-/* ======================================================= */
-/* 🌙 DARK MODE – Chips pastel                             */
-/* ======================================================= */
-
-::ng-deep .dark-mode mat-chip-option .mdc-evolution-chip__cell {
-  background: rgba(255,255,255,0.12) !important;
-  border-color: rgba(255,255,255,0.25) !important;
-  color: var(--text) !important;
-}
-
-::ng-deep .dark-mode mat-chip-option:hover .mdc-evolution-chip__cell {
-  background: rgba(255,255,255,0.20) !important;
-}
-
-/* SELECCIONADO (dark) */
-::ng-deep .dark-mode mat-chip-option.mat-mdc-chip-selected .mdc-evolution-chip__cell {
-  background: var(--accent-hover) !important; /* celeste pastel */
-  border-color: var(--accent-strong) !important;
-  color: #000 !important;
-  box-shadow: 0 0 10px rgba(189,224,254,0.65);
 }
 /* ================================
    🌟 PAGINADOR — ESTILO ARREGLADO

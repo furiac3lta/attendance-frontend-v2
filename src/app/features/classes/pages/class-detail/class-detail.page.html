@@ -15,7 +15,8 @@
 
   <mat-divider></mat-divider>
 
-  <table mat-table [dataSource]="classes" *ngIf="classes.length > 0">
+  <div class="table-wrapper" *ngIf="classes.length > 0">
+    <table mat-table [dataSource]="classes" class="table-modern">
 
     <!-- Clase -->
     <ng-container matColumnDef="name">
@@ -87,6 +88,7 @@
     <tr mat-header-row *matHeaderRowDef="['name','date','takenBy','action']"></tr>
     <tr mat-row *matRowDef="let row; columns: ['name','date','takenBy','action']"></tr>
 
-  </table>
+    </table>
+  </div>
 
 </mat-card>

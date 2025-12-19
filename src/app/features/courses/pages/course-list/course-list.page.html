@@ -1,13 +1,14 @@
 <mat-card class="page-card">
 
-  <h2 class="title">Gestión de Cursos</h2>
+  <div class="page-head">
+    <h2 class="page-head__title">Gestión de Cursos</h2>
 
-  <!-- Acciones -->
-  <div class="actions" *ngIf="canEdit()">
-    <button mat-raised-button color="primary" (click)="goToCreateCourse()">
-      <mat-icon>add</mat-icon>
-      Nuevo curso
-    </button>
+    <div class="page-head__actions" *ngIf="canEdit()">
+      <button mat-raised-button color="primary" (click)="goToCreateCourse()">
+        <mat-icon>add</mat-icon>
+        Nuevo curso
+      </button>
+    </div>
   </div>
 
   <!-- Sin cursos -->
