@@ -782,7 +782,10 @@ body.dark-mode ::ng-deep mat-chip-option .mdc-evolution-chip__cell {
   
   }
   .page-card{
-    width: 100%!important;
+    width: 200%!important;
+  }
+  .users-table-block{
+     width: 200%!important;
   }
   }
 
