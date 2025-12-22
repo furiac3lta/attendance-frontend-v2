@@ -1,67 +1,15 @@
-<mat-toolbar class="toolbar">
-
-  <!-- BOTÓN HAMBURGUESA (solo móvil) -->
-  <button
-    mat-icon-button
-    class="mobile-menu-btn"
-    (click)="menuOpen = !menuOpen"
-    *ngIf="isLoggedIn">
-    <mat-icon>{{ menuOpen ? 'close' : 'menu' }}</mat-icon>
-  </button>
-
- 
-<!-- HOME (NO para instructor) -->
 <button
-  mat-button
-  [routerLink]="homeRoute"
-  *ngIf="isLoggedIn && !isInstructor">
-  <mat-icon>home</mat-icon>
-  Home
+  mat-icon-button
+  class="drawer-toggle"
+  (click)="menuOpen = !menuOpen"
+  *ngIf="isLoggedIn">
+  <mat-icon>{{ menuOpen ? 'close' : 'menu' }}</mat-icon>
 </button>
 
+<mat-toolbar class="toolbar" [class.drawer-open]="menuOpen">
 
-  <span class="spacer"></span>
-
-  <!-- MENÚ DESKTOP -->
-  <nav class="nav-links" *ngIf="isLoggedIn">
-
-    <button
-      mat-button
-      *ngIf="canSee('organizations')"
-      routerLink="/organizations"
-      routerLinkActive="active">
-      <mat-icon>business</mat-icon>
-      Organizaciones
-    </button>
-
-    <button
-      mat-button
-      *ngIf="canSee('users')"
-      routerLink="/users"
-      routerLinkActive="active">
-      <mat-icon>groups</mat-icon>
-      Usuarios
-    </button>
-
-    <button
-      mat-button
-      *ngIf="canSee('courses')"
-      routerLink="/courses"
-      routerLinkActive="active">
-      <mat-icon>menu_book</mat-icon>
-      Cursos
-    </button>
-
-  </nav>
-
-  <!-- DARK MODE -->
-  <button mat-icon-button (click)="toggleDark()" *ngIf="isLoggedIn">
-    <mat-icon>{{ isDark ? 'light_mode' : 'dark_mode' }}</mat-icon>
-  </button>
-
-  <!-- USUARIO + ORGANIZACIÓN + LOGOUT -->
-  <div class="user-actions" *ngIf="isLoggedIn">
-
+  <!-- HEADER USUARIO -->
+  <div class="sidebar-header" *ngIf="isLoggedIn">
     <div class="user-info">
       <mat-icon>account_circle</mat-icon>
       <div class="user-text">
@@ -69,43 +17,69 @@
       </div>
     </div>
 
-    <button mat-raised-button color="accent" (click)="logout()">
-      <mat-icon>logout</mat-icon>
-      Salir
+    <button mat-icon-button class="theme-toggle" (click)="toggleDark()">
+      <mat-icon>{{ isDark ? 'light_mode' : 'dark_mode' }}</mat-icon>
     </button>
-
   </div>
 
+  <div class="sidebar-header guest" *ngIf="!isLoggedIn">
+    <button mat-icon-button class="theme-toggle" (click)="toggleDark()">
+      <mat-icon>{{ isDark ? 'light_mode' : 'dark_mode' }}</mat-icon>
+    </button>
+  </div>
+
+  <!-- NAVEGACIÓN PRINCIPAL -->
+  <nav class="nav-links" *ngIf="isLoggedIn">
+
+    <button
+      mat-button
+      class="nav-link"
+      [routerLink]="homeRoute"
+      *ngIf="!isInstructor"
+      (click)="menuOpen = false">
+      <mat-icon>home</mat-icon>
+      Home
+    </button>
+
+    <button
+      mat-button
+      class="nav-link"
+      *ngIf="canSee('organizations')"
+      routerLink="/organizations"
+      routerLinkActive="active"
+      (click)="menuOpen = false">
+      <mat-icon>business</mat-icon>
+      Organizaciones
+    </button>
+
+    <button
+      mat-button
+      class="nav-link"
+      *ngIf="canSee('users')"
+      routerLink="/users"
+      routerLinkActive="active"
+      (click)="menuOpen = false">
+      <mat-icon>groups</mat-icon>
+      Usuarios
+    </button>
+
+    <button
+      mat-button
+      class="nav-link"
+      *ngIf="canSee('courses')"
+      routerLink="/courses"
+      routerLinkActive="active"
+      (click)="menuOpen = false">
+      <mat-icon>menu_book</mat-icon>
+      Cursos
+    </button>
+
+  </nav>
+
+  <!-- BOTÓN DE SALIDA -->
+  <button mat-stroked-button class="logout-btn" (click)="logout(); menuOpen = false" *ngIf="isLoggedIn">
+    <mat-icon>logout</mat-icon>
+    Salir
+  </button>
+
 </mat-toolbar>
-
-<!-- ✅ MENÚ MÓVIL -->
-<nav class="mobile-menu" [class.open]="menuOpen" *ngIf="isLoggedIn">
-
-  <button
-    mat-button
-    *ngIf="canSee('organizations')"
-    routerLink="/organizations"
-    (click)="menuOpen = false">
-    <mat-icon>business</mat-icon>
-    Organizaciones
-  </button>
-
-  <button
-    mat-button
-    *ngIf="canSee('users')"
-    routerLink="/users"
-    (click)="menuOpen = false">
-    <mat-icon>groups</mat-icon>
-    Usuarios
-  </button>
-
-  <button
-    mat-button
-    *ngIf="canSee('courses')"
-    routerLink="/courses"
-    (click)="menuOpen = false">
-    <mat-icon>menu_book</mat-icon>
-    Cursos
-  </button>
-
-</nav>

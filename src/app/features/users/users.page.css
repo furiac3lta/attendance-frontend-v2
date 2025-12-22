@@ -11,13 +11,11 @@
 }
 
 .users-layout {
-  display: grid;
-  grid-template-columns: minmax(320px, 1.1fr) minmax(320px, 0.9fr);
-  gap: 24px;
+  display: contents;
 }
 
 .users-layout .section-card {
-  margin: 0;
+  margin: 0 0 24px 0;
 }
 
 .users-layout .filters-card {

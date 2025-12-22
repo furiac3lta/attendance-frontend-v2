@@ -23,3 +23,38 @@
   align-items: center;
   gap: 10px;
 }
+
+@media (max-width: 768px) {
+  .page-card {
+    width: 100%;
+    margin: 16px auto 0;
+    padding: 2rem 1.25rem 0 1.25rem;
+  }
+
+  .page-head {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
+
+  .page-head__title {
+    margin-left: 0;
+    font-size: 1.6rem;
+    white-space: normal;
+    word-break: normal;
+  }
+
+  .page-head__actions {
+    width: 100%;
+    justify-content: flex-start;
+  }
+
+  .page-head__actions button {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .table-section {
+    padding: 0;
+  }
+}

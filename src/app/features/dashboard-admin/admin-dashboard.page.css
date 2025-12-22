@@ -282,3 +282,10 @@
     padding: 20px 16px 70px;
   }
 }
+
+.dark-mode button{
+    color: white!important;
+}
+button{
+    background-color: black!important;
+}

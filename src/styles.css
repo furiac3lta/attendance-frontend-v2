@@ -5,7 +5,7 @@
    ========================================================= */
 :root {
   --font-main: 'Poppins', 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-
+  --drawer-bg: #f5f6fa;
   --bg: #f4f6fb;
   --surface: #ffffff;
   --surface-alt: #f1f3f8;
@@ -29,7 +29,7 @@
   --table-row: #ffffff;
   --table-hover: rgba(42, 163, 244, 0.08);
   --shadow: none;
-
+ 
   --kpi-bg-1: #e6f0ff;
   --kpi-bg-2: #eaffe9;
   --kpi-bg-3: #fff3e4;
@@ -39,6 +39,7 @@
 
 .dark-mode {
   --bg: #050507;
+  --drawer-bg: #0f0f17;
   --surface: #11111a;
   --surface-alt: #181822;
   --text: #d6d7df;
@@ -61,7 +62,7 @@
   --table-row: #1d1d28;
   --table-hover: rgba(71, 211, 217, 0.14);
   --shadow: none;
-
+  --drawer-bg: #0e0e14; /* dark mode sólido */
   --kpi-bg-1: #122640;
   --kpi-bg-2: #123222;
   --kpi-bg-3: #3a2414;
@@ -87,6 +88,28 @@ body {
 body.dark-mode {
   background: var(--bg);
   color: var(--text);
+}
+
+@media (max-width: 768px) {
+  body {
+    padding: 80px 18px 100px;
+    overflow-x: hidden;
+  }
+}
+
+@media (max-width: 1024px) and (orientation: landscape) {
+  body {
+    padding: 64px 32px 96px;
+    padding-left: 32px;
+    padding-right: 32px;
+  }
+
+  .page,
+  .page-card,
+  .page-head,
+  .table-section {
+    max-width: 100%;
+  }
 }
 
 .page,
@@ -384,9 +407,31 @@ button[mat-raised-button]:hover {
 
 .table-modern .mat-mdc-cell,
 .table-modern .mat-mdc-header-cell {
-  padding: 18px;
+  padding: 14px 16px;
   font-size: 14px;
   color: var(--text);
+}
+
+@media (max-width: 1024px) and (orientation: landscape) {
+  .table-wrapper {
+    padding: 0 0 16px;
+  }
+
+  .table-modern {
+    min-width: 720px;
+  }
+
+  .table-modern th,
+  .table-modern td,
+  .table-modern .mat-mdc-cell,
+  .table-modern .mat-mdc-header-cell {
+    padding: 12px;
+    font-size: 13px;
+  }
+
+  .table-modern tbody tr {
+    border-bottom-width: 0;
+  }
 }
 
 .mat-header-cell {
@@ -601,4 +646,158 @@ body.dark-mode ::ng-deep mat-chip-option .mdc-evolution-chip__cell {
   display: flex;
   justify-content: flex-end;
   gap: 12px;
+}
+.dark-mode .mat-mdc-table{
+  background-color: #1d1d28!important;
+}
+.dark-mode .table-modern tbody tr, .table-modern .mat-mdc-row {
+  transition: background 0.2s ease!important;
+    transition-property: background!important;
+    transition-duration: 0.2s!important;
+    transition-timing-function: ease!important;
+    transition-delay: 0s!important;
+    transition-behavior: normal!important;
+}
+@media (max-width: 1024px) and (orientation: landscape) {
+  mat-card {
+    padding: 20px;
+    box-shadow: 0 12px 30px rgba(0,0,0,0.18) !important;
+  }
+}
+/* =========================================================
+   📱 MOBILE – NAVBAR FIX
+   ========================================================= */
+ @media (max-width: 768px) {
+
+  /* ===== BOTÓN HAMBURGUESA ===== */
+  .drawer-toggle {
+    display: inline-flex;
+    position: fixed;
+    top: 16px;
+    left: 16px;
+    z-index: 3000;
+    background: var(--drawer-bg);
+    border: none;
+  }
+
+  /* ===== DRAWER ===== */
+  .toolbar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 260px;
+    height: 100vh;
+
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 24px;
+
+    padding: 24px 16px;
+    padding-top: 64px;
+
+    background: var(--drawer-bg) !important;
+    color: #fff;
+
+    border-right: none;
+    box-shadow: 0 0 0 rgba(0,0,0,0);
+
+    transform: translateX(-100%);
+    transition: transform 0.3s ease;
+    z-index: 2500;
+  }
+
+  .toolbar.drawer-open {
+    transform: translateX(0);
+    box-shadow: 0 0 40px rgba(0,0,0,0.6);
+  }
+
+  /* ===== LIMPIAR FONDOS INTERNOS ===== */
+  .sidebar-header,
+  .nav-links,
+  .nav-link,
+  .logout-btn {
+    background: transparent !important;
+  }
+
+  /* ===== LINKS ===== */
+  .nav-links {
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .nav-link {
+    width: 100%;
+    justify-content: flex-start;
+    padding: 12px 14px;
+    border-radius: 10px;
+    color: #eaeaf0;
+  }
+
+  .nav-link:hover,
+  .nav-link.active {
+    background: rgba(255,255,255,0.08);
+  }
+
+  /* ===== LOGOUT ===== */
+  .logout-btn {
+    margin-top: auto;
+    color: #fff !important;
+    border-color: rgba(255,255,255,0.2) !important;
+  }
+}
+/* =========================================================
+   🧭 MAT-TOOLBAR – SOLO DESKTOP
+   ========================================================= */
+@media (min-width: 769px) {
+  mat-toolbar {
+    background: var(--card-bg) !important;
+    color: var(--text-strong) !important;
+    border-bottom: 1px solid var(--border);
+    box-shadow: none;
+  }
+
+}
+
+@media (min-width: 769px) {
+.dark-mode .toolbar {
+   background-color:#161620 !important;
+}
+
+}
+/* =========================================
+   🚫 DESACTIVAR mat-toolbar EN MOBILE
+========================================= */
+@media (max-width: 768px) {
+  mat-toolbar {
+    background: transparent !important;
+    box-shadow: none !important;
+    border: none !important;
+  }
+}
+@media (max-width: 768px) {
+  .toolbar {
+    background-color: var(--drawer-bg) !important;
+    opacity: 1 !important;
+  
+  }
+  .page-card{
+    width: 100%!important;
+  }
+  }
+
+.dark-mode .mdc-evolution-chip__text-label{
+  color: white!important;
+}
+.dark-mode .mat-mdc-select-min-line{
+ color: white!important;
+}
+.dark-mode .mdc-button__label{
+   color: white!important;
+}
+.dark-mode .swal2-title{
+  color: black!important;
+}
+.dark-mode .mat-mdc-chip-action-label{
+  color: white!important;
 }
