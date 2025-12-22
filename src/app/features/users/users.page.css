@@ -538,3 +538,9 @@ mat-icon.unpaid {
 .paid-bad {
   color: #f44336;
 }
+@media (max-width: 768px) {
+  .page-card {
+    width: 100%!important;
+   
+  }
+}
