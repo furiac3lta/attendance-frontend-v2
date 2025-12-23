@@ -544,3 +544,37 @@ mat-icon.unpaid {
    
   }
 }
+@media (max-width: 760px) {
+  .users-table-block {
+    width: 100%!important;
+    margin-left: 0;
+    margin-right: 0;
+    border-radius: 0;
+  }
+}
+/* ===========================================
+   FIX USERS — FULL WIDTH EN LANDSCAPE MOBILE
+   =========================================== */
+@media (max-width: 960px) and (orientation: landscape) {
+
+  /* Rompe el 80% del contenedor solo en landscape */
+  .users-page {
+    width: 100% !important;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+  }
+
+  /* Tabla a edge-to-edge */
+  .users-table-block {
+    width: 100% !important;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+    border-radius: 0 !important;
+  }
+
+  /* Cards Material full width */
+  app-users-page mat-card {
+    width: 100% !important;
+    border-radius: 0 !important;
+  }
+}

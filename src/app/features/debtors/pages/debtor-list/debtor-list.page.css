@@ -1,0 +1,28 @@
+.badge-danger {
+  background: #ffe3e3;
+  color: #d32f2f;
+  padding: 4px 10px;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: 600;
+}
+.dark-mode .mdc-data-table__header-cell{
+  color: black!important;
+}
+.paid-bad {
+  color: #f44336;
+}
+/* =====================================
+   ❌ ICON CLOSE – X TRANSPARENTE REAL
+   ===================================== */
+mat-icon {
+  -webkit-user-select: none;
+  user-select: none;
+  background-repeat: no-repeat;
+  display: inline-block;
+  fill: currentColor;
+  height: 24px;
+  width: 24px;
+  overflow: hidden;
+  color: red;
+}

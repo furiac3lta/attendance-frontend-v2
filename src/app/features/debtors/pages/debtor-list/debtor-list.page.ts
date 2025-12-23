@@ -3,12 +3,13 @@ import { CommonModule } from '@angular/common';
 import { MatTableModule } from '@angular/material/table';
 import { DebtorService } from '../../services/debtor.service';
 import { Debtor } from '../../models/debtor.model';
+import { MatIconModule } from '@angular/material/icon';
 
 @Component({
   standalone: true,
-  imports: [CommonModule, MatTableModule],
+  imports: [CommonModule, MatTableModule, MatIconModule],
   templateUrl: './debtor-list.page.html',
-  styleUrl: './debtor-list.page.scss'
+  styleUrl: './debtor-list.page.css'
 })
 export class DebtorListPage implements OnInit {
 

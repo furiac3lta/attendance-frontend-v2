@@ -254,6 +254,8 @@
   box-shadow: 0 10px 20px rgba(0,0,0,0.15);
 }
 
+/* ================= EXISTENTE ================= */
+
 @media (max-width: 960px) {
   .kpi-card.wide {
     grid-column: span 1;
@@ -277,15 +279,40 @@
   }
 }
 
+/* ================= FIX 760 ================= */
+
+@media (max-width: 760px) {
+  .admin-dashboard {
+    max-width: 720px; /* 👈 MISMO ANCHO EN PORTRAIT Y LANDSCAPE */
+  }
+
+  .kpi-grid,
+  .quick-list {
+    grid-template-columns: 1fr; /* 👈 evita estiradas */
+  }
+}
+
+/* ================= EXISTENTE ================= */
+
 @media (max-width: 600px) {
   .admin-dashboard {
     padding: 20px 16px 70px;
   }
 }
 
-.dark-mode button{
-    color: white!important;
+.dark-mode button {
+  color: white!important;
 }
-button{
-    background-color: black!important;
+
+button {
+  background-color: black!important;
 }
+/* ===== FIX DESKTOP ANCHO ===== */
+/* ===== FIX GRID DESKTOP ===== */
+@media (min-width: 1280px) {
+ 
+  .kpi-card.wide {
+    grid-column: span 3;
+  }
+}
+
