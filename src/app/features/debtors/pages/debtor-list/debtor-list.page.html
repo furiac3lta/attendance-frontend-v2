@@ -3,6 +3,21 @@
   <h1>Seguimiento de morosos</h1>
   <p class="subtitle">Alumnos que no registran pago</p>
 
+  <div class="debtors-cards" *ngIf="dataSource.length > 0">
+    <article class="debtor-card" *ngFor="let d of dataSource">
+      <div class="debtor-card__head">
+        <div>
+          <div class="debtor-name">{{ d.fullName }}</div>
+          <div class="debtor-course">{{ d.courseName }}</div>
+        </div>
+        <mat-icon class="icon-close">report</mat-icon>
+      </div>
+      <div class="debtor-actions">
+        <button class="btn-link">Contactar</button>
+      </div>
+    </article>
+  </div>
+
   <table mat-table [dataSource]="dataSource" class="mat-elevation-z0">
 
     <!-- Alumno -->

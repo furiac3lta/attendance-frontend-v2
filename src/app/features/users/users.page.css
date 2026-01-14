@@ -74,7 +74,7 @@
 
 .form-grid {
   width: 100%;
-  max-width: 460px;  /* 🔥 Mismo ancho visual que mobile */
+  max-width: 100%;
   display: grid;
   gap: 12px;
 }
@@ -524,6 +524,51 @@ mat-icon.unpaid {
   justify-content: flex-end;
 }
 
+.excel-import-card {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.excel-helper {
+  margin: 0;
+  color: var(--text-muted);
+  font-size: 0.95rem;
+}
+
+.excel-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.excel-input {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.excel-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  align-items: center;
+}
+
+.excel-file {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  border: 1px solid var(--border);
+  background: var(--surface-alt);
+  color: var(--text);
+  max-width: 100%;
+  word-break: break-all;
+}
+
 .pagination-bar {
   margin-top: 16px;
   display: flex;
@@ -544,12 +589,151 @@ mat-icon.unpaid {
    
   }
 }
+
+/* ===========================================
+   📱 MODAL EDIT (USERS) — MOBILE ONLY
+   =========================================== */
+.modal-scrim {
+  display: none;
+}
+
+@media (max-width: 768px) {
+  .modal-scrim {
+    display: block;
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.35);
+    z-index: 2400;
+  }
+
+  .user-form-card.is-editing {
+    position: fixed;
+    top: 72px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: calc(100vw - 36px);
+    max-height: calc(100vh - 120px);
+    overflow: auto;
+    z-index: 2500;
+    box-shadow: 0 16px 40px rgba(0, 0, 0, 0.25);
+  }
+}
 @media (max-width: 760px) {
   .users-table-block {
     width: 100%!important;
     margin-left: 0;
     margin-right: 0;
     border-radius: 0;
+  }
+}
+
+/* ===========================================
+   📱 CARDS MOBILE USERS
+   =========================================== */
+.users-cards {
+  display: grid;
+  gap: 12px;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+.user-card {
+  border: 1px solid var(--border);
+  background: var(--card-bg);
+  padding: 14px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.user-card__head {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  align-items: flex-start;
+}
+
+.user-name {
+  font-weight: 600;
+  color: var(--text-strong);
+}
+
+.user-role {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  margin-top: 2px;
+}
+
+.user-payment {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  min-width: 32px;
+}
+
+.user-meta {
+  display: grid;
+  gap: 6px;
+  margin: 10px 0;
+}
+
+.meta-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.meta-row .label {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+}
+
+.meta-row .value {
+  color: var(--text);
+  text-align: right;
+}
+
+.user-chips {
+  margin-bottom: 8px;
+}
+
+.user-actions {
+  display: flex;
+  gap: 8px;
+  justify-content: flex-end;
+}
+
+.status-toggle {
+  margin-right: auto;
+}
+
+.inactive-toggle {
+  margin-left: auto;
+}
+
+.muted {
+  color: var(--text-muted);
+}
+
+/* Mobile-first table toggle */
+.users-table-block .table-wrapper {
+  display: none;
+}
+
+@media (min-width: 769px) {
+  .users-cards {
+    display: none;
+  }
+
+  .users-table-block .table-wrapper {
+    display: block;
+  }
+}
+
+@media (max-width: 768px) {
+  .pagination-bar {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
   }
 }
 /* ===========================================

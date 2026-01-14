@@ -12,6 +12,16 @@
   box-shadow: none;
 }
 
+.page-head__actions {
+  display: flex;
+  gap: 12px;
+}
+
+.primary-full {
+  width: 100%;
+  justify-content: center;
+}
+
 /* ===================================== */
 /* 📊 SECCIÓN DE TABLA                   */
 /* ===================================== */
@@ -43,6 +53,10 @@
 
   .page-card {
     padding: 1.4rem;
+  }
+
+  .page-head__actions {
+    margin-top: 8px;
   }
 
   .table-modern {
@@ -127,6 +141,89 @@ table th {
 .text-muted {
   color: var(--text-muted);
 }
+
+/* ===================================== */
+/* 📱 CARDS MOBILE                        */
+/* ===================================== */
+.org-cards {
+  display: grid;
+  gap: 12px;
+  margin-top: 12px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.org-card {
+  border: 1px solid var(--border);
+  background: var(--card-bg);
+  padding: 14px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.org-card__head {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  align-items: flex-start;
+}
+
+.org-name {
+  font-weight: 600;
+  color: var(--text-strong);
+}
+
+.org-type {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  margin-top: 2px;
+}
+
+.org-admin {
+  font-size: 0.85rem;
+  color: var(--text);
+  text-align: right;
+}
+
+.org-meta {
+  display: grid;
+  gap: 6px;
+  margin: 10px 0;
+}
+
+.meta-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.meta-row .label {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+}
+
+.meta-row .value {
+  color: var(--text);
+  text-align: right;
+}
+
+.org-actions {
+  display: grid;
+  gap: 10px;
+}
+
+.org-actions .actions-inline {
+  flex-wrap: wrap;
+  justify-content: flex-end;
+}
+
+.status-toggle {
+  margin-right: auto;
+}
+
+.inactive-toggle {
+  margin-left: auto;
+}
 /* ============================= */
 /* 📱 FIX SELECT ADMIN EN MOBILE */
 /* ============================= */
@@ -158,4 +255,19 @@ td.mat-mdc-cell {
 :host ::ng-deep .mat-mdc-select-panel {
   max-width: 90vw !important;
   width: auto !important;
+}
+
+/* Mobile-first: hide table */
+.table-section {
+  display: none;
+}
+
+@media (min-width: 769px) {
+  .org-cards {
+    display: none;
+  }
+
+  .table-section {
+    display: flex;
+  }
 }

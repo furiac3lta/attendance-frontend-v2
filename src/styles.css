@@ -73,6 +73,18 @@
 /* =========================================================
    🧩 BASE GLOBAL
    ========================================================= */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  max-width: 100%;
+  overflow-x: hidden;
+}
+
 body, input, button, mat-card {
   font-family: var(--font-main) !important;
 }
@@ -90,10 +102,213 @@ body.dark-mode {
   color: var(--text);
 }
 
+/* =========================================
+   ✅ SWEETALERT2 INPUTS (MOBILE WIDTH FIX)
+   ========================================= */
+.swal2-popup .swal2-input,
+.swal2-popup .swal2-textarea,
+.swal2-popup .swal2-select {
+  width: 100% !important;
+  box-sizing: border-box;
+  margin-left: 0 !important;
+  margin-right: 0 !important;
+}
+
+.swal2-popup .swal2-html-container {
+  width: 100%;
+  padding: 0 !important;
+}
+
+.swal2-popup {
+  max-width: 520px !important;
+  overflow: hidden;
+}
+
+@media (max-width: 768px) {
+  .swal2-popup {
+    width: calc(100vw - 36px) !important;
+    max-width: calc(100vw - 36px) !important;
+  }
+}
+
+/* =========================================
+   📱 CARD LAYOUT SAFETY (NO OVERFLOW)
+   ========================================= */
+.course-card,
+.course-cards,
+.user-card,
+.users-cards,
+.org-card,
+.org-cards,
+.attendance-card,
+.attendance-cards,
+.report-card,
+.report-cards,
+.class-card,
+.class-cards,
+.debtor-card,
+.debtor-cards,
+.org-info-card,
+.org-info-cards,
+.member-card,
+.member-cards {
+  max-width: 100%;
+  box-sizing: border-box;
+}
+
+.course-card,
+.user-card,
+.org-card,
+.attendance-card,
+.report-card,
+.class-card,
+.debtor-card,
+.org-info-card,
+.member-card {
+  width: 100%;
+  overflow: hidden;
+}
+
+.course-title,
+.user-name,
+.org-name,
+.debtor-name,
+.report-name,
+.class-title,
+.member-name,
+.card-title {
+  overflow-wrap: anywhere;
+  word-break: break-word;
+}
+
+/* =========================================
+   ⬅️ GLOBAL FLOATING BACK BUTTON
+   ========================================= */
+.floating-back {
+  position: fixed !important;
+  right: 18px;
+  bottom: 92px;
+  z-index: 2500;
+  width: 52px !important;
+  height: 52px !important;
+  min-width: 52px !important;
+  border-radius: 999px !important;
+}
+
+@media (max-width: 768px) {
+  .floating-back {
+    right: 16px;
+    bottom: 96px;
+  }
+}
+
+/* =========================================
+   ✅ GLOBAL BUTTON STYLE (NO GRADIENTS)
+   Excludes attendance present/absent pills.
+   ========================================= */
+button.mat-mdc-raised-button:not(.presence-toggle):not(.pill-button),
+button.mat-mdc-unelevated-button:not(.presence-toggle):not(.pill-button),
+button.mat-mdc-outlined-button:not(.presence-toggle):not(.pill-button),
+button.mat-mdc-button:not(.presence-toggle):not(.pill-button),
+a.mat-mdc-raised-button:not(.presence-toggle):not(.pill-button),
+a.mat-mdc-unelevated-button:not(.presence-toggle):not(.pill-button),
+a.mat-mdc-outlined-button:not(.presence-toggle):not(.pill-button),
+a.mat-mdc-button:not(.presence-toggle):not(.pill-button) {
+  border-radius: 999px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+}
+
+button.mat-mdc-raised-button:not(.presence-toggle):not(.pill-button),
+button.mat-mdc-unelevated-button:not(.presence-toggle):not(.pill-button),
+a.mat-mdc-raised-button:not(.presence-toggle):not(.pill-button),
+a.mat-mdc-unelevated-button:not(.presence-toggle):not(.pill-button) {
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.12);
+}
+
+button.mat-mdc-icon-button:not(.presence-toggle):not(.pill-button) {
+  border-radius: 999px;
+}
+
 @media (max-width: 768px) {
   body {
-    padding: 80px 18px 100px;
+    padding: 80px 0 100px;
     overflow-x: hidden;
+  }
+
+  .page,
+  .page-wrapper,
+  main {
+    width: 100%;
+    max-width: 100%;
+    padding: 0;
+  }
+
+  mat-card,
+  mat-card,
+  .page-card,
+  .section-card,
+  .users-table-block,
+  .table-section,
+  .table-card,
+  .table-wrapper,
+  .course-cards,
+  .users-cards,
+  .org-cards,
+  .attendance-cards,
+  .report-cards,
+  .class-cards,
+  .debtor-cards,
+  .org-info-cards,
+  .member-cards,
+  [class$="-card"],
+  [class$="-cards"] {
+    width: 95% !important;
+    max-width: 95% !important;
+    min-width: 0 !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
+  }
+
+  .page-head {
+    width: 95%;
+    max-width: 95%;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .mat-mdc-form-field,
+  input,
+  select,
+  textarea,
+  button {
+    max-width: 100%;
+  }
+
+  .mat-mdc-form-field {
+    width: 100%;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  .title,
+  .page-title,
+  .section-title,
+  .card-title,
+  .course-title,
+  .user-name,
+  .org-name,
+  .debtor-name,
+  .report-name,
+  .class-title,
+  .member-name,
+  .mat-mdc-card-title {
+    max-width: 100%;
+    overflow-wrap: anywhere;
+    word-break: break-word;
   }
 }
 
@@ -149,9 +364,12 @@ main {
 }
 
 .page-head__title {
-  margin: 0 0 0 65px;
-  font-size: 1.8rem;
+  margin: 0;
+  font-size: 1.4rem;
   color: var(--text-strong);
+  white-space: nowrap;
+  text-align: center;
+  width: 100%;
 }
 
 .page-head__actions {

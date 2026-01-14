@@ -1,4 +1,4 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, ElementRef, inject, OnInit, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, FormsModule, Validators } from '@angular/forms';
 import { UsersService, User } from '../../core/services/users.service';
@@ -49,6 +49,7 @@ private paymentSvc = inject(PaymentService);
   filterRole: string = 'ALL';
   filterOrg: number | 'ALL' = 'ALL';
   filterCourse: number | 'ALL' = 'ALL';
+  showInactive = false;
 
   // =========================
   // PAGINACIÓN
@@ -82,6 +83,14 @@ private paymentSvc = inject(PaymentService);
   });
 
   // =========================
+  // 📥 IMPORTAR EXCEL
+  // =========================
+  @ViewChild('excelInput') excelInput?: ElementRef<HTMLInputElement>;
+  selectedExcelFile: File | null = null;
+  excelFileName = '';
+  importingExcel = false;
+
+  // =========================
   // INIT
   // =========================
   ngOnInit(): void {
@@ -109,6 +118,7 @@ private paymentSvc = inject(PaymentService);
     if (this.filterRole !== 'ALL') params.role = this.filterRole;
     if (this.filterOrg !== 'ALL') params.orgId = this.filterOrg;
     if (this.filterCourse !== 'ALL') params.courseId = this.filterCourse;
+    params.active = !this.showInactive;
 
     this.usersSvc.findAll(params).subscribe({
       next: (res) => {
@@ -171,27 +181,28 @@ editUser(u: User): void {
 }
 
 // =========================
-// 🗑️ ELIMINAR USUARIO
+// ✅ ACTIVAR / DESACTIVAR USUARIO
 // =========================
-deleteUser(id: number): void {
-  Swal.fire({
-    title: '¿Eliminar este usuario?',
-    icon: 'warning',
-    showCancelButton: true,
-    confirmButtonText: 'Eliminar',
-    cancelButtonText: 'Cancelar'
-  }).then(result => {
-    if (!result.isConfirmed) return;
+toggleUserActive(user: User): void {
+  if (!user.id) return;
 
-    this.usersSvc.remove(id).subscribe({
-      next: () => {
-        Swal.fire('Eliminado', 'Usuario eliminado', 'success');
-        this.loadUsers();
-      },
-      error: () => {
-        Swal.fire('Error', 'No se pudo eliminar el usuario', 'error');
+  const nextActive = !user.active;
+  const action$ = nextActive
+    ? this.usersSvc.activate(user.id)
+    : this.usersSvc.deactivate(user.id);
+
+  action$.subscribe({
+    next: () => {
+      user.active = nextActive;
+      const shouldRemove =
+        (!this.showInactive && !nextActive) || (this.showInactive && nextActive);
+      if (shouldRemove) {
+        this.users = this.users.filter(u => u.id !== user.id);
       }
-    });
+    },
+    error: () => {
+      Swal.fire('Error', 'No se pudo actualizar el estado', 'error');
+    }
   });
 }
 // =========================
@@ -238,10 +249,75 @@ loadPaymentStatus(courseId: number): void {
       }
     });
 }
-cancelEdit(): void {
-  this.editingUserId = null;
-  this.form.reset({ role: 'USER', courseIds: [] });
-}
+  cancelEdit(): void {
+    this.editingUserId = null;
+    this.form.reset({ role: 'USER', courseIds: [] });
+  }
+
+  // =========================
+  // 📥 IMPORTAR EXCEL
+  // =========================
+  onExcelSelected(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    const file = input.files?.[0] ?? null;
+
+    if (!file) {
+      this.clearExcelSelection();
+      return;
+    }
+
+    this.selectedExcelFile = file;
+    this.excelFileName = file.name;
+  }
+
+  clearExcelSelection(): void {
+    this.selectedExcelFile = null;
+    this.excelFileName = '';
+    if (this.excelInput?.nativeElement) {
+      this.excelInput.nativeElement.value = '';
+    }
+  }
+
+  uploadExcel(): void {
+    if (!this.selectedExcelFile) {
+      Swal.fire('Atención', 'Selecciona un archivo para importar', 'warning');
+      return;
+    }
+
+    this.importingExcel = true;
+
+    this.usersSvc.importFromExcel(this.selectedExcelFile).subscribe({
+      next: (res: any) => {
+        const created = res?.created ?? 0;
+        const skipped = res?.skipped ?? 0;
+        const errors: string[] = Array.isArray(res?.errors) ? res.errors : [];
+
+        if (created > 0 && errors.length === 0) {
+          Swal.fire('Éxito', 'Usuarios importados correctamente', 'success');
+        } else if (created > 0) {
+          Swal.fire(
+            'Importación parcial',
+            `Creados: ${created}. Omitidos: ${skipped}.`,
+            'warning'
+          );
+        } else {
+          const message = errors.length > 0
+            ? errors.join('<br>')
+            : 'No se importaron usuarios.';
+          Swal.fire({ title: 'Error', html: message, icon: 'error' });
+        }
+
+        this.clearExcelSelection();
+        this.currentPage = 0;
+        this.loadUsers();
+        this.importingExcel = false;
+      },
+      error: () => {
+        Swal.fire('Error', 'No se pudo importar el archivo', 'error');
+        this.importingExcel = false;
+      }
+    });
+  }
 
   // =========================
   // 💰 REGISTRAR PAGO

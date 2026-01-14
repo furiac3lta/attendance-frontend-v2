@@ -104,7 +104,12 @@
         <h4>Descargar resumen mensual</h4>
         <p class="muted">Ideal para compartir con tu equipo.</p>
       </div>
-      <button type="button">Descargar</button>
+      <button
+        type="button"
+        (click)="downloadMonthlyReport()"
+        [disabled]="isDownloading">
+        {{ isDownloading ? 'Generando...' : 'Descargar' }}
+      </button>
     </article>
   </section>
 

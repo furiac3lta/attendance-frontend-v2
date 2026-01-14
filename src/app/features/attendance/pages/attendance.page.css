@@ -78,3 +78,73 @@ body.attendance-page {
   padding-left: 0;
   padding-right: 0;
 }
+
+/* ===================================== */
+/* 📱 CARDS MOBILE                        */
+/* ===================================== */
+.attendance-cards {
+  display: grid;
+  gap: 12px;
+  margin-top: 16px;
+}
+
+.attendance-card {
+  border: 1px solid var(--border);
+  background: var(--card-bg);
+  padding: 14px;
+}
+
+.card-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 10px;
+}
+
+.card-title {
+  font-weight: 600;
+  color: var(--text-strong);
+}
+
+.card-subtitle {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  margin-top: 2px;
+}
+
+.card-grid {
+  display: grid;
+  gap: 8px;
+}
+
+.card-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.card-row .label {
+  color: var(--text-muted);
+  font-size: 0.8rem;
+}
+
+.card-row .value {
+  color: var(--text);
+  text-align: right;
+}
+
+/* Mobile-first: hide table */
+.table-wrapper {
+  display: none;
+}
+
+@media (min-width: 769px) {
+  .attendance-cards {
+    display: none;
+  }
+
+  .table-wrapper {
+    display: block;
+  }
+}

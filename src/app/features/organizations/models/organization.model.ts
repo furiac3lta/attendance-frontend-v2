@@ -15,6 +15,9 @@ export interface Organization {
   /** 🖼️ Logo en formato URL */
   logoUrl?: string;
 
+  /** ✅ Estado activo */
+  active?: boolean;
+
   /** 👤 Usuario administrador asignado (si existe) */
   admin?: {
     id: number;

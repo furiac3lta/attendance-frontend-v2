@@ -33,4 +33,11 @@ export class PaymentService {
   createPayment(payload: any) {
     return this.http.post(`${this.baseUrl}`, payload);
   }
+
+  // 🔹 Listar pagos por curso y mes
+  listByCourse(courseId: number, month: number, year: number) {
+    return this.http.get<any[]>(`${this.baseUrl}/course/${courseId}`, {
+      params: { month, year }
+    });
+  }
 }

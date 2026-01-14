@@ -9,11 +9,12 @@
   </div>
 
   <div class="users-layout">
+    <div class="modal-scrim" *ngIf="editingUserId"></div>
 
     <!-- ===================== -->
     <!-- 🟣 ALTA / EDICIÓN -->
     <!-- ===================== -->
-    <div class="section-card user-form-card">
+    <div class="section-card user-form-card" [class.is-editing]="editingUserId">
 
       <h3 class="section-title">
         <mat-icon>{{ editingUserId ? 'edit' : 'person_add' }}</mat-icon>
@@ -76,6 +77,60 @@
     </div>
 
     <!-- ===================== -->
+    <!-- 📥 IMPORTAR EXCEL -->
+    <!-- ===================== -->
+    <div class="section-card excel-import-card">
+      <h3 class="section-title">
+        <mat-icon>upload_file</mat-icon>
+        Importar usuarios desde Excel
+      </h3>
+
+      <p class="excel-helper">
+        Sube un archivo .xlsx, .xls o .csv con las columnas: nombre, email, rol y cursos.
+      </p>
+
+      <div class="excel-actions">
+        <input
+          #excelInput
+          class="excel-input"
+          type="file"
+          accept=".xlsx,.xls,.csv"
+          (change)="onExcelSelected($event)">
+
+        <div class="excel-buttons">
+          <button
+            mat-stroked-button
+            type="button"
+            (click)="excelInput.click()">
+            Elegir archivo
+          </button>
+
+          <button
+            mat-raised-button
+            color="primary"
+            type="button"
+            (click)="uploadExcel()"
+            [disabled]="!selectedExcelFile || importingExcel">
+            {{ importingExcel ? 'Importando...' : 'Importar' }}
+          </button>
+
+          <button
+            *ngIf="selectedExcelFile"
+            mat-button
+            type="button"
+            (click)="clearExcelSelection()">
+            Quitar
+          </button>
+        </div>
+
+        <div class="excel-file" *ngIf="selectedExcelFile">
+          <mat-icon>description</mat-icon>
+          <span>{{ excelFileName }}</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===================== -->
     <!-- 🔍 FILTROS -->
     <!-- ===================== -->
     <div class="section-card filters-card">
@@ -110,6 +165,13 @@
           </mat-chip-listbox>
         </div>
 
+        <mat-slide-toggle
+          class="inactive-toggle"
+          [(ngModel)]="showInactive"
+          (change)="applyFilter()">
+          Ver inactivos
+        </mat-slide-toggle>
+
       </div>
     </div>
 
@@ -128,6 +190,61 @@
   </div>
 
   <div class="table-section">
+
+    <div class="users-cards" *ngIf="users && users.length > 0">
+      <article class="user-card" *ngFor="let u of users">
+        <div class="user-card__head">
+          <div>
+            <div class="user-name">{{ u.fullName }}</div>
+            <div class="user-role">{{ u.role }}</div>
+          </div>
+          <div class="user-payment">
+            <ng-container *ngIf="filterCourse !== 'ALL'; else paymentDash">
+              <mat-icon
+                [ngClass]="paymentStatus[u.id] ? 'paid-ok' : 'paid-bad'">
+                {{ paymentStatus[u.id] ? 'check_circle' : 'cancel' }}
+              </mat-icon>
+            </ng-container>
+            <ng-template #paymentDash>
+              <span class="muted">—</span>
+            </ng-template>
+          </div>
+        </div>
+
+        <div class="user-meta">
+          <div class="meta-row">
+            <span class="label">Email</span>
+            <span class="value">{{ u.email }}</span>
+          </div>
+          <div class="meta-row">
+            <span class="label">Organización</span>
+            <span class="value">{{ u.organizationName || '—' }}</span>
+          </div>
+        </div>
+
+        <div class="user-chips">
+          <mat-chip-set>
+            <mat-chip *ngFor="let c of u.courses">{{ c }}</mat-chip>
+            <mat-chip *ngIf="!u.courses?.length">Sin cursos</mat-chip>
+          </mat-chip-set>
+        </div>
+
+        <div class="user-actions">
+          <mat-slide-toggle
+            [checked]="u.active"
+            (change)="toggleUserActive(u)"
+            class="status-toggle">
+            {{ u.active ? 'Activo' : 'Inactivo' }}
+          </mat-slide-toggle>
+          <button mat-icon-button (click)="editUser(u)">
+            <mat-icon class="icon-edit">edit</mat-icon>
+          </button>
+          <button mat-icon-button (click)="goToRegisterPayment(u)">
+            <mat-icon class="icon-payment">payments</mat-icon>
+          </button>
+        </div>
+      </article>
+    </div>
 
     <div class="table-wrapper">
       <table mat-table [dataSource]="users" class="table-modern">
@@ -185,15 +302,25 @@
             </td>
           </ng-container>
 
+          <!-- ESTADO -->
+          <ng-container matColumnDef="status">
+            <th mat-header-cell *matHeaderCellDef>Estado</th>
+            <td mat-cell *matCellDef="let u">
+              <mat-slide-toggle
+                [checked]="u.active"
+                (change)="toggleUserActive(u)"
+                class="status-toggle">
+                {{ u.active ? 'Activo' : 'Inactivo' }}
+              </mat-slide-toggle>
+            </td>
+          </ng-container>
+
           <!-- ACCIONES -->
           <ng-container matColumnDef="actions">
             <th mat-header-cell *matHeaderCellDef>Acciones</th>
             <td mat-cell *matCellDef="let u">
               <button mat-icon-button (click)="editUser(u)">
                 <mat-icon class="icon-edit">edit</mat-icon>
-              </button>
-              <button mat-icon-button (click)="deleteUser(u.id)">
-                <mat-icon class="icon-delete">delete</mat-icon>
               </button>
               <button mat-icon-button (click)="goToRegisterPayment(u)">
                 <mat-icon class="icon-payment">payments</mat-icon>
@@ -202,11 +329,11 @@
           </ng-container>
 
           <tr mat-header-row *matHeaderRowDef="[
-            'fullName','email','role','organization','courses','paid','actions'
+            'fullName','email','role','organization','courses','paid','status','actions'
           ]"></tr>
 
         <tr mat-row *matRowDef="let row; columns: [
-          'fullName','email','role','organization','courses','paid','actions'
+          'fullName','email','role','organization','courses','paid','status','actions'
         ]"></tr>
 
       </table>

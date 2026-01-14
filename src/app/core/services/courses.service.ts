@@ -23,8 +23,10 @@ private authHeaders() {
   constructor(private http: HttpClient) {}
 
   // ✅ Listar todos los cursos
-  findAll(): Observable<any[]> {
-    return this.http.get<any[]>(this.apiUrl);
+  findAll(active: boolean = true): Observable<any[]> {
+    return this.http.get<any[]>(this.apiUrl, {
+      params: { active }
+    });
   }
 
   // ✅ Obtener curso por ID
@@ -42,9 +44,21 @@ private authHeaders() {
     return this.http.put<any>(`${this.apiUrl}/${id}`, payload);
   }
 
-  // ✅ Eliminar curso
-  delete(id: number): Observable<any> {
-    return this.http.delete<any>(`${this.apiUrl}/${id}`);
+  // ✅ Activar / desactivar curso
+  deactivate(id: number): Observable<string> {
+    return this.http.put(
+      `${this.apiUrl}/${id}/deactivate`,
+      {},
+      { responseType: 'text' as const }
+    );
+  }
+
+  activate(id: number): Observable<string> {
+    return this.http.put(
+      `${this.apiUrl}/${id}/activate`,
+      {},
+      { responseType: 'text' as const }
+    );
   }
   assignInstructor(courseId: number, instructorId: number) {
   return this.http.patch(`${this.apiUrl}/${courseId}/assign-instructor/${instructorId}`, {});
@@ -56,10 +70,16 @@ getInstructors() {
   getById(id: number): Observable<any> {
     return this.http.get<any>(`${this.apiUrl}/${id}`);
   }
-getAvailableInstructors(courseId: number) {
+  getAvailableInstructors(courseId: number) {
   return this.http.get<InstructorDTO[]>(
     `${environment.API_URL}/courses/${courseId}/available-instructors`,
     this.authHeaders()
   );
 }
+
+  getStudentsByCourse(courseId: number) {
+    return this.http.get<any[]>(
+      `${environment.API_URL}/courses/${courseId}/students`
+    );
+  }
 }

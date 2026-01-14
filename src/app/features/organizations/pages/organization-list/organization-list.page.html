@@ -2,21 +2,95 @@
 
   <div class="page-head">
     <h2 class="page-head__title">Gestión de Organizaciones</h2>
+  </div>
 
-    <div class="page-head__actions">
-      <button
-        *ngIf="userRole === 'SUPER_ADMIN'"
-        mat-raised-button
-        color="primary"
-        routerLink="/organizations/new">
-        <mat-icon>add</mat-icon>
-      </button>
-    </div>
+  <div class="page-head__actions">
+    <button
+      *ngIf="userRole === 'SUPER_ADMIN'"
+      mat-raised-button
+      color="primary"
+      class="primary-full"
+      routerLink="/organizations/new">
+      <mat-icon>add</mat-icon>
+      Nueva organización
+    </button>
+
+    <mat-slide-toggle
+      *ngIf="userRole === 'SUPER_ADMIN'"
+      class="inactive-toggle"
+      [(ngModel)]="showInactive"
+      (change)="toggleInactiveView()">
+      Ver inactivos
+    </mat-slide-toggle>
   </div>
 
   <!-- ⚠️ ALERTA si no hay -->
   <div *ngIf="!organizations.length" class="alert alert-info">
     No hay organizaciones registradas.
+  </div>
+
+  <!-- 📱 CARDS -->
+  <div class="org-cards" *ngIf="organizations.length > 0">
+    <article class="org-card" *ngFor="let org of organizations">
+      <div class="org-card__head">
+        <div>
+          <div class="org-name">{{ org.name }}</div>
+          <div class="org-type">{{ org.type }}</div>
+        </div>
+        <div class="org-admin">
+          <ng-container *ngIf="org.adminFullName; else noAdminCard">
+            {{ org.adminFullName }}
+          </ng-container>
+          <ng-template #noAdminCard>
+            <span class="text-muted">Sin asignar</span>
+          </ng-template>
+        </div>
+      </div>
+
+      <div class="org-meta">
+        <div class="meta-row">
+          <span class="label">Teléfono</span>
+          <span class="value">{{ org.phone }}</span>
+        </div>
+        <div class="meta-row">
+          <span class="label">Dirección</span>
+          <span class="value">{{ org.address }}</span>
+        </div>
+      </div>
+
+      <div class="org-actions" *ngIf="userRole === 'SUPER_ADMIN'">
+        <mat-form-field appearance="outline" class="admin-select">
+          <mat-select [(ngModel)]="selectedAdmin[org.id]" placeholder="Seleccionar...">
+            <mat-option [value]="null">Seleccionar...</mat-option>
+            <mat-option *ngFor="let admin of admins" [value]="admin.id">
+              {{ admin.fullName }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <div class="actions-inline">
+          <mat-slide-toggle
+            [checked]="org.active"
+            (change)="toggleOrganizationActive(org)"
+            class="status-toggle">
+            {{ org.active ? 'Activo' : 'Inactivo' }}
+          </mat-slide-toggle>
+
+          <button mat-stroked-button
+                  color="primary"
+                  (click)="assignAdmin(org.id)"
+                  [disabled]="!selectedAdmin[org.id]">
+            <mat-icon class="icon-save">save</mat-icon>
+            Guardar admin
+          </button>
+
+          <button mat-stroked-button (click)="editOrganization(org)">
+            <mat-icon class="icon-edit">edit</mat-icon>
+            Editar
+          </button>
+        </div>
+      </div>
+    </article>
   </div>
 
   <!-- 📊 TABLA -->
@@ -89,6 +163,24 @@
           </td>
         </ng-container>
 
+        <!-- Estado -->
+        <ng-container matColumnDef="status">
+          <th mat-header-cell *matHeaderCellDef> Estado </th>
+          <td mat-cell *matCellDef="let org">
+            <ng-container *ngIf="userRole === 'SUPER_ADMIN'; else statusLabel">
+              <mat-slide-toggle
+                [checked]="org.active"
+                (change)="toggleOrganizationActive(org)"
+                class="status-toggle">
+                {{ org.active ? 'Activo' : 'Inactivo' }}
+              </mat-slide-toggle>
+            </ng-container>
+            <ng-template #statusLabel>
+              {{ org.active ? 'Activo' : 'Inactivo' }}
+            </ng-template>
+          </td>
+        </ng-container>
+
         <!-- ACCIONES -->
         <ng-container *ngIf="userRole === 'SUPER_ADMIN'" matColumnDef="actions">
           <th mat-header-cell *matHeaderCellDef> Acciones </th>
@@ -99,11 +191,6 @@
               <!-- EDITAR -->
               <button mat-icon-button (click)="editOrganization(org)">
                 <mat-icon class="icon-edit">edit</mat-icon>
-              </button>
-
-              <!-- ELIMINAR -->
-              <button mat-icon-button (click)="deleteOrganization(org.id)">
-                <mat-icon class="icon-delete">delete</mat-icon>
               </button>
 
             </div>

@@ -9,6 +9,7 @@ export interface User {
   fullName?: string;
   email?: string;
   role?: string;
+  active?: boolean;
   courses?: string[];
   organizationId?: number | null;
   organizationName?: string | null;
@@ -61,11 +62,20 @@ export class UsersService {
     return this.http.put(`${this.base}/${id}`, data, this.authHeaders());
   }
 
-  remove(id: number): Observable<any> {
-    return this.http.delete(`${this.base}/${id}`, {
-      ...this.authHeaders(),
-      responseType: 'text'
-    });
+  deactivate(id: number): Observable<string> {
+    return this.http.put(
+      `${this.base}/${id}/deactivate`,
+      {},
+      { ...this.authHeaders(), responseType: 'text' as const }
+    );
+  }
+
+  activate(id: number): Observable<string> {
+    return this.http.put(
+      `${this.base}/${id}/activate`,
+      {},
+      { ...this.authHeaders(), responseType: 'text' as const }
+    );
   }
 
   assignCourses(userId: number, courseIds: number[]): Observable<string> {
@@ -98,5 +108,12 @@ export class UsersService {
     return this.http.get<User[]>(`${this.base}/all`, {
       params: { search }
     });
+  }
+
+  importFromExcel(file: File): Observable<any> {
+    const formData = new FormData();
+    formData.append('file', file);
+
+    return this.http.post(`${this.base}/import`, formData, this.authHeaders());
   }
 }

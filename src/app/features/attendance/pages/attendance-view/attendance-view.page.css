@@ -43,6 +43,65 @@ table {
   text-align: right;
 }
 
+/* ============================= */
+/* 📱 CARDS MOBILE               */
+/* ============================= */
+.attendance-cards {
+  display: grid;
+  gap: 12px;
+  margin-top: 16px;
+}
+
+.attendance-card {
+  border: 1px solid var(--border);
+  background: var(--card-bg);
+  padding: 14px;
+}
+
+.card-head {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  align-items: flex-start;
+}
+
+.card-title {
+  font-weight: 600;
+  color: var(--text-strong);
+}
+
+.card-subtitle {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  margin-top: 2px;
+}
+
+.card-status mat-icon {
+  font-size: 22px;
+}
+
+.card-grid {
+  display: grid;
+  gap: 8px;
+  margin-top: 10px;
+}
+
+.card-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+  align-items: center;
+}
+
+.card-row .label {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+}
+
+.card-row .value {
+  text-align: right;
+}
+
 @media (max-width: 768px) {
   .attendance-view-card {
     padding: 1.5rem;
@@ -51,6 +110,21 @@ table {
   .paid-ok,
   .paid-bad {
     font-size: 20px;
+  }
+}
+
+/* Mobile-first: hide table */
+.table-wrapper {
+  display: none;
+}
+
+@media (min-width: 769px) {
+  .attendance-cards {
+    display: none;
+  }
+
+  .table-wrapper {
+    display: block;
   }
 }
 /* ===================================== */

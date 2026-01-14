@@ -18,6 +18,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatCard } from '@angular/material/card';
+import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 
 @Component({
   selector: 'app-course-list-page',
@@ -32,7 +33,8 @@ import { MatCard } from '@angular/material/card';
     MatTooltipModule,
     MatDividerModule,
     MatProgressSpinnerModule,
-    MatCard
+    MatCard,
+    MatSlideToggleModule
 
   ],
   templateUrl: './course-list.page.html',
@@ -42,6 +44,7 @@ export class CourseListPage implements OnInit {
 
   courses: Course[] = [];
   instructors: User[] = [];
+  showInactive = false;
 
 
   /** 🔥 instructores disponibles por curso */
@@ -70,7 +73,7 @@ availableInstructors: Record<number, InstructorDTO[]> = {};
   loadCourses(): void {
     this.loading = true;
 
-    this.coursesSvc.findAll().subscribe({
+    this.coursesSvc.findAll(!this.showInactive).subscribe({
       next: (res: Course[]) => {
         this.courses = res.map((c: any) => ({
           ...c,
@@ -83,6 +86,10 @@ availableInstructors: Record<number, InstructorDTO[]> = {};
         this.loading = false;
       },
     });
+  }
+
+  toggleInactiveView(): void {
+    this.loadCourses();
   }
 
   // 🔹 Cargar instructores (solo ADMIN / SUPER_ADMIN)
@@ -133,6 +140,32 @@ availableInstructors: Record<number, InstructorDTO[]> = {};
       error: (err) =>
         console.error('❌ Error asignando instructor:', err),
     });
+  }
+
+  toggleCourseActive(course: Course): void {
+    if (!course.id) return;
+
+    const nextActive = !course.active;
+    const action$ = nextActive
+      ? this.coursesSvc.activate(course.id)
+      : this.coursesSvc.deactivate(course.id);
+
+    action$.subscribe({
+      next: () => {
+        course.active = nextActive;
+        const shouldRemove =
+          (!this.showInactive && !nextActive) || (this.showInactive && nextActive);
+        if (shouldRemove) {
+          this.courses = this.courses.filter(c => c.id !== course.id);
+        }
+      },
+      error: (err) => console.error('❌ Error actualizando curso:', err)
+    });
+  }
+
+  getAvailableInstructors(courseId?: number): InstructorDTO[] {
+    if (!courseId) return [];
+    return this.availableInstructors[courseId] ?? [];
   }
 // 🔥 ESTE MÉTODO NO EXISTÍA → ERROR
  loadAvailableInstructors(courseId: number): void {

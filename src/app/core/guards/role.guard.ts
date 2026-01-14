@@ -42,7 +42,16 @@ Swal.fire({
   confirmButtonText: 'Entendido',
   heightAuto: false
 }).then(() => {
-  router.navigate(['/dashboard/admin']);});
+  const fallback =
+    role === 'SUPER_ADMIN'
+      ? '/organizations'
+      : role === 'ADMIN'
+        ? '/dashboard/admin'
+        : role === 'INSTRUCTOR'
+          ? '/courses'
+          : '/login';
+  router.navigate([fallback], { replaceUrl: true });
+});
 
 return false;
 

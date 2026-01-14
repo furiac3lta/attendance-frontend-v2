@@ -9,6 +9,7 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatCard } from '@angular/material/card';
+import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import Swal from 'sweetalert2';
 
 @Component({
@@ -22,7 +23,8 @@ import Swal from 'sweetalert2';
     MatSelectModule,
     MatButtonModule,
     MatIconModule,
-    MatCard
+    MatCard,
+    MatSlideToggleModule
   ],
   templateUrl: './organization-list.page.html',
   styleUrls: ['./organization-list.page.css'],
@@ -36,6 +38,7 @@ export class OrganizationListPage {
   admins: any[] = [];
   selectedAdmin: Record<number, number | null> = {};
   userRole: string | null = sessionStorage.getItem('role');
+  showInactive = false;
 
   ngOnInit() {
     this.loadOrganizations();
@@ -44,7 +47,7 @@ export class OrganizationListPage {
 
   // 📌 Cargar organizaciones
   loadOrganizations() {
-    this.orgService.findAll().subscribe({
+    this.orgService.findAll(!this.showInactive).subscribe({
       next: (res) => {
         this.organizations = res || [];
       },
@@ -53,6 +56,10 @@ export class OrganizationListPage {
         Swal.fire('Error', '❌ No se pudieron cargar las organizaciones', 'error');
       },
     });
+  }
+
+  toggleInactiveView() {
+    this.loadOrganizations();
   }
 
   // 📌 Cargar admins
@@ -123,36 +130,34 @@ export class OrganizationListPage {
     });
   }
 
-  // 📌 Eliminar organización
-  deleteOrganization(id: number) {
-    Swal.fire({
-      title: '¿Eliminar organización?',
-      text: 'Esta acción no se puede deshacer',
-      icon: 'warning',
-      showCancelButton: true,
-      confirmButtonText: 'Eliminar',
-      cancelButtonText: 'Cancelar'
-    }).then(result => {
-      if (!result.isConfirmed) return;
+  // 📌 Activar / Desactivar organización
+  toggleOrganizationActive(org: any) {
+    const nextActive = !org.active;
+    const action$ = nextActive
+      ? this.orgService.activate(org.id)
+      : this.orgService.deactivate(org.id);
 
-      this.orgService.delete(id).subscribe({
-        next: () => {
-          Swal.fire('Eliminado', 'Organización eliminada', 'success');
-          this.loadOrganizations();
-        },
-        error: (err) => {
-          console.error('❌ Error al eliminar organización:', err);
-          Swal.fire('Error', 'No se pudo eliminar la organización', 'error');
-        },
-      });
+    action$.subscribe({
+      next: () => {
+        org.active = nextActive;
+        const shouldRemove =
+          (!this.showInactive && !nextActive) || (this.showInactive && nextActive);
+        if (shouldRemove) {
+          this.organizations = this.organizations.filter(o => o.id !== org.id);
+        }
+      },
+      error: (err) => {
+        console.error('❌ Error al actualizar estado:', err);
+        Swal.fire('Error', 'No se pudo actualizar la organización', 'error');
+      }
     });
   }
 
   // 📌 Columnas de la tabla
   displayedColumns =
     this.userRole === 'SUPER_ADMIN'
-      ? ['name', 'type', 'phone', 'address', 'admin', 'selectAdmin', 'actions']
-      : ['name', 'type', 'phone', 'address', 'admin'];
+      ? ['name', 'type', 'phone', 'address', 'admin', 'selectAdmin', 'status', 'actions']
+      : ['name', 'type', 'phone', 'address', 'admin', 'status'];
 
 
     }

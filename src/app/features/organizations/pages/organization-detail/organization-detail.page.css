@@ -1,3 +1,59 @@
 .org-detail-wrapper{
   padding: 5rem;
 }
+
+/* ===================================== */
+/* 📱 CARDS MOBILE                        */
+/* ===================================== */
+.org-info-cards,
+.member-cards {
+  display: grid;
+  gap: 12px;
+  margin: 16px 0;
+}
+
+.org-info-card,
+.member-card {
+  border: 1px solid var(--border);
+  background: var(--card-bg);
+  padding: 14px;
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  align-items: center;
+}
+
+.info-label,
+.member-name {
+  font-weight: 600;
+  color: var(--text-strong);
+}
+
+.info-value {
+  color: var(--text);
+  text-align: right;
+}
+
+/* Mobile-first: hide tables */
+.info-table,
+.members-table {
+  display: none;
+}
+
+@media (min-width: 769px) {
+  .org-info-cards,
+  .member-cards {
+    display: none;
+  }
+
+  .info-table,
+  .members-table {
+    display: table;
+  }
+}
+
+@media (max-width: 768px) {
+  .org-detail-wrapper {
+    padding: 2rem 1.25rem;
+  }
+}

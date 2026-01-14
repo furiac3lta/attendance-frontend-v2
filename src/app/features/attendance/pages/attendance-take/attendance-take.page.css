@@ -90,6 +90,48 @@
   min-width: 150px;
 }
 
+/* ============================= */
+/* ✨ BOTONES PILL (NO ASISTENCIA) */
+/* ============================= */
+.action-pill {
+  border-radius: 999px !important;
+  padding: 10px 22px !important;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.12);
+  border: none !important;
+  color: #fff !important;
+  transition: transform 0.15s ease, box-shadow 0.2s ease, filter 0.2s ease;
+}
+
+.action-pill mat-icon {
+  margin-right: 6px;
+}
+
+.action-pill:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 14px 26px rgba(0, 0, 0, 0.14);
+  filter: saturate(1.05);
+}
+
+.action-pill:active {
+  transform: translateY(0);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.12);
+}
+
+.action-pill.action-primary {
+  background: #2aa3f4;
+}
+
+.action-pill.action-accent {
+  background: #d7263d;
+}
+
+.action-pill.action-warn {
+  background: #ff8a00;
+}
+
 .center {
   text-align: center;
 }
@@ -120,6 +162,120 @@
   clip: rect(0, 0, 0, 0);
   border: 0;
 }
+
+/* ============================= */
+/* 📱 CARDS MOBILE               */
+/* ============================= */
+.attendance-cards {
+  display: grid;
+  gap: 12px;
+  margin-top: 16px;
+}
+
+.attendance-card {
+  border: 1px solid var(--border);
+  background: var(--card-bg);
+  padding: 14px;
+}
+
+.card-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 12px;
+}
+
+.card-title {
+  font-weight: 600;
+  color: var(--text-strong);
+}
+
+.card-grid {
+  display: grid;
+  gap: 8px;
+  margin-top: 10px;
+}
+
+.card-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+  align-items: center;
+}
+
+.card-row .label {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+}
+
+.card-row .value {
+  text-align: right;
+}
+
+.pill-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 12px;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+  background: #fff;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--text);
+  line-height: 1;
+}
+
+.pill-button:focus-visible {
+  outline: 2px solid var(--accent-hover);
+  outline-offset: 2px;
+}
+
+.pill-icon {
+  width: 22px;
+  height: 22px;
+  border-radius: 999px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--surface-alt);
+  flex: 0 0 22px;
+}
+
+.pill-icon mat-icon {
+  font-size: 16px;
+  line-height: 1;
+  width: 16px;
+  height: 16px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.pill-ok {
+  border-color: rgba(29, 215, 96, 0.35);
+  color: #1a7f3b;
+}
+
+.pill-ok .pill-icon {
+  background: #e7f9ef;
+  color: #1dd760;
+}
+
+.pill-bad {
+  border-color: rgba(255, 95, 122, 0.35);
+  color: #b3273f;
+}
+
+.pill-bad .pill-icon {
+  background: #ffe9ee;
+  color: #ff5f7a;
+}
+
+.presence-toggle {
+  cursor: pointer;
+  background: #fff;
+}
 /* ===================================== */
 /* 🧩 CONTENEDOR PRINCIPAL               */
 /* ===================================== */
@@ -146,4 +302,19 @@
 .table-wrapper {
   padding-left: 0;
   padding-right: 0;
+}
+
+/* Mobile-first: hide table */
+.table-wrapper {
+  display: none;
+}
+
+@media (min-width: 769px) {
+  .attendance-cards {
+    display: none;
+  }
+
+  .table-wrapper {
+    display: block;
+  }
 }

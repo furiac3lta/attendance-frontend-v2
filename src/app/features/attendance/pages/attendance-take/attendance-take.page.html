@@ -16,6 +16,51 @@
     Cargando alumnos…
   </div>
 
+  <div class="attendance-cards" *ngIf="students.length > 0">
+    <article class="attendance-card" *ngFor="let s of students">
+      <div class="card-head">
+        <div class="card-title">{{ s.fullName }}</div>
+      </div>
+
+      <div class="card-grid">
+        <div class="card-row">
+          <span class="label">Cuota</span>
+          <span class="value">
+            <span
+              class="pill-button"
+              [ngClass]="s.paid ? 'pill-ok' : 'pill-bad'">
+              <span class="pill-icon" aria-hidden="true">
+                <mat-icon>
+                  {{ s.paid ? 'check' : 'close' }}
+                </mat-icon>
+              </span>
+              {{ s.paid ? 'Al día' : 'Vencida' }}
+            </span>
+          </span>
+        </div>
+        <div class="card-row">
+          <span class="label">Asistencia</span>
+          <span class="value">
+            <button
+              type="button"
+              class="pill-button presence-toggle"
+              [ngClass]="getMark(s.id) ? 'pill-ok' : 'pill-bad'"
+              type="button"
+              (click)="toggleAttendance(s.id, !getMark(s.id))"
+              [attr.aria-pressed]="getMark(s.id)">
+              <span class="pill-icon" aria-hidden="true">
+                <mat-icon>
+                  {{ getMark(s.id) ? 'check' : 'close' }}
+                </mat-icon>
+              </span>
+              {{ getMark(s.id) ? 'Presente' : 'Ausente' }}
+            </button>
+          </span>
+        </div>
+      </div>
+    </article>
+  </div>
+
   <div class="table-wrapper" *ngIf="students.length > 0">
     <table
       mat-table
@@ -87,7 +132,7 @@
   <mat-divider></mat-divider>
 
   <div class="button-container">
-    <button mat-raised-button color="primary" (click)="save()">
+    <button mat-raised-button color="primary" class="action-pill action-primary" (click)="save()">
       <mat-icon>save</mat-icon>
       Guardar
     </button>
@@ -95,13 +140,14 @@
     <button
       mat-raised-button
       color="accent"
+      class="action-pill action-accent"
       [routerLink]="['/attendance/view', classId]"
     >
       <mat-icon>visibility</mat-icon>
       Ver asistencia
     </button>
 
-    <button mat-raised-button color="primary" (click)="cancel()">
+    <button mat-raised-button color="primary" class="action-pill action-warn" (click)="cancel()">
       <mat-icon>cancel</mat-icon>
       Cancelar
     </button>

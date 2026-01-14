@@ -24,6 +24,88 @@
   gap: 10px;
 }
 
+/* ===================================== */
+/* 📱 CARDS MOBILE                        */
+/* ===================================== */
+.course-cards {
+  display: grid;
+  gap: 12px;
+  margin-top: 16px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.course-card {
+  border: 1px solid var(--border);
+  background: var(--card-bg);
+  padding: 14px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.course-card__head {
+  display: grid;
+  gap: 4px;
+  margin-bottom: 8px;
+}
+
+.course-title {
+  font-weight: 600;
+  color: var(--text-strong);
+}
+
+.course-program {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+}
+
+.course-desc {
+  color: var(--text);
+  margin-bottom: 10px;
+}
+
+.course-meta {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  margin-bottom: 12px;
+}
+
+.course-meta .label {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+}
+
+.course-meta .value {
+  text-align: right;
+}
+
+.course-assign {
+  display: grid;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.course-actions {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 8px;
+}
+
+.status-toggle {
+  grid-column: 1 / -1;
+  justify-self: start;
+}
+
+.inactive-toggle {
+  margin-left: auto;
+}
+
+/* Mobile-first: hide table */
+.table-section {
+  display: none;
+}
+
 @media (max-width: 768px) {
   .page-card {
     width: 100%!important;
@@ -56,5 +138,15 @@
 
   .table-section {
     padding: 0;
+  }
+}
+
+@media (min-width: 769px) {
+  .course-cards {
+    display: none;
+  }
+
+  .table-section {
+    display: block;
   }
 }

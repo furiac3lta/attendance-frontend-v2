@@ -14,6 +14,48 @@
     Cargando asistencia…
   </div>
 
+  <div class="attendance-cards" *ngIf="!loading && records.length > 0">
+    <article class="attendance-card" *ngFor="let r of records">
+      <div class="card-head">
+        <div>
+          <div class="card-title">{{ r.fullName }}</div>
+          <div class="card-subtitle">
+            <span *ngIf="r.takenAt; else noDateCard">
+              {{ r.takenAt | date:'dd/MM/yyyy HH:mm' }}
+            </span>
+            <ng-template #noDateCard>
+              <span class="text-muted">—</span>
+            </ng-template>
+          </div>
+        </div>
+        <div class="card-status">
+          <mat-icon
+            [ngClass]="r.present ? 'paid-ok' : 'paid-bad'">
+            {{ r.present ? 'check_circle' : 'cancel' }}
+          </mat-icon>
+        </div>
+      </div>
+
+      <div class="card-grid">
+        <div class="card-row">
+          <span class="label">Cuota</span>
+          <span class="value">
+            <mat-icon
+              [ngClass]="r.paid ? 'paid-ok' : 'paid-bad'">
+              {{ r.paid ? 'check_circle' : 'cancel' }}
+            </mat-icon>
+          </span>
+        </div>
+        <div class="card-row">
+          <span class="label">Presente</span>
+          <span class="value">
+            {{ r.present ? 'Presente' : 'Ausente' }}
+          </span>
+        </div>
+      </div>
+    </article>
+  </div>
+
   <div class="table-wrapper" *ngIf="!loading && records.length > 0">
     <table
       mat-table

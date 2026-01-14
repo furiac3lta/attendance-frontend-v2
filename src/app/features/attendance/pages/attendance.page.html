@@ -1,5 +1,39 @@
 <h3>Asistencias registradas</h3>
 
+<!-- CARDS (MOBILE) -->
+<div class="attendance-cards" *ngIf="attendances && attendances.length > 0">
+  <article class="attendance-card" *ngFor="let a of attendances">
+    <div class="card-head">
+      <div>
+        <div class="card-title">{{ a.studentName }}</div>
+        <div class="card-subtitle">{{ a.className }} · {{ a.classDate }}</div>
+      </div>
+      <mat-icon [ngClass]="a.attended ? 'paid-ok' : 'paid-bad'">
+        {{ a.attended ? 'check_circle' : 'cancel' }}
+      </mat-icon>
+    </div>
+
+    <div class="card-grid">
+      <div class="card-row">
+        <span class="label">Curso</span>
+        <span class="value">{{ a.courseName }}</span>
+      </div>
+      <div class="card-row">
+        <span class="label">Instructor</span>
+        <span class="value">{{ a.instructorName }}</span>
+      </div>
+      <div class="card-row">
+        <span class="label">Organización</span>
+        <span class="value">{{ a.organizationName }}</span>
+      </div>
+      <div class="card-row">
+        <span class="label">ID</span>
+        <span class="value">#{{ a.id }}</span>
+      </div>
+    </div>
+  </article>
+</div>
+
 <!-- TABLA -->
 <div class="table-wrapper" *ngIf="attendances && attendances.length > 0">
   <table

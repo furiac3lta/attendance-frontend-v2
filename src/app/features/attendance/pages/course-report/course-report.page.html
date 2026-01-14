@@ -43,6 +43,32 @@
         {{ getMonthLabel(month) }} {{ year }}
       </h3>
 
+      <div class="report-cards" *ngIf="stats && stats.length > 0">
+        <article class="report-card" *ngFor="let s of stats">
+          <div class="report-card__head">
+            <div class="report-name">{{ s.studentName }}</div>
+            <span class="report-percent" [style.color]="getColor(s.percent)">
+              {{ s.percent | number:'1.0-1' }}%
+            </span>
+          </div>
+
+          <div class="report-grid">
+            <div class="report-row">
+              <span class="label">Asistencias</span>
+              <span class="value">{{ s.present }}</span>
+            </div>
+            <div class="report-row">
+              <span class="label">Faltas</span>
+              <span class="value">{{ s.absent }}</span>
+            </div>
+            <div class="report-row">
+              <span class="label">Total</span>
+              <span class="value">{{ s.total }}</span>
+            </div>
+          </div>
+        </article>
+      </div>
+
       <div class="table-wrapper">
         <table mat-table [dataSource]="stats" class="table-modern">
 

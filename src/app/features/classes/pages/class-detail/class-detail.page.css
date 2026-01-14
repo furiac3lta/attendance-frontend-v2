@@ -114,3 +114,73 @@ tr.mat-row:hover {
 .actions button {
   min-width: 80px;
 }
+
+/* ============================= */
+/*   📱 CARDS MOBILE             */
+/* ============================= */
+.class-cards {
+  display: grid;
+  gap: 12px;
+  margin-top: 16px;
+}
+
+.class-card {
+  border: 1px solid var(--border);
+  background: var(--card-bg);
+  padding: 14px;
+}
+
+.class-card__head {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  align-items: flex-start;
+  margin-bottom: 10px;
+}
+
+.class-title {
+  font-weight: 600;
+  color: var(--text-strong);
+}
+
+.class-date {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+}
+
+.status-pill {
+  font-size: 0.75rem;
+  padding: 4px 8px;
+  border-radius: 12px;
+  border: 1px solid var(--border);
+  background: var(--surface-alt);
+}
+
+.status-ok {
+  color: var(--success);
+}
+
+.status-pending {
+  color: var(--text-muted);
+}
+
+.class-actions {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+}
+
+/* Mobile-first: hide table */
+.table-wrapper {
+  display: none;
+}
+
+@media (min-width: 769px) {
+  .class-cards {
+    display: none;
+  }
+
+  .table-wrapper {
+    display: block;
+  }
+}

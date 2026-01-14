@@ -6,6 +6,13 @@
   <!-- =======================
         📌 TABLA DE INFORMACIÓN
        ======================= -->
+  <div class="org-info-cards" *ngIf="orgBasicData && orgBasicData.length > 0">
+    <article class="org-info-card" *ngFor="let row of orgBasicData">
+      <div class="info-label">{{ row.label }}</div>
+      <div class="info-value">{{ row.value }}</div>
+    </article>
+  </div>
+
   <table mat-table [dataSource]="orgBasicData" class="mat-elevation-z2 info-table">
 
     <!-- Label -->
@@ -36,6 +43,18 @@
   <!-- =======================
         📌 TABLA DE USUARIOS
        ======================= -->
+  <div class="member-cards" *ngIf="organization.users && organization.users.length > 0">
+    <article class="member-card" *ngFor="let u of organization.users">
+      <div class="member-name">{{ u.fullName }}</div>
+      <span class="role-chip"
+            [class.admin]="u.role === 'ADMIN'"
+            [class.instructor]="u.role === 'INSTRUCTOR'"
+            [class.user]="u.role === 'USER'">
+        {{ u.role }}
+      </span>
+    </article>
+  </div>
+
   <table mat-table [dataSource]="organization.users || []" class="mat-elevation-z2 members-table">
 
     <!-- Nombre -->

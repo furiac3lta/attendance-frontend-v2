@@ -10,6 +10,7 @@
 .chip-section {
   flex: 1;
   min-width: 140px;
+  margin-left: 6px;
 }
 
 .chip-title {
@@ -59,7 +60,7 @@
 }
 /* Contenedor general del card */
 .page-card {
-  width: 80%;
+  width: 90vw;
   margin: 24px auto 0;
   padding: 64px 0 40px;
 }
@@ -82,6 +83,7 @@
 .table-section .subtitle {
   margin: 0 0 12px 0;
   color: var(--text-muted);
+  margin-left: 6px;
 }
 
 /* La tabla debe ocupar MINIMO el ancho total */
@@ -105,6 +107,57 @@ table {
   border: 1px solid var(--border);
 }
 
+/* ===================================== */
+/* 📱 CARDS MOBILE                        */
+/* ===================================== */
+.report-cards {
+  display: grid;
+  gap: 12px;
+}
+
+.report-card {
+  border: 1px solid var(--border);
+  background: var(--card-bg);
+  padding: 14px;
+}
+
+.report-card__head {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  align-items: flex-start;
+}
+
+.report-name {
+  font-weight: 600;
+  color: var(--text-strong);
+}
+
+.report-percent {
+  font-weight: 600;
+}
+
+.report-grid {
+  display: grid;
+  gap: 8px;
+  margin-top: 10px;
+}
+
+.report-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.report-row .label {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+}
+
+.report-row .value {
+  text-align: right;
+}
+
 /* RESPONSIVE – más espacio en pantallas grandes */
 @media (min-width: 600px) {
   .table-modern th,
@@ -117,5 +170,20 @@ table {
   .chips-container,
   .table-section {
     padding: 0;
+  }
+}
+
+/* Mobile-first: hide table */
+.table-wrapper {
+  display: none;
+}
+
+@media (min-width: 769px) {
+  .report-cards {
+    display: none;
+  }
+
+  .table-wrapper {
+    display: block;
   }
 }

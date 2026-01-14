@@ -11,10 +11,104 @@
     </div>
   </div>
 
+  <div class="page-head__actions" *ngIf="canEdit()">
+    <mat-slide-toggle
+      class="inactive-toggle"
+      [(ngModel)]="showInactive"
+      (change)="toggleInactiveView()">
+      Ver inactivos
+    </mat-slide-toggle>
+  </div>
+
   <!-- Sin cursos -->
   <div *ngIf="courses.length === 0" class="empty">
     <mat-icon>info</mat-icon>
     No hay cursos disponibles para tu organización.
+  </div>
+
+  <!-- 📱 CARDS -->
+  <div class="course-cards" *ngIf="courses.length > 0">
+    <article class="course-card" *ngFor="let c of courses">
+      <div class="course-card__head">
+        <div class="course-title">{{ c.name }}</div>
+        <div class="course-program">{{ c.universityProgram }}</div>
+      </div>
+
+      <div class="course-desc">{{ c.description }}</div>
+
+      <div class="course-meta">
+        <span class="label">Instructor</span>
+        <span class="value" *ngIf="c.instructorName; else noInstructor">
+          {{ c.instructorName }}
+        </span>
+        <ng-template #noInstructor>
+          <span class="text-muted">Sin asignar</span>
+        </ng-template>
+      </div>
+
+      <div class="course-assign" *ngIf="canEdit()">
+        <mat-form-field appearance="outline" class="assign-select">
+          <mat-label>Instructor</mat-label>
+          <mat-select
+            [(ngModel)]="c.selectedInstructorId"
+            (openedChange)="loadAvailableInstructors(c.id!)">
+
+            <mat-option [value]="null">
+              Sin asignar
+            </mat-option>
+
+            <mat-option
+              *ngFor="let inst of getAvailableInstructors(c.id)"
+              [value]="inst.id">
+
+              {{ inst.fullName }}
+              <span class="org-hint">
+                — {{ inst.organizationName }}
+              </span>
+
+            </mat-option>
+
+          </mat-select>
+        </mat-form-field>
+
+        <button
+          mat-stroked-button
+          color="primary"
+          (click)="saveInstructor(c.id!, c.selectedInstructorId!)"
+          [disabled]="!c.selectedInstructorId">
+          Guardar instructor
+        </button>
+      </div>
+
+      <div class="course-actions">
+        <mat-slide-toggle
+          *ngIf="canEdit()"
+          [checked]="c.active"
+          (change)="toggleCourseActive(c)"
+          class="status-toggle">
+          {{ c.active ? 'Activo' : 'Inactivo' }}
+        </mat-slide-toggle>
+        <button
+          *ngIf="canEdit()"
+          mat-stroked-button
+          color="primary"
+          (click)="goToEdit(c.id!)">
+          Editar
+        </button>
+
+        <button
+          mat-stroked-button
+          (click)="goToAttendance(c.id!)">
+          Asistencia
+        </button>
+
+        <button
+          mat-stroked-button
+          (click)="goToReport(c.id!)">
+          Reporte
+        </button>
+      </div>
+    </article>
   </div>
 
   <!-- 📊 TABLA -->
@@ -54,6 +148,20 @@
           </td>
         </ng-container>
 
+        <!-- Estado -->
+        <ng-container matColumnDef="status">
+          <th mat-header-cell *matHeaderCellDef>Estado</th>
+          <td mat-cell *matCellDef="let c">
+            <mat-slide-toggle
+              *ngIf="canEdit()"
+              [checked]="c.active"
+              (change)="toggleCourseActive(c)"
+              class="status-toggle">
+              {{ c.active ? 'Activo' : 'Inactivo' }}
+            </mat-slide-toggle>
+          </td>
+        </ng-container>
+
         <!-- Asignar instructor -->
         <ng-container matColumnDef="assign">
           <th mat-header-cell *matHeaderCellDef>Asignar instructor</th>
@@ -72,7 +180,7 @@
                   </mat-option>
 
                   <mat-option
-                    *ngFor="let inst of availableInstructors[c.id]"
+                    *ngFor="let inst of getAvailableInstructors(c.id)"
                     [value]="inst.id">
 
                     {{ inst.fullName }}
@@ -138,11 +246,11 @@
 
         <!-- Header / Rows -->
         <tr mat-header-row
-            *matHeaderRowDef="['name','description','program','instructor','assign','actions']">
+            *matHeaderRowDef="['name','description','program','instructor','status','assign','actions']">
         </tr>
 
         <tr mat-row
-            *matRowDef="let row; columns: ['name','description','program','instructor','assign','actions']">
+            *matRowDef="let row; columns: ['name','description','program','instructor','status','assign','actions']">
         </tr>
 
       </table>

@@ -76,6 +76,14 @@ export const routes: Routes = [
           import('./features/organizations/pages/organization-list/organization-list.page')
             .then(m => m.OrganizationListPage)
       },
+      {
+        path: 'organizations/new',
+        canActivate: [roleGuard],
+        data: { roles: ['SUPER_ADMIN'] },
+        loadComponent: () =>
+          import('./features/organizations/pages/organization-form/organization-form.page')
+            .then(m => m.OrganizationFormPage)
+      },
 
       // =========================
       // CURSOS

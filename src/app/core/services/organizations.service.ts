@@ -11,8 +11,10 @@ export class OrganizationsService {
   constructor(private http: HttpClient) {}
 
   /** 🔹 Obtener todas las organizaciones */
-  findAll(): Observable<Organization[]> {
-    return this.http.get<Organization[]>(this.apiUrl);
+  findAll(active: boolean = true): Observable<Organization[]> {
+    return this.http.get<Organization[]>(this.apiUrl, {
+      params: { active }
+    });
   }
 
   /** 🔹 Obtener una organización por ID */
@@ -30,9 +32,21 @@ export class OrganizationsService {
     return this.http.put<Organization>(`${this.apiUrl}/${id}`, org);
   }
 
-  /** 🔹 Eliminar organización */
-  delete(id: number): Observable<void> {
-    return this.http.delete<void>(`${this.apiUrl}/${id}`);
+  /** 🔹 Activar / desactivar organización */
+  deactivate(id: number): Observable<string> {
+    return this.http.put(
+      `${this.apiUrl}/${id}/deactivate`,
+      {},
+      { responseType: 'text' as const }
+    );
+  }
+
+  activate(id: number): Observable<string> {
+    return this.http.put(
+      `${this.apiUrl}/${id}/activate`,
+      {},
+      { responseType: 'text' as const }
+    );
   }
 
   /** 🔹 Asignar un ADMIN a la organización */

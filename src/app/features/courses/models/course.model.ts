@@ -7,6 +7,7 @@ export interface Course {
   name: string;
   description?: string;
   universityProgram?: string;
+  active?: boolean;
 
  // ✅ Nuevos campos utilizados en el front
   instructorId?: number | null;
