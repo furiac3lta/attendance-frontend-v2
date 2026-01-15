@@ -8,6 +8,7 @@
     <p><strong>Clase:</strong> {{ className }}</p>
     <p><strong>Curso:</strong> {{ courseName }}</p>
     <p><strong>Fecha:</strong> {{ date | date:'dd/MM/yyyy' }}</p>
+    <p *ngIf="classObservations"><strong>Observaciones:</strong> {{ classObservations }}</p>
   </div>
 
   <mat-divider></mat-divider>

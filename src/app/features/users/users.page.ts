@@ -79,7 +79,8 @@ private paymentSvc = inject(PaymentService);
     password: [''],
     role: ['USER', Validators.required],
     organizationId: [null as number | null],
-    courseIds: [[] as number[]]
+    courseIds: [[] as number[]],
+    observations: ['']
   });
 
   // =========================
@@ -172,7 +173,8 @@ editUser(u: User): void {
     email: u.email,
     role: u.role,
     organizationId: u.organizationId || null,
-    courseIds: ids
+    courseIds: ids,
+    observations: u.observations || ''
   });
 
   if (u.id) {
@@ -362,7 +364,8 @@ saveUser(): void {
     fullName: dto.username,
     email: dto.email || `${dto.username}@dojo.com`,
     role: dto.role,
-    organizationId: dto.organizationId ?? null
+    organizationId: dto.organizationId ?? null,
+    observations: dto.observations || null
   };
 
   const courseIds: number[] = dto.courseIds || [];

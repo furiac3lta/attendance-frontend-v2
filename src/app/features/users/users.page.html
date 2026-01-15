@@ -48,6 +48,16 @@
           </mat-select>
         </mat-form-field>
 
+        <mat-form-field appearance="outline" *ngIf="isSuperAdmin()">
+          <mat-label>Organización</mat-label>
+          <mat-select formControlName="organizationId">
+            <mat-option [value]="null">Sin organización</mat-option>
+            <mat-option *ngFor="let org of organizations" [value]="org.id">
+              {{ org.name }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+
         <mat-form-field appearance="outline" class="full-width">
           <mat-label>Cursos</mat-label>
           <mat-select formControlName="courseIds" multiple>
@@ -55,6 +65,11 @@
               {{ c.name }}
             </mat-option>
           </mat-select>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Observaciones</mat-label>
+          <textarea matInput formControlName="observations" rows="3"></textarea>
         </mat-form-field>
 
         <!-- BOTONES -->
@@ -219,6 +234,10 @@
           <div class="meta-row">
             <span class="label">Organización</span>
             <span class="value">{{ u.organizationName || '—' }}</span>
+          </div>
+          <div class="meta-row" *ngIf="u.observations">
+            <span class="label">Observaciones</span>
+            <span class="value">{{ u.observations }}</span>
           </div>
         </div>
 

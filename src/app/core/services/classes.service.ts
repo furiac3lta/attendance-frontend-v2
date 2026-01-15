@@ -15,6 +15,7 @@ export interface ClassSessionDto {
   date: string;
   attendanceTaken?: boolean;
   courseId: number;
+  observations?: string | null;
 }
 
 @Injectable({ providedIn: 'root' })
@@ -24,7 +25,7 @@ export class ClassesService {
   constructor(private http: HttpClient) {}
 
   /** ✅ Crear clase */
-  createClass(data: { name: string; date: string; courseId: number }): Observable<any> {
+  createClass(data: { name: string; date: string; courseId: number; observations?: string | null }): Observable<any> {
     return this.http.post<any>(this.apiUrl, data);
   }
 

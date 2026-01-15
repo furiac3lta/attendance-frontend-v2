@@ -11,6 +11,7 @@ export interface User {
   courses: string[]; // ← ahora cursos son solo nombres
   role: 'SUPER_ADMIN' | 'ADMIN' | 'INSTRUCTOR' | 'USER';
   active?: boolean;
+  observations?: string | null;
   organization?: {
     id: number;
     name: string;

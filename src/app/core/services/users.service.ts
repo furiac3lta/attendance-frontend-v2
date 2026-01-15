@@ -10,6 +10,7 @@ export interface User {
   email?: string;
   role?: string;
   active?: boolean;
+  observations?: string | null;
   courses?: string[];
   organizationId?: number | null;
   organizationName?: string | null;

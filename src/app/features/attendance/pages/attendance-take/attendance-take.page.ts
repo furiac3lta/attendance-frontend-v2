@@ -44,6 +44,7 @@ export class AttendanceTakePage implements OnInit {
   className = '';
   courseName = '';
   date = '';
+  classObservations = '';
 
   students: StudentWithPayment[] = [];
   attendanceMarks: AttendanceMark[] = [];
@@ -70,6 +71,7 @@ export class AttendanceTakePage implements OnInit {
       this.date = res.date;
       this.courseName = res.courseName;
       this.courseId = res.courseId;
+      this.classObservations = res.observations || '';
     });
 
     this.classesSvc.getStudentsForClass(this.classId).subscribe(students => {

@@ -3,6 +3,11 @@
   <h2>Lista de clases creadas - {{ selectedCourseName }}</h2>
   <p class="date-label">{{ currentDate }}</p>
 
+  <mat-form-field appearance="outline" class="full-width">
+    <mat-label>Observaciones</mat-label>
+    <textarea matInput [(ngModel)]="newClassObservations" rows="3"></textarea>
+  </mat-form-field>
+
   <div class="center-actions">
     <button mat-raised-button color="primary" (click)="createClass()">
       Crear nueva clase
@@ -21,6 +26,9 @@
         <div>
           <div class="class-title">{{ c.name }}</div>
           <div class="class-date">{{ c.date | date:'dd/MM/yyyy' }}</div>
+          <div class="class-date" *ngIf="c.observations">
+            Observaciones: {{ c.observations }}
+          </div>
         </div>
         <span class="status-pill" [ngClass]="c.attendanceTaken ? 'status-ok' : 'status-pending'">
           {{ c.attendanceTaken ? 'Tomada' : 'No tomada' }}

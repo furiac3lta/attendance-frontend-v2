@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule, DatePipe } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 
 import { ClassesService, ClassSessionDto } from '../../../../core/services/classes.service';
@@ -12,17 +13,22 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatTableModule } from '@angular/material/table';
 import { MatIconModule } from '@angular/material/icon';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
 
 @Component({
   selector: 'app-class-detail',
   standalone: true,
   imports: [
     CommonModule,
+    FormsModule,
     MatCardModule,
     MatButtonModule,
     MatDividerModule,
     MatTableModule,
-    MatIconModule
+    MatIconModule,
+    MatFormFieldModule,
+    MatInputModule
   ],
   providers: [DatePipe],
   templateUrl: './class-detail.page.html',
@@ -33,6 +39,7 @@ export class ClassDetailPage implements OnInit {
   courseId!: number;
   selectedCourseName = '';
   currentDate = '';
+  newClassObservations = '';
 
   classes: (ClassSessionDto & {
     attendanceTaken?: boolean;
@@ -110,9 +117,13 @@ export class ClassDetailPage implements OnInit {
     this.classesSvc.createClass({
       name: 'Clase nueva',
       courseId: this.courseId,
-      date: new Date().toISOString().split('T')[0]
+      date: new Date().toISOString().split('T')[0],
+      observations: this.newClassObservations?.trim() || null
     }).subscribe({
-      next: (res: any) => this.goToAttendance(res.id)
+      next: (res: any) => {
+        this.newClassObservations = '';
+        this.goToAttendance(res.id);
+      }
     });
   }
 
