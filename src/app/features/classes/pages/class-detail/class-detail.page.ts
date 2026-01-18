@@ -155,7 +155,24 @@ export class ClassDetailPage implements OnInit {
         this.generateQr(session);
       },
       error: () => {
-        Swal.fire('Error', 'No se pudo crear la clase.', 'error');
+        this.classesSvc.createClass({
+          name: 'Clase nueva',
+          courseId: this.courseId,
+          date: new Date().toISOString().split('T')[0],
+          observations: this.newClassObservations?.trim() || null
+        }).subscribe({
+          next: (created: any) => {
+            if (!created?.id) {
+              Swal.fire('Error', 'No se pudo crear la clase.', 'error');
+              return;
+            }
+            this.generateQr(created);
+          },
+          error: (err) => {
+            const message = err?.error ?? 'No se pudo crear la clase.';
+            Swal.fire('Error', message, 'error');
+          }
+        });
       }
     });
   }

@@ -59,6 +59,6 @@ export class ClassesService {
   }
 
   createOrGetTodaySession(courseId: number): Observable<any> {
-    return this.http.post<any>(`${this.apiUrl}/create-or-get`, { courseId });
+    return this.http.get<any>(`${this.apiUrl}/today/${courseId}`);
   }
 }
