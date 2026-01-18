@@ -22,6 +22,7 @@ export class AttendanceQrScanPage implements OnInit, OnDestroy {
   private controls?: IScannerControls;
   scanning = false;
   processing = false;
+  private errorShown = false;
 
   constructor(
     private attendanceSvc: AttendanceService,
@@ -36,7 +37,6 @@ export class AttendanceQrScanPage implements OnInit, OnDestroy {
       this.router.navigate(['/dashboard/student']);
       return;
     }
-    this.startScan();
   }
 
   ngOnDestroy(): void {
@@ -46,26 +46,46 @@ export class AttendanceQrScanPage implements OnInit, OnDestroy {
   startScan(): void {
     if (!this.video || this.scanning) return;
     this.scanning = true;
+    this.errorShown = false;
 
-    this.reader.decodeFromVideoDevice(
+    const start = this.reader.decodeFromVideoDevice(
       undefined,
       this.video.nativeElement,
       (result: { getText: () => string } | undefined, _err: unknown, controls: IScannerControls | undefined) => {
-      if (controls) {
-        this.controls = controls;
-      }
-      if (result && !this.processing) {
-        this.processing = true;
-        this.handleResult(result.getText());
-      }
+        if (controls) {
+          this.controls = controls;
+        }
+        if (result && !this.processing) {
+          this.processing = true;
+          this.handleResult(result.getText());
+        }
+        const err = _err as { name?: string } | null;
+        if (err?.name && err.name !== 'NotFoundException' && !this.errorShown) {
+          this.errorShown = true;
+          this.stopScan();
+          Swal.fire('Cámara no disponible', 'Activa los permisos de cámara e intenta nuevamente.', 'error');
+        }
       }
     );
+
+    if (start && typeof (start as Promise<IScannerControls>).then === 'function') {
+      (start as Promise<IScannerControls>).then((controls) => {
+        this.controls = controls;
+      }).catch(() => {
+        if (!this.errorShown) {
+          this.errorShown = true;
+          this.stopScan();
+          Swal.fire('Cámara no disponible', 'Activa los permisos de cámara e intenta nuevamente.', 'error');
+        }
+      });
+    }
   }
 
   stopScan(): void {
     this.controls?.stop();
     this.controls = undefined;
     this.scanning = false;
+    this.processing = false;
   }
 
   private handleResult(text: string): void {

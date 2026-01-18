@@ -13,3 +13,24 @@
 .muted {
   color: var(--text-muted);
 }
+
+@media (max-width: 768px) {
+  .page-card {
+    width: 95vw;
+    margin: 16px auto;
+    padding: 16px;
+  }
+
+  .history-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .scan-actions {
+    justify-content: center;
+  }
+
+  .section-card,
+  .table-modern {
+    width: 100%;
+  }
+}

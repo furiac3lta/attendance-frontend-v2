@@ -57,4 +57,8 @@ export class ClassesService {
   generateQr(classId: number): Observable<any> {
     return this.http.post<any>(`${this.apiUrl}/${classId}/qr`, {});
   }
+
+  createOrGetTodaySession(courseId: number): Observable<any> {
+    return this.http.post<any>(`${this.apiUrl}/create-or-get`, { courseId });
+  }
 }

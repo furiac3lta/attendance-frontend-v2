@@ -12,6 +12,13 @@
     <button mat-raised-button color="primary" (click)="createClass()">
       Crear nueva clase
     </button>
+    <button
+      mat-stroked-button
+      color="accent"
+      *ngIf="proPlan && ['INSTRUCTOR', 'ADMIN', 'SUPER_ADMIN'].includes(role)"
+      (click)="createClassAndGenerateQr()">
+      Generar QR
+    </button>
   </div>
 
   <button mat-stroked-button color="accent" class="report-btn" (click)="goToReport()" *ngIf="proPlan">

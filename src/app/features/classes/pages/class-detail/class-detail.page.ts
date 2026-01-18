@@ -135,9 +135,34 @@ export class ClassDetailPage implements OnInit {
     });
   }
 
+  createClassAndGenerateQr(): void {
+    if (!this.proPlan) {
+      Swal.fire('Plan PRO', 'Esta función está disponible solo para plan PRO.', 'info');
+      return;
+    }
+
+    if (!['INSTRUCTOR', 'ADMIN', 'SUPER_ADMIN'].includes(this.role)) {
+      Swal.fire('Sin permisos', 'No tienes permisos para generar QR.', 'error');
+      return;
+    }
+
+    this.classesSvc.createOrGetTodaySession(this.courseId).subscribe({
+      next: (session: any) => {
+        if (!session?.id) {
+          Swal.fire('Error', 'No se pudo crear la clase.', 'error');
+          return;
+        }
+        this.generateQr(session);
+      },
+      error: () => {
+        Swal.fire('Error', 'No se pudo crear la clase.', 'error');
+      }
+    });
+  }
+
   canUseQr(c: ClassSessionDto): boolean {
     if (!this.proPlan) return false;
-    if (this.role !== 'INSTRUCTOR') return false;
+    if (!['INSTRUCTOR', 'ADMIN', 'SUPER_ADMIN'].includes(this.role)) return false;
     if (!c?.date) return false;
     const today = new Date().toISOString().split('T')[0];
     return c.date === today;
