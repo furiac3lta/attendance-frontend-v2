@@ -6,7 +6,7 @@ import { CoursesService } from '../../core/services/courses.service';
 import { MaterialModule } from '../../material.module';
 import { MatChipsModule } from '@angular/material/chips';
 import Swal from 'sweetalert2';
-import { Router } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { PaymentService } from '../../core/services/payment.service';
 import { AuthService } from '../../core/services/auth.service';
@@ -20,7 +20,8 @@ import { AuthService } from '../../core/services/auth.service';
     FormsModule,
     MaterialModule,
     MatChipsModule,
-    MatTooltipModule
+    MatTooltipModule,
+    RouterLink
   ],
   templateUrl: './users.page.html',
   styleUrls: ['./users.page.css']

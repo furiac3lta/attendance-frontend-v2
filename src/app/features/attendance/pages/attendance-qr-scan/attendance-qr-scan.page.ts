@@ -47,7 +47,10 @@ export class AttendanceQrScanPage implements OnInit, OnDestroy {
     if (!this.video || this.scanning) return;
     this.scanning = true;
 
-    this.reader.decodeFromVideoDevice(undefined, this.video.nativeElement, (result, err, controls) => {
+    this.reader.decodeFromVideoDevice(
+      undefined,
+      this.video.nativeElement,
+      (result: { getText: () => string } | undefined, _err: unknown, controls: IScannerControls | undefined) => {
       if (controls) {
         this.controls = controls;
       }
@@ -55,7 +58,8 @@ export class AttendanceQrScanPage implements OnInit, OnDestroy {
         this.processing = true;
         this.handleResult(result.getText());
       }
-    });
+      }
+    );
   }
 
   stopScan(): void {
