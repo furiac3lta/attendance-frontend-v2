@@ -64,18 +64,20 @@ export class AuthService {
           this.loginStatusSubject.next(true);
           this.roleSubject.next(role ?? null);
 
+          const proPlan = !!res.user?.organizationProPlan;
+
           switch (role) {
             case 'SUPER_ADMIN':
               this.router.navigate(['/organizations']);
               break;
             case 'ADMIN':
-              this.router.navigate(['/users']);
+              this.router.navigate([proPlan ? '/dashboard/admin' : '/courses']);
               break;
             case 'INSTRUCTOR':
               this.router.navigate(['/attendance']);
               break;
             case 'USER':
-              this.router.navigate(['/dashboard/student']);
+              this.router.navigate([proPlan ? '/dashboard/student' : '/login']);
               break;
             default:
               this.showError('Rol no reconocido');

@@ -56,6 +56,10 @@
           <span class="label">Dirección</span>
           <span class="value">{{ org.address }}</span>
         </div>
+        <div class="meta-row">
+          <span class="label">Plan</span>
+          <span class="value">{{ org.proPlan ? 'PRO' : 'FREE' }}</span>
+        </div>
       </div>
 
       <div class="org-actions" *ngIf="userRole === 'SUPER_ADMIN'">
@@ -69,6 +73,13 @@
         </mat-form-field>
 
         <div class="actions-inline">
+          <mat-slide-toggle
+            [checked]="org.proPlan"
+            (change)="toggleProPlan(org)"
+            class="status-toggle">
+            {{ org.proPlan ? 'PRO' : 'FREE' }}
+          </mat-slide-toggle>
+
           <mat-slide-toggle
             [checked]="org.active"
             (change)="toggleOrganizationActive(org)"
@@ -121,6 +132,19 @@
         <ng-container matColumnDef="address">
           <th mat-header-cell *matHeaderCellDef> Dirección </th>
           <td mat-cell *matCellDef="let org"> {{ org.address }} </td>
+        </ng-container>
+
+        <!-- Plan -->
+        <ng-container matColumnDef="plan">
+          <th mat-header-cell *matHeaderCellDef> Plan </th>
+          <td mat-cell *matCellDef="let org">
+            <mat-slide-toggle
+              [checked]="org.proPlan"
+              (change)="toggleProPlan(org)"
+              class="status-toggle">
+              {{ org.proPlan ? 'PRO' : 'FREE' }}
+            </mat-slide-toggle>
+          </td>
         </ng-container>
 
         <!-- Admin actual -->

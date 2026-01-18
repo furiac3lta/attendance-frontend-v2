@@ -18,6 +18,9 @@ export interface Organization {
   /** ✅ Estado activo */
   active?: boolean;
 
+  /** ⭐ Plan PRO */
+  proPlan?: boolean;
+
   /** 👤 Usuario administrador asignado (si existe) */
   admin?: {
     id: number;

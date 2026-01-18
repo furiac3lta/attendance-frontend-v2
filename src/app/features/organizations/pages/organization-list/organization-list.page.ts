@@ -113,6 +113,8 @@ export class OrganizationListPage {
           type: (document.getElementById('org-type') as HTMLInputElement).value,
           phone: (document.getElementById('org-phone') as HTMLInputElement).value,
           address: (document.getElementById('org-address') as HTMLInputElement).value,
+          logoUrl: org.logoUrl ?? null,
+          proPlan: !!org.proPlan
         };
       }
     }).then(result => {
@@ -127,6 +129,27 @@ export class OrganizationListPage {
           Swal.fire('Error', 'No se pudo actualizar la organización', 'error');
         }
       });
+    });
+  }
+
+  toggleProPlan(org: any) {
+    const nextPlan = !org.proPlan;
+
+    this.orgService.update(org.id, {
+      name: org.name,
+      type: org.type,
+      phone: org.phone,
+      address: org.address,
+      logoUrl: org.logoUrl ?? null,
+      proPlan: nextPlan
+    }).subscribe({
+      next: () => {
+        org.proPlan = nextPlan;
+        Swal.fire('Actualizado', 'Plan actualizado correctamente', 'success');
+      },
+      error: () => {
+        Swal.fire('Error', 'No se pudo actualizar el plan', 'error');
+      }
     });
   }
 
@@ -156,7 +179,7 @@ export class OrganizationListPage {
   // 📌 Columnas de la tabla
   displayedColumns =
     this.userRole === 'SUPER_ADMIN'
-      ? ['name', 'type', 'phone', 'address', 'admin', 'selectAdmin', 'status', 'actions']
+      ? ['name', 'type', 'phone', 'address', 'plan', 'admin', 'selectAdmin', 'status', 'actions']
       : ['name', 'type', 'phone', 'address', 'admin', 'status'];
 
 

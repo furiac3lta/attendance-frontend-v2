@@ -296,6 +296,10 @@ loadPaymentStatus(courseId: number): void {
   }
 
   uploadExcel(): void {
+    if (!this.proPlan) {
+      Swal.fire('Plan PRO', 'Esta función está disponible solo para plan PRO.', 'info');
+      return;
+    }
     if (!this.selectedExcelFile) {
       Swal.fire('Atención', 'Selecciona un archivo para importar', 'warning');
       return;
