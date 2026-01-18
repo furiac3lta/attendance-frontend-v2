@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { CommonModule } from '@angular/common';
 
 import { UsersService } from '../../../../core/services/users.service';
@@ -19,7 +19,8 @@ import Swal from 'sweetalert2';
     MatCardModule,
     MatTableModule,
     MatChipsModule,
-    MatButtonModule
+    MatButtonModule,
+    RouterLink
   ],
   templateUrl: './user-history.page.html',
   styleUrls: ['./user-history.page.css']
