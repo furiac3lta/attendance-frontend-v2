@@ -20,7 +20,9 @@ export const jwtInterceptor: HttpInterceptorFn = (req, next) => {
     catchError((error: HttpErrorResponse) => {
 
       // 🔥 SOLO si realmente es sesión inválida
-      if (error.status === 401 && !req.url.includes('/auth/login')) {
+      const skipAutoLogout = req.url.includes('/api/classes/today/');
+
+      if (error.status === 401 && !req.url.includes('/auth/login') && !skipAutoLogout) {
         Swal.fire({
           title: 'Sesión expirada',
           text: 'Volvé a iniciar sesión.',
