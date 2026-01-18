@@ -55,43 +55,6 @@ export class LoginPage {
     this.authService.login(this.loginForm.value).subscribe({
       next: (res) => {
         this.isLoading = false;
-
-        // Guardamos token y rol (ambos storages para compatibilidad)
-        localStorage.setItem('token', res.token);
-        localStorage.setItem('role', res.type);
-        sessionStorage.setItem('token', res.token);
-        sessionStorage.setItem('role', res.type);
-
-        const role = res.type?.toUpperCase(); // ADMIN | SUPER_ADMIN | INSTRUCTOR | USER
-
-        // ✅ Mensaje OK
-        Swal.fire({
-          icon: 'success',
-          title: 'Bienvenido',
-          text: `Acceso concedido`,
-          timer: 1200,
-          showConfirmButton: false,
-          heightAuto: false
-        });
-
-        // 🎯 REDIRECCIÓN POR ROL
-        switch (role) {
-          case 'SUPER_ADMIN':
-            this.router.navigate(['/organizations']);
-            break;
-          case 'ADMIN':
-            this.router.navigate(['/dashboard/admin']);
-            break;
-          case 'INSTRUCTOR':
-            this.router.navigate(['/courses']);
-            break;
-          case 'USER':
-            this.router.navigate(['/dashboard/student']);
-            break;
-          default:
-            this.router.navigate(['/']);
-            break;
-        }
       },
 
       error: (err) => {
