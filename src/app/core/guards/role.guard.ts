@@ -49,7 +49,7 @@ Swal.fire({
         ? '/dashboard/admin'
         : role === 'INSTRUCTOR'
           ? '/courses'
-          : '/login';
+          : '/dashboard/student';
   router.navigate([fallback], { replaceUrl: true });
 });
 

@@ -79,7 +79,7 @@ export class NavbarComponent implements OnInit, OnDestroy {
   get homeRoute(): string {
     if (this.isSuperAdmin) return '/organizations';
     if (this.isAdmin) return this.proPlan ? '/dashboard/admin' : '/users';
-    if (this.isUser) return this.proPlan ? '/dashboard/student' : '/login';
+    if (this.isUser) return '/dashboard/student';
     return '/';
   }
 

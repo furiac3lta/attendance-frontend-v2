@@ -11,6 +11,10 @@
 
   <div *ngIf="loading" class="muted">Cargando historial...</div>
 
+  <div *ngIf="!loading && !proPlan" class="muted">
+    Función disponible solo en plan PRO.
+  </div>
+
   <ng-container *ngIf="!loading && history">
     <section class="history-grid">
       <article class="section-card">

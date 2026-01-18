@@ -51,12 +51,6 @@ export class UserHistoryPage implements OnInit {
     this.isUser = role === 'USER';
     this.proPlan = !!currentUser?.organizationProPlan;
 
-    if (!this.proPlan) {
-      Swal.fire('Plan PRO', 'Esta función está disponible solo para plan PRO.', 'info');
-      this.router.navigate([this.isUser ? '/login' : '/users']);
-      return;
-    }
-
     this.userId = fromRoute || currentUser?.id || null;
     if (!this.userId) {
       this.router.navigate(['/login']);
@@ -67,7 +61,9 @@ export class UserHistoryPage implements OnInit {
       this.title = 'Mi panel';
     }
 
-    this.loadHistory();
+    if (this.proPlan) {
+      this.loadHistory();
+    }
   }
 
   loadHistory(): void {

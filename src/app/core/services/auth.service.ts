@@ -77,7 +77,7 @@ export class AuthService {
               this.router.navigate(['/attendance']);
               break;
             case 'USER':
-              this.router.navigate([proPlan ? '/dashboard/student' : '/login']);
+              this.router.navigate(['/dashboard/student']);
               break;
             default:
               this.showError('Rol no reconocido');
