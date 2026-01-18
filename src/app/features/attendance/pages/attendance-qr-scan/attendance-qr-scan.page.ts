@@ -66,9 +66,16 @@ export class AttendanceQrScanPage implements OnInit, OnDestroy {
   }
 
   private startDecode(): void {
+    const videoEl = this.video?.nativeElement;
+    if (!videoEl) {
+      this.scanning = false;
+      Swal.fire('Cámara no disponible', 'No se encontró el video para escanear.', 'error');
+      return;
+    }
+
     const start = this.reader.decodeFromVideoDevice(
       undefined,
-      this.video.nativeElement,
+      videoEl,
       (result: { getText: () => string } | undefined, _err: unknown, controls: IScannerControls | undefined) => {
         if (controls) {
           this.controls = controls;
