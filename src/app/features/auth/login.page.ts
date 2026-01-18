@@ -64,19 +64,6 @@ export class LoginPage {
 
         const role = res.type?.toUpperCase(); // ADMIN | SUPER_ADMIN | INSTRUCTOR | USER
 
-        // 🚫 BLOQUEO EXTRA POR SEGURIDAD (USER)
-        if (role === 'USER') {
-          Swal.fire({
-            icon: 'error',
-            title: 'Acceso restringido',
-            text: 'Tu cuenta no tiene permisos para ingresar al sistema.',
-            heightAuto: false
-          });
-          sessionStorage.clear();
-          localStorage.clear();
-          return;
-        }
-
         // ✅ Mensaje OK
         Swal.fire({
           icon: 'success',
@@ -97,6 +84,9 @@ export class LoginPage {
             break;
           case 'INSTRUCTOR':
             this.router.navigate(['/courses']);
+            break;
+          case 'USER':
+            this.router.navigate(['/dashboard/student']);
             break;
           default:
             this.router.navigate(['/']);

@@ -44,6 +44,17 @@
     <button
       mat-button
       class="nav-link"
+      *ngIf="canSee('student')"
+      routerLink="/dashboard/student"
+      routerLinkActive="active"
+      (click)="menuOpen = false">
+      <mat-icon>person</mat-icon>
+      Mi panel
+    </button>
+
+    <button
+      mat-button
+      class="nav-link"
       *ngIf="canSee('organizations')"
       routerLink="/organizations"
       routerLinkActive="active"

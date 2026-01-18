@@ -1,0 +1,21 @@
+.scan-box {
+  width: 100%;
+  max-width: 520px;
+  margin: 0 auto 16px;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  overflow: hidden;
+  background: #000;
+}
+
+video {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.scan-actions {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+}

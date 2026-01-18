@@ -1,4 +1,5 @@
-<div class="admin-dashboard" *ngIf="data as d">
+<div class="admin-dashboard" *ngIf="proPlan; else freePlanNotice">
+  <ng-container *ngIf="data as d">
 
   <header class="hero">
     <div>
@@ -113,4 +114,19 @@
     </article>
   </section>
 
+  </ng-container>
 </div>
+
+<ng-template #freePlanNotice>
+  <div class="admin-dashboard">
+    <section class="quick-list">
+      <article class="quick-card">
+        <div>
+          <p class="label">Plan FREE</p>
+          <h4>Función disponible en planes avanzados</h4>
+          <p class="muted">El dashboard y los reportes están habilitados solo en plan PRO.</p>
+        </div>
+      </article>
+    </section>
+  </div>
+</ng-template>

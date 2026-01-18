@@ -53,4 +53,8 @@ export class ClassesService {
   getClassDetails(classId: number) {
     return this.http.get<any>(`${this.apiUrl}/${classId}/details`);
   }
+
+  generateQr(classId: number): Observable<any> {
+    return this.http.post<any>(`${this.apiUrl}/${classId}/qr`, {});
+  }
 }

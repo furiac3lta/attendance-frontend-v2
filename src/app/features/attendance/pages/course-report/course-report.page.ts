@@ -1,11 +1,12 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 
 // Servicios
 import { AttendanceService } from '../../../../core/services/attendance.service';
 import { CoursesService } from '../../../../core/services/courses.service';
+import { AuthService } from '../../../../core/services/auth.service';
 
 // Material
 import { MatCardModule } from '@angular/material/card';
@@ -61,10 +62,17 @@ export class CourseReportPage implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private attendanceSvc: AttendanceService,
-    private courseSvc: CoursesService
+    private courseSvc: CoursesService,
+    private auth: AuthService,
+    private router: Router
   ) {}
 
   ngOnInit(): void {
+    if (!this.auth.isProPlan()) {
+      Swal.fire('Plan PRO', 'Esta función está disponible solo para plan PRO.', 'info');
+      this.router.navigate(['/courses']);
+      return;
+    }
     this.courseId = Number(this.route.snapshot.paramMap.get('courseId'));
 
     const today = new Date();

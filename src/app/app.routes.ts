@@ -33,6 +33,14 @@ export const routes: Routes = [
             .then(m => m.AdminDashboardPage)
       },
       {
+        path: 'dashboard/student',
+        canActivate: [roleGuard],
+        data: { roles: ['USER'] },
+        loadComponent: () =>
+          import('./features/users/pages/user-history/user-history.page')
+            .then(m => m.UserHistoryPage)
+      },
+      {
         path: 'dashboard/morosos',
         canActivate: [roleGuard],
         data: { roles: ['ADMIN', 'SUPER_ADMIN'] },
@@ -63,6 +71,14 @@ export const routes: Routes = [
         loadComponent: () =>
           import('./features/users/users.page')
             .then(m => m.UsersPage)
+      },
+      {
+        path: 'users/:id',
+        canActivate: [roleGuard],
+        data: { roles: ['SUPER_ADMIN', 'ADMIN', 'INSTRUCTOR', 'USER'] },
+        loadComponent: () =>
+          import('./features/users/pages/user-history/user-history.page')
+            .then(m => m.UserHistoryPage)
       },
 
       // =========================
@@ -155,6 +171,14 @@ export const routes: Routes = [
         loadComponent: () =>
           import('./features/attendance/pages/course-report/course-report.page')
             .then(m => m.CourseReportPage)
+      },
+      {
+        path: 'attendance/scan',
+        canActivate: [roleGuard],
+        data: { roles: ['USER'] },
+        loadComponent: () =>
+          import('./features/attendance/pages/attendance-qr-scan/attendance-qr-scan.page')
+            .then(m => m.AttendanceQrScanPage)
       },
 
       // =========================

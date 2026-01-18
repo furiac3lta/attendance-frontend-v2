@@ -11,6 +11,7 @@ export interface User {
   role?: string;
   active?: boolean;
   observations?: string | null;
+  organizationProPlan?: boolean;
   courses?: string[];
   organizationId?: number | null;
   organizationName?: string | null;
@@ -63,6 +64,14 @@ export class UsersService {
     return this.http.put(`${this.base}/${id}`, data, this.authHeaders());
   }
 
+  updatePassword(id: number, newPassword: string): Observable<string> {
+    return this.http.put(
+      `${this.base}/${id}/password`,
+      { newPassword },
+      { ...this.authHeaders(), responseType: 'text' as const }
+    );
+  }
+
   deactivate(id: number): Observable<string> {
     return this.http.put(
       `${this.base}/${id}/deactivate`,
@@ -109,6 +118,10 @@ export class UsersService {
     return this.http.get<User[]>(`${this.base}/all`, {
       params: { search }
     });
+  }
+
+  getHistory(userId: number): Observable<any> {
+    return this.http.get(`${this.base}/${userId}/history`, this.authHeaders());
   }
 
   importFromExcel(file: File): Observable<any> {

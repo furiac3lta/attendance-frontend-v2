@@ -39,6 +39,13 @@
           <input matInput type="password" formControlName="password">
         </mat-form-field>
 
+        <mat-form-field
+          appearance="outline"
+          *ngIf="editingUserId && (currentRole === 'SUPER_ADMIN' || currentRole === 'ADMIN')">
+          <mat-label>Nueva contraseña</mat-label>
+          <input matInput type="password" formControlName="newPassword">
+        </mat-form-field>
+
         <mat-form-field appearance="outline">
           <mat-label>Rol</mat-label>
           <mat-select formControlName="role">
@@ -67,7 +74,7 @@
           </mat-select>
         </mat-form-field>
 
-        <mat-form-field appearance="outline" class="full-width">
+        <mat-form-field appearance="outline" class="full-width" *ngIf="proPlan">
           <mat-label>Observaciones</mat-label>
           <textarea matInput formControlName="observations" rows="3"></textarea>
         </mat-form-field>
@@ -213,7 +220,7 @@
             <div class="user-name">{{ u.fullName }}</div>
             <div class="user-role">{{ u.role }}</div>
           </div>
-          <div class="user-payment">
+          <div class="user-payment" *ngIf="proPlan">
             <ng-container *ngIf="filterCourse !== 'ALL'; else paymentDash">
               <mat-icon
                 [ngClass]="paymentStatus[u.id] ? 'paid-ok' : 'paid-bad'">
@@ -235,7 +242,7 @@
             <span class="label">Organización</span>
             <span class="value">{{ u.organizationName || '—' }}</span>
           </div>
-          <div class="meta-row" *ngIf="u.observations">
+          <div class="meta-row" *ngIf="proPlan && u.observations">
             <span class="label">Observaciones</span>
             <span class="value">{{ u.observations }}</span>
           </div>
@@ -255,10 +262,13 @@
             class="status-toggle">
             {{ u.active ? 'Activo' : 'Inactivo' }}
           </mat-slide-toggle>
+          <button mat-icon-button [routerLink]="['/users', u.id]" *ngIf="proPlan">
+            <mat-icon>visibility</mat-icon>
+          </button>
           <button mat-icon-button (click)="editUser(u)">
             <mat-icon class="icon-edit">edit</mat-icon>
           </button>
-          <button mat-icon-button (click)="goToRegisterPayment(u)">
+          <button mat-icon-button (click)="goToRegisterPayment(u)" *ngIf="proPlan">
             <mat-icon class="icon-payment">payments</mat-icon>
           </button>
         </div>
@@ -306,7 +316,7 @@
           </ng-container>
 
           <!-- CUOTA -->
-          <ng-container matColumnDef="paid">
+          <ng-container matColumnDef="paid" *ngIf="proPlan">
             <th mat-header-cell *matHeaderCellDef>Cuota</th>
             <td mat-cell *matCellDef="let u" class="quota-cell">
 
@@ -341,19 +351,15 @@
               <button mat-icon-button (click)="editUser(u)">
                 <mat-icon class="icon-edit">edit</mat-icon>
               </button>
-              <button mat-icon-button (click)="goToRegisterPayment(u)">
+              <button mat-icon-button (click)="goToRegisterPayment(u)" *ngIf="proPlan">
                 <mat-icon class="icon-payment">payments</mat-icon>
               </button>
             </td>
           </ng-container>
 
-          <tr mat-header-row *matHeaderRowDef="[
-            'fullName','email','role','organization','courses','paid','status','actions'
-          ]"></tr>
+          <tr mat-header-row *matHeaderRowDef="tableColumns"></tr>
 
-        <tr mat-row *matRowDef="let row; columns: [
-          'fullName','email','role','organization','courses','paid','status','actions'
-        ]"></tr>
+        <tr mat-row *matRowDef="let row; columns: tableColumns"></tr>
 
       </table>
     </div>

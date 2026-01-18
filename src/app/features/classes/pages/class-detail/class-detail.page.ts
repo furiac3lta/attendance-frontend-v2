@@ -6,6 +6,8 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { ClassesService, ClassSessionDto } from '../../../../core/services/classes.service';
 import { CoursesService } from '../../../../core/services/courses.service';
 import { AttendanceService } from '../../../../core/services/attendance.service';
+import { AuthService } from '../../../../core/services/auth.service';
+import Swal from 'sweetalert2';
 
 /* Material */
 import { MatCardModule } from '@angular/material/card';
@@ -40,6 +42,8 @@ export class ClassDetailPage implements OnInit {
   selectedCourseName = '';
   currentDate = '';
   newClassObservations = '';
+  role = '';
+  proPlan = false;
 
   classes: (ClassSessionDto & {
     attendanceTaken?: boolean;
@@ -54,7 +58,8 @@ export class ClassDetailPage implements OnInit {
     private classesSvc: ClassesService,
     private coursesSvc: CoursesService,
     private attendanceSvc: AttendanceService,
-    private datePipe: DatePipe
+    private datePipe: DatePipe,
+    private auth: AuthService
   ) {}
 
   ngOnInit(): void {
@@ -67,6 +72,9 @@ export class ClassDetailPage implements OnInit {
         "EEEE d 'de' MMMM 'de' y, HH:mm 'hs'",
         'es-AR'
       ) ?? '';
+
+    this.role = (this.auth.getRole() ?? '').replace(/^ROLE_/, '').toUpperCase();
+    this.proPlan = !!this.auth.getUser()?.organizationProPlan;
 
     this.loadCourse();
     this.loadClasses();
@@ -127,7 +135,40 @@ export class ClassDetailPage implements OnInit {
     });
   }
 
+  canUseQr(c: ClassSessionDto): boolean {
+    if (!this.proPlan) return false;
+    if (this.role !== 'INSTRUCTOR') return false;
+    if (!c?.date) return false;
+    const today = new Date().toISOString().split('T')[0];
+    return c.date === today;
+  }
+
+  generateQr(c: ClassSessionDto): void {
+    if (!this.canUseQr(c)) {
+      Swal.fire('Atención', 'El QR solo está disponible el día de la clase.', 'info');
+      return;
+    }
+
+    this.classesSvc.generateQr(c.id).subscribe({
+      next: (res: any) => {
+        Swal.fire({
+          title: 'QR de asistencia',
+          html: `<img src="${res.imageBase64}" alt="QR" style="width: 240px; max-width: 100%;" />`,
+          showConfirmButton: true,
+          confirmButtonText: 'Cerrar'
+        });
+      },
+      error: () => {
+        Swal.fire('Error', 'No se pudo generar el QR.', 'error');
+      }
+    });
+  }
+
   goToReport(): void {
+    if (!this.proPlan) {
+      Swal.fire('Plan PRO', 'Esta función está disponible solo para plan PRO.', 'info');
+      return;
+    }
     this.router.navigate(['/attendance/report', this.courseId]);
   }
 }

@@ -12,6 +12,7 @@ export interface User {
   role: 'SUPER_ADMIN' | 'ADMIN' | 'INSTRUCTOR' | 'USER';
   active?: boolean;
   observations?: string | null;
+  organizationProPlan?: boolean;
   organization?: {
     id: number;
     name: string;

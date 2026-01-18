@@ -26,6 +26,7 @@ export class AdminDashboardPage implements OnInit {
   organizationName = '—';
   role = '—';
   isDownloading = false;
+  proPlan = false;
 
   constructor(
     private dashboardService: DashboardService,
@@ -45,6 +46,7 @@ export class AdminDashboardPage implements OnInit {
       'Sin organización';
 
     this.role = (this.auth.getRole() ?? '').toUpperCase();
+    this.proPlan = this.auth.isProPlan();
 
     // 🔐 Seguridad UX
     if (this.role !== 'ADMIN') {
@@ -55,6 +57,16 @@ export class AdminDashboardPage implements OnInit {
         heightAuto: false
       });
       this.auth.logout();
+      return;
+    }
+
+    if (!this.proPlan) {
+      Swal.fire({
+        icon: 'info',
+        title: 'Plan PRO',
+        text: 'Este dashboard está disponible solo para plan PRO.',
+        heightAuto: false
+      });
       return;
     }
 
@@ -93,6 +105,10 @@ export class AdminDashboardPage implements OnInit {
 }
 
   downloadMonthlyReport(): void {
+    if (!this.proPlan) {
+      Swal.fire('Plan PRO', 'Esta función está disponible solo para plan PRO.', 'info');
+      return;
+    }
     if (this.isDownloading) return;
 
     const today = new Date();

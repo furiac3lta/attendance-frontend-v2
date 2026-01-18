@@ -9,6 +9,7 @@ import Swal from 'sweetalert2';
 import { Router } from '@angular/router';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { PaymentService } from '../../core/services/payment.service';
+import { AuthService } from '../../core/services/auth.service';
 
 @Component({
   standalone: true,
@@ -33,7 +34,8 @@ export class UsersPage implements OnInit {
   private usersSvc = inject(UsersService);
   private coursesSvc = inject(CoursesService);
   private router = inject(Router);
-private paymentSvc = inject(PaymentService);
+  private paymentSvc = inject(PaymentService);
+  private auth = inject(AuthService);
   // =========================
   // DATA
   // =========================
@@ -62,6 +64,8 @@ private paymentSvc = inject(PaymentService);
   loading = false;
   currentRole = sessionStorage.getItem('role');
   editingUserId: number | null = null;
+  proPlan = false;
+  tableColumns: string[] = [];
 
   // =========================
   // 💰 PAGOS
@@ -77,6 +81,7 @@ private paymentSvc = inject(PaymentService);
     username: ['', Validators.required],
     email: [''],
     password: [''],
+    newPassword: [''],
     role: ['USER', Validators.required],
     organizationId: [null as number | null],
     courseIds: [[] as number[]],
@@ -95,6 +100,10 @@ private paymentSvc = inject(PaymentService);
   // INIT
   // =========================
   ngOnInit(): void {
+    this.proPlan = this.auth.isProPlan();
+    this.tableColumns = this.proPlan
+      ? ['fullName','email','role','organization','courses','paid','status','actions']
+      : ['fullName','email','role','organization','courses','status','actions'];
     this.loadCourses();
     this.loadUsers();
     if (this.isSuperAdmin()) this.loadOrganizations();
@@ -129,7 +138,7 @@ private paymentSvc = inject(PaymentService);
         this.loading = false;
 
         // 👉 Cargar estado de pagos SOLO si hay curso filtrado
-        if (this.filterCourse !== 'ALL') {
+        if (this.proPlan && this.filterCourse !== 'ALL') {
           this.loadPaymentStatus(this.filterCourse);
         } else {
           this.paymentStatus = {};
@@ -174,7 +183,8 @@ editUser(u: User): void {
     role: u.role,
     organizationId: u.organizationId || null,
     courseIds: ids,
-    observations: u.observations || ''
+    observations: u.observations || '',
+    newPassword: ''
   });
 
   if (u.id) {
@@ -240,6 +250,10 @@ mapCourseNamesToIds(names: string[]): number[] {
   // 💰 ESTADO DE PAGOS
   // =========================
 loadPaymentStatus(courseId: number): void {
+  if (!this.proPlan) {
+    this.paymentStatus = {};
+    return;
+  }
   this.paymentSvc
     .getPaymentStatusByCourse(courseId, this.currentMonth, this.currentYear)
     .subscribe({
@@ -324,12 +338,16 @@ loadPaymentStatus(courseId: number): void {
   // =========================
   // 💰 REGISTRAR PAGO
   // =========================
-  goToRegisterPayment(user: User): void {
+goToRegisterPayment(user: User): void {
+  if (!this.proPlan) {
+    Swal.fire('Plan PRO', 'Esta función está disponible solo para plan PRO.', 'info');
+    return;
+  }
 
-    if (!user.courses || user.courses.length === 0) {
-      Swal.fire('Atención', 'El alumno no tiene cursos asignados', 'warning');
-      return;
-    }
+  if (!user.courses || user.courses.length === 0) {
+    Swal.fire('Atención', 'El alumno no tiene cursos asignados', 'warning');
+    return;
+  }
 
     const courseName = user.courses[0];
     const course = this.courses.find(c => c.name === courseName);
@@ -365,7 +383,7 @@ saveUser(): void {
     email: dto.email || `${dto.username}@dojo.com`,
     role: dto.role,
     organizationId: dto.organizationId ?? null,
-    observations: dto.observations || null
+    observations: this.proPlan ? (dto.observations || null) : null
   };
 
   const courseIds: number[] = dto.courseIds || [];
@@ -374,6 +392,7 @@ saveUser(): void {
   // ✏️ EDICIÓN
   // =========================
   if (this.editingUserId) {
+    const newPassword = dto.newPassword?.trim();
 
     this.usersSvc.update(this.editingUserId, userPayload).subscribe({
       next: () => {
@@ -381,6 +400,21 @@ saveUser(): void {
         // 🔥 SEGUNDA LLAMADA: asignar cursos
         this.usersSvc.assignCourses(this.editingUserId!, courseIds).subscribe({
           next: () => {
+            if (newPassword) {
+              this.usersSvc.updatePassword(this.editingUserId!, newPassword).subscribe({
+                next: () => {
+                  Swal.fire('Éxito', 'Usuario actualizado', 'success');
+                  this.cancelEdit();
+                  this.currentPage = 0;
+                  this.loadUsers();
+                },
+                error: () => {
+                  Swal.fire('Error', 'No se pudo actualizar la contraseña', 'error');
+                }
+              });
+              return;
+            }
+
             Swal.fire('Éxito', 'Usuario actualizado', 'success');
             this.cancelEdit();
             this.currentPage = 0;

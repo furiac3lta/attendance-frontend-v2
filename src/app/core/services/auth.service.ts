@@ -75,7 +75,7 @@ export class AuthService {
               this.router.navigate(['/attendance']);
               break;
             case 'USER':
-              this.router.navigate(['/courses']);
+              this.router.navigate(['/dashboard/student']);
               break;
             default:
               this.showError('Rol no reconocido');
@@ -136,6 +136,10 @@ export class AuthService {
   getUser(): any | null {
     const user = localStorage.getItem('user');
     return user ? JSON.parse(user) : null;
+  }
+
+  isProPlan(): boolean {
+    return !!this.getUser()?.organizationProPlan;
   }
 
   private hasToken(): boolean {

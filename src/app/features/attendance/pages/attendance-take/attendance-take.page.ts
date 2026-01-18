@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { AttendanceService, AttendanceMark } from '../../../../core/services/attendance.service';
+import { AuthService } from '../../../../core/services/auth.service';
 import { ClassesService, StudentDto } from '../../../../core/services/classes.service';
 import { MatTableModule } from '@angular/material/table';
 import { MatCheckboxModule } from '@angular/material/checkbox';
@@ -45,6 +46,9 @@ export class AttendanceTakePage implements OnInit {
   courseName = '';
   date = '';
   classObservations = '';
+  qrEnabled = false;
+  proPlan = false;
+  tableColumns: string[] = ['name', 'paid', 'present'];
 
   students: StudentWithPayment[] = [];
   attendanceMarks: AttendanceMark[] = [];
@@ -54,11 +58,14 @@ export class AttendanceTakePage implements OnInit {
     private route: ActivatedRoute,
     private router: Router,
     private classesSvc: ClassesService,
-    private attendanceSvc: AttendanceService
+    private attendanceSvc: AttendanceService,
+    private auth: AuthService
   ) {}
 
   ngOnInit(): void {
     this.classId = Number(this.route.snapshot.paramMap.get('classId'));
+    this.proPlan = this.auth.isProPlan();
+    this.tableColumns = this.proPlan ? ['name', 'paid', 'present'] : ['name', 'present'];
 
     if (!this.classId) {
       Swal.fire('Clase inválida', '', 'error');
@@ -72,6 +79,7 @@ export class AttendanceTakePage implements OnInit {
       this.courseName = res.courseName;
       this.courseId = res.courseId;
       this.classObservations = res.observations || '';
+      this.qrEnabled = !!res.qrEnabled;
     });
 
     this.classesSvc.getStudentsForClass(this.classId).subscribe(students => {
@@ -94,13 +102,15 @@ export class AttendanceTakePage implements OnInit {
           ? marks
           : this.students.map(s => ({ userId: s.id, present: false }));
 
-        this.attendanceSvc.getPaymentStatus(this.courseId)
-          .subscribe(payments => {
-            this.students = this.students.map(s => ({
-              ...s,
-              paid: payments[s.id] === true
-            }));
-          });
+        if (this.proPlan) {
+          this.attendanceSvc.getPaymentStatus(this.courseId)
+            .subscribe(payments => {
+              this.students = this.students.map(s => ({
+                ...s,
+                paid: payments[s.id] === true
+              }));
+            });
+        }
 
       });
     });

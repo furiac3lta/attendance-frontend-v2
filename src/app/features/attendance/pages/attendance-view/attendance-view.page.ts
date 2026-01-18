@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CommonModule, DatePipe } from '@angular/common';
 import { AttendanceService } from '../../../../core/services/attendance.service';
+import { AuthService } from '../../../../core/services/auth.service';
 
 // SweetAlert2
 import Swal from 'sweetalert2';
@@ -55,13 +56,15 @@ export class AttendanceViewPage implements OnInit {
   records: AttendanceRecord[] = [];
   loading = true;
 
-  displayedColumns = ['fullName', 'paid', 'present', 'takenAt'];
+  displayedColumns: string[] = ['fullName', 'paid', 'present', 'takenAt'];
+  proPlan = false;
 
   constructor(
     private route: ActivatedRoute,
     private attendanceSvc: AttendanceService,
     private router: Router,
-    private datePipe: DatePipe
+    private datePipe: DatePipe,
+    private auth: AuthService
   ) {}
 
   ngOnInit(): void {
@@ -73,6 +76,10 @@ export class AttendanceViewPage implements OnInit {
     }
 
     this.classId = Number(param);
+    this.proPlan = this.auth.isProPlan();
+    this.displayedColumns = this.proPlan
+      ? ['fullName', 'paid', 'present', 'takenAt']
+      : ['fullName', 'present', 'takenAt'];
     this.loadAttendance();
   }
 
@@ -118,7 +125,7 @@ export class AttendanceViewPage implements OnInit {
         }));
 
         // 🔹 cargar pagos
-        if (this.courseId) {
+        if (this.courseId && this.proPlan) {
           this.attendanceSvc
             .getPaymentStatus(this.courseId)
             .subscribe((payments: Record<number, boolean>) => {

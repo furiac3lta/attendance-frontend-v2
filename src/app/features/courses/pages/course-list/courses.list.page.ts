@@ -8,6 +8,7 @@ import { Course } from '../../models/course.model';
 import { UsersService } from '../../../../core/services/users.service';
 import { User } from '../../../../core/services/users.service';
 import { InstructorDTO } from '../../../../core/models/instructorDTO';
+import { AuthService } from '../../../../core/services/auth.service';
 
 // Material
 import { MatTableModule } from '@angular/material/table';
@@ -52,15 +53,18 @@ availableInstructors: Record<number, InstructorDTO[]> = {};
 
   loading = true;
   message = '';
+  proPlan = false;
 
   constructor(
     private router: Router,
     private coursesSvc: CoursesService,
-    private usersSvc: UsersService
+    private usersSvc: UsersService,
+    private auth: AuthService
   ) { }
 
   // 🔹 INIT
   ngOnInit(): void {
+    this.proPlan = this.auth.isProPlan();
     this.loadCourses();
 
     // 👉 SOLO ADMIN / SUPER_ADMIN
@@ -128,6 +132,9 @@ availableInstructors: Record<number, InstructorDTO[]> = {};
   }
 
   goToReport(courseId: number): void {
+    if (!this.proPlan) {
+      return;
+    }
     this.router.navigate(['/attendance/report', courseId]);
   }
 

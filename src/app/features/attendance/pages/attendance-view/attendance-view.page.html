@@ -37,7 +37,7 @@
       </div>
 
       <div class="card-grid">
-        <div class="card-row">
+        <div class="card-row" *ngIf="proPlan">
           <span class="label">Cuota</span>
           <span class="value">
             <mat-icon
@@ -75,7 +75,7 @@
       <!-- ===================== -->
       <!-- Estado de pago        -->
       <!-- ===================== -->
-      <ng-container matColumnDef="paid">
+      <ng-container matColumnDef="paid" *ngIf="proPlan">
         <th mat-header-cell *matHeaderCellDef> Cuota </th>
         <td mat-cell *matCellDef="let r">
           <mat-icon

@@ -9,6 +9,7 @@
     <p><strong>Curso:</strong> {{ courseName }}</p>
     <p><strong>Fecha:</strong> {{ date | date:'dd/MM/yyyy' }}</p>
     <p *ngIf="classObservations"><strong>Observaciones:</strong> {{ classObservations }}</p>
+    <p *ngIf="qrEnabled" class="muted"><strong>QR activo:</strong> asistencia manual deshabilitada.</p>
   </div>
 
   <mat-divider></mat-divider>
@@ -24,7 +25,7 @@
       </div>
 
       <div class="card-grid">
-        <div class="card-row">
+        <div class="card-row" *ngIf="proPlan">
           <span class="label">Cuota</span>
           <span class="value">
             <span
@@ -48,6 +49,7 @@
               [ngClass]="getMark(s.id) ? 'pill-ok' : 'pill-bad'"
               type="button"
               (click)="toggleAttendance(s.id, !getMark(s.id))"
+              [disabled]="qrEnabled"
               [attr.aria-pressed]="getMark(s.id)">
               <span class="pill-icon" aria-hidden="true">
                 <mat-icon>
@@ -86,7 +88,7 @@
     <!-- ===================== -->
     <!-- Estado de cuota       -->
     <!-- ===================== -->
-    <ng-container matColumnDef="paid">
+    <ng-container matColumnDef="paid" *ngIf="proPlan">
       <th mat-header-cell *matHeaderCellDef class="center"> Cuota </th>
       <td mat-cell *matCellDef="let s" class="center">
         <mat-icon
@@ -111,6 +113,7 @@
           type="button"
           class="presence-icon"
           (click)="toggleAttendance(s.id, !getMark(s.id))"
+          [disabled]="qrEnabled"
           [attr.aria-pressed]="getMark(s.id)">
           <mat-icon
             class="payment-icon"
@@ -124,8 +127,8 @@
       </td>
     </ng-container>
 
-    <tr mat-header-row *matHeaderRowDef="['name','paid','present']"></tr>
-    <tr mat-row *matRowDef="let row; columns: ['name','paid','present']"></tr>
+    <tr mat-header-row *matHeaderRowDef="tableColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: tableColumns"></tr>
 
   </table>
   </div>
@@ -133,7 +136,7 @@
   <mat-divider></mat-divider>
 
   <div class="button-container">
-    <button mat-raised-button color="primary" class="action-pill action-primary" (click)="save()">
+    <button mat-raised-button color="primary" class="action-pill action-primary" (click)="save()" [disabled]="qrEnabled">
       <mat-icon>save</mat-icon>
       Guardar
     </button>

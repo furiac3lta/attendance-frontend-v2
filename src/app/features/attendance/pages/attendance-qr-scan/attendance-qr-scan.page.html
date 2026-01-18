@@ -1,0 +1,18 @@
+<mat-card class="page-card">
+  <div class="page-head">
+    <h2 class="page-head__title">Escanear QR</h2>
+  </div>
+
+  <div class="scan-box">
+    <video #video autoplay muted playsinline></video>
+  </div>
+
+  <div class="scan-actions">
+    <button mat-stroked-button color="primary" (click)="startScan()" [disabled]="scanning">
+      Iniciar
+    </button>
+    <button mat-stroked-button color="warn" (click)="stopScan()" [disabled]="!scanning">
+      Detener
+    </button>
+  </div>
+</mat-card>

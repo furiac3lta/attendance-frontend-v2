@@ -1,0 +1,75 @@
+<mat-card class="page-card">
+  <div class="page-head">
+    <h2 class="page-head__title">{{ title }}</h2>
+  </div>
+
+  <div class="scan-actions" *ngIf="isUser && proPlan">
+    <button mat-raised-button color="primary" routerLink="/attendance/scan">
+      Escanear QR
+    </button>
+  </div>
+
+  <div *ngIf="loading" class="muted">Cargando historial...</div>
+
+  <ng-container *ngIf="!loading && history">
+    <section class="history-grid">
+      <article class="section-card">
+        <h3 class="section-title">Observaciones</h3>
+        <p *ngIf="history.observations; else noObs">{{ history.observations }}</p>
+        <ng-template #noObs>
+          <p class="muted">Sin observaciones.</p>
+        </ng-template>
+      </article>
+
+      <article class="section-card">
+        <h3 class="section-title">Cursos</h3>
+        <mat-chip-set>
+          <mat-chip *ngFor="let c of history.courses">{{ c.name }}</mat-chip>
+          <mat-chip *ngIf="!history.courses?.length">Sin cursos</mat-chip>
+        </mat-chip-set>
+      </article>
+    </section>
+
+    <section class="section-card">
+      <h3 class="section-title">Asistencias</h3>
+      <table mat-table [dataSource]="history.attendances || []" class="table-modern">
+        <ng-container matColumnDef="date">
+          <th mat-header-cell *matHeaderCellDef>Fecha</th>
+          <td mat-cell *matCellDef="let a">{{ a.takenAt | date:'dd/MM/yyyy' }}</td>
+        </ng-container>
+        <ng-container matColumnDef="course">
+          <th mat-header-cell *matHeaderCellDef>Curso</th>
+          <td mat-cell *matCellDef="let a">{{ a.courseName }}</td>
+        </ng-container>
+        <ng-container matColumnDef="status">
+          <th mat-header-cell *matHeaderCellDef>Estado</th>
+          <td mat-cell *matCellDef="let a">
+            {{ a.attended ? 'Presente' : 'Ausente' }}
+          </td>
+        </ng-container>
+        <tr mat-header-row *matHeaderRowDef="attendanceColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: attendanceColumns"></tr>
+      </table>
+    </section>
+
+    <section class="section-card">
+      <h3 class="section-title">Pagos</h3>
+      <table mat-table [dataSource]="history.payments || []" class="table-modern">
+        <ng-container matColumnDef="month">
+          <th mat-header-cell *matHeaderCellDef>Mes</th>
+          <td mat-cell *matCellDef="let p">{{ p.month }}/{{ p.year }}</td>
+        </ng-container>
+        <ng-container matColumnDef="amount">
+          <th mat-header-cell *matHeaderCellDef>Monto</th>
+          <td mat-cell *matCellDef="let p">{{ p.amount | currency:'$':'symbol':'1.0-0' }}</td>
+        </ng-container>
+        <ng-container matColumnDef="status">
+          <th mat-header-cell *matHeaderCellDef>Estado</th>
+          <td mat-cell *matCellDef="let p">{{ p.status }}</td>
+        </ng-container>
+        <tr mat-header-row *matHeaderRowDef="paymentColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: paymentColumns"></tr>
+      </table>
+    </section>
+  </ng-container>
+</mat-card>

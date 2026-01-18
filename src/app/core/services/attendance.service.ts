@@ -56,6 +56,14 @@ export class AttendanceService {
     );
   }
 
+  /** Registrar asistencia via QR */
+  registerAttendanceViaQr(classId: number, token: string): Observable<void> {
+    return this.http.post<void>(
+      `${this.apiUrl}/class/${classId}/qr`,
+      { token }
+    );
+  }
+
   /** Obtener asistencia completa (para vista detalle) */
   getAttendance(classId: number) {
     return this.http.get<any[]>(`${this.apiUrl}/class/${classId}`);

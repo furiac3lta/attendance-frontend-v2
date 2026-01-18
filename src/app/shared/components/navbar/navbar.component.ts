@@ -44,6 +44,7 @@ export class NavbarComponent implements OnInit, OnDestroy {
   userName: string | null = null;
   userRole: string | null = null;
   organizationName: string | null = null;
+  proPlan = false;
 
   private subRole?: Subscription;
   private subLogin?: Subscription;
@@ -68,12 +69,17 @@ export class NavbarComponent implements OnInit, OnDestroy {
     return this.userRole === 'INSTRUCTOR';
   }
 
+  get isUser(): boolean {
+    return this.userRole === 'USER';
+  }
+
   // =========================
   // HOME ROUTE
   // =========================
   get homeRoute(): string {
     if (this.isSuperAdmin) return '/organizations';
-    if (this.isAdmin) return '/dashboard/admin';
+    if (this.isAdmin) return this.proPlan ? '/dashboard/admin' : '/users';
+    if (this.isUser) return this.proPlan ? '/dashboard/student' : '/login';
     return '/';
   }
 
@@ -129,6 +135,7 @@ export class NavbarComponent implements OnInit, OnDestroy {
     if (user) {
       this.userName = user.fullName?.split(' ')[0] ?? 'Usuario';
       this.organizationName = user.organization?.name ?? null;
+      this.proPlan = !!user.organizationProPlan;
       return;
     }
 
@@ -152,7 +159,14 @@ export class NavbarComponent implements OnInit, OnDestroy {
       SUPER_ADMIN: ['organizations', 'users', 'courses'],
       ADMIN:       ['users', 'courses', 'payments'],
       INSTRUCTOR:  ['courses'],
+      USER:        ['student'],
     };
+
+    if (!this.proPlan) {
+      if (link === 'payments' || link === 'student') {
+        return false;
+      }
+    }
 
     return access[this.userRole ?? '']?.includes(link) ?? false;
   }

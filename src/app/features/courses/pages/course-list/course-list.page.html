@@ -104,7 +104,8 @@
 
         <button
           mat-stroked-button
-          (click)="goToReport(c.id!)">
+          (click)="goToReport(c.id!)"
+          *ngIf="proPlan">
           Reporte
         </button>
       </div>
@@ -235,7 +236,8 @@
               <button
                 mat-icon-button
                 matTooltip="Ver reporte"
-                (click)="goToReport(c.id!)">
+                (click)="goToReport(c.id!)"
+                *ngIf="proPlan">
                 <mat-icon class="icon-report">bar_chart</mat-icon>
               </button>
 

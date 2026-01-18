@@ -13,6 +13,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
+import { AuthService } from '../../../../core/services/auth.service';
 
 @Component({
   selector: 'app-payment-create',
@@ -52,10 +53,16 @@ export class PaymentCreatePage implements OnInit {
     private fb: FormBuilder,
     private http: HttpClient,
     private router: Router,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private auth: AuthService
   ) {}
 
   ngOnInit(): void {
+    if (!this.auth.isProPlan()) {
+      Swal.fire('Plan PRO', 'Esta función está disponible solo para plan PRO.', 'info');
+      this.router.navigate(['/users']);
+      return;
+    }
     const qp = this.route.snapshot.queryParamMap;
 
     const studentIdParam = qp.get('studentId');
