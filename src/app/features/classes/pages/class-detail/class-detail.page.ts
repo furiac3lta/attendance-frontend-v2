@@ -183,8 +183,9 @@ export class ClassDetailPage implements OnInit {
           confirmButtonText: 'Cerrar'
         });
       },
-      error: () => {
-        Swal.fire('Error', 'No se pudo generar el QR.', 'error');
+      error: (err) => {
+        const message = err?.error ?? 'No se pudo generar el QR.';
+        Swal.fire('Error', message, 'error');
       }
     });
   }

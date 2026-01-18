@@ -48,6 +48,24 @@ export class AttendanceQrScanPage implements OnInit, OnDestroy {
     this.scanning = true;
     this.errorShown = false;
 
+    if (!navigator.mediaDevices?.getUserMedia) {
+      this.scanning = false;
+      Swal.fire('Cámara no disponible', 'El navegador no soporta cámara.', 'error');
+      return;
+    }
+
+    navigator.mediaDevices.getUserMedia({ video: { facingMode: 'environment' } })
+      .then((stream) => {
+        stream.getTracks().forEach((t) => t.stop());
+        this.startDecode();
+      })
+      .catch(() => {
+        this.scanning = false;
+        Swal.fire('Permiso de cámara', 'Debes permitir el acceso a la cámara.', 'error');
+      });
+  }
+
+  private startDecode(): void {
     const start = this.reader.decodeFromVideoDevice(
       undefined,
       this.video.nativeElement,
