@@ -73,13 +73,8 @@ export class AttendanceQrScanPage implements OnInit, AfterViewInit, OnDestroy {
     }
 
     try {
-      const devices = await BrowserQRCodeReader.listVideoInputDevices();
-      if (!devices.length) {
-        throw { name: 'NotFoundError' };
-      }
-      const preferred = devices.find((d) => /back|rear|environment/i.test(d.label)) ?? devices[0];
-      const controls = await this.reader.decodeFromVideoDevice(
-        preferred.deviceId,
+      const controls = await this.reader.decodeFromConstraints(
+        { video: { facingMode: { ideal: 'environment' } } },
         videoEl,
         (result: { getText: () => string } | undefined, _err: unknown, innerControls: IScannerControls | undefined) => {
           if (innerControls) {
@@ -99,11 +94,6 @@ export class AttendanceQrScanPage implements OnInit, AfterViewInit, OnDestroy {
         }
       );
       this.controls = controls;
-      try {
-        await videoEl.play();
-      } catch {
-        // Ignore autoplay restrictions; scan still runs once the stream is active.
-      }
     } catch (err) {
       const errName = (err as { name?: string } | null)?.name;
       this.scanning = false;
