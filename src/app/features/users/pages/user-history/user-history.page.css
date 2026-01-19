@@ -14,6 +14,16 @@
   color: var(--text-muted);
 }
 
+.password-form {
+  display: grid;
+  gap: 12px;
+  max-width: 420px;
+}
+
+.password-form button {
+  justify-self: flex-start;
+}
+
 .status-pill {
   display: inline-flex;
   align-items: center;

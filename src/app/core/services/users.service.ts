@@ -72,6 +72,14 @@ export class UsersService {
     );
   }
 
+  changeOwnPassword(currentPassword: string, newPassword: string): Observable<string> {
+    return this.http.put(
+      `${this.base}/me/password`,
+      { currentPassword, newPassword },
+      { ...this.authHeaders(), responseType: 'text' as const }
+    );
+  }
+
   deactivate(id: number): Observable<string> {
     return this.http.put(
       `${this.base}/${id}/deactivate`,

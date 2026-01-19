@@ -34,6 +34,27 @@
       </article>
     </section>
 
+    <section class="section-card" *ngIf="isOwnPanel">
+      <h3 class="section-title">Cambiar contraseña</h3>
+      <form class="password-form" (ngSubmit)="updateOwnPassword()">
+        <mat-form-field appearance="outline">
+          <mat-label>Contraseña actual</mat-label>
+          <input matInput type="password" [(ngModel)]="currentPassword" name="currentPassword">
+        </mat-form-field>
+        <mat-form-field appearance="outline">
+          <mat-label>Nueva contraseña</mat-label>
+          <input matInput type="password" [(ngModel)]="newPassword" name="newPassword">
+        </mat-form-field>
+        <mat-form-field appearance="outline">
+          <mat-label>Confirmar nueva contraseña</mat-label>
+          <input matInput type="password" [(ngModel)]="confirmPassword" name="confirmPassword">
+        </mat-form-field>
+        <button mat-raised-button color="primary" type="submit" [disabled]="updatingPassword">
+          {{ updatingPassword ? 'Guardando...' : 'Actualizar contraseña' }}
+        </button>
+      </form>
+    </section>
+
     <section class="section-card">
       <h3 class="section-title">Asistencias</h3>
       <table mat-table [dataSource]="history.attendances || []" class="table-modern">

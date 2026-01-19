@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 
 import { UsersService } from '../../../../core/services/users.service';
 import { AuthService } from '../../../../core/services/auth.service';
@@ -9,6 +10,8 @@ import { MatCardModule } from '@angular/material/card';
 import { MatTableModule } from '@angular/material/table';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatButtonModule } from '@angular/material/button';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
 import Swal from 'sweetalert2';
 
 @Component({
@@ -16,10 +19,13 @@ import Swal from 'sweetalert2';
   standalone: true,
   imports: [
     CommonModule,
+    FormsModule,
     MatCardModule,
     MatTableModule,
     MatChipsModule,
     MatButtonModule,
+    MatFormFieldModule,
+    MatInputModule,
     RouterLink
   ],
   templateUrl: './user-history.page.html',
@@ -30,9 +36,15 @@ export class UserHistoryPage implements OnInit {
   title = 'Historial del alumno';
   isUser = false;
   proPlan = false;
+  isOwnPanel = false;
 
   history: any | null = null;
   loading = false;
+  updatingPassword = false;
+
+  currentPassword = '';
+  newPassword = '';
+  confirmPassword = '';
 
   attendanceColumns = ['date', 'course', 'observations', 'status'];
   paymentColumns = ['month', 'amount', 'status'];
@@ -60,6 +72,7 @@ export class UserHistoryPage implements OnInit {
 
     if (!param) {
       this.title = 'Mi panel';
+      this.isOwnPanel = true;
     }
 
     if (this.proPlan) {
@@ -77,6 +90,43 @@ export class UserHistoryPage implements OnInit {
       },
       error: () => {
         this.loading = false;
+      }
+    });
+  }
+
+  updateOwnPassword(): void {
+    if (this.updatingPassword) return;
+
+    const current = this.currentPassword.trim();
+    const next = this.newPassword.trim();
+    const confirm = this.confirmPassword.trim();
+
+    if (!current || !next || !confirm) {
+      Swal.fire('Error', 'Completá todos los campos.', 'error');
+      return;
+    }
+    if (next.length < 6) {
+      Swal.fire('Error', 'La nueva contraseña debe tener al menos 6 caracteres.', 'error');
+      return;
+    }
+    if (next !== confirm) {
+      Swal.fire('Error', 'La confirmación no coincide.', 'error');
+      return;
+    }
+
+    this.updatingPassword = true;
+    this.usersSvc.changeOwnPassword(current, next).subscribe({
+      next: () => {
+        this.updatingPassword = false;
+        this.currentPassword = '';
+        this.newPassword = '';
+        this.confirmPassword = '';
+        Swal.fire('Listo', 'Contraseña actualizada.', 'success');
+      },
+      error: (err) => {
+        this.updatingPassword = false;
+        const message = err?.error ?? 'No se pudo actualizar la contraseña.';
+        Swal.fire('Error', message, 'error');
       }
     });
   }
