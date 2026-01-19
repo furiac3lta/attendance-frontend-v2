@@ -94,7 +94,7 @@ body {
   color: var(--text);
   transition: 0.35s ease;
   min-height: 100vh;
-  padding: 24px 10% 124px;
+  padding: 24px 24px 124px;
 }
 
 body.dark-mode {
@@ -125,10 +125,25 @@ body.dark-mode {
 }
 
 @media (max-width: 768px) {
+  body {
+    padding: 16px 16px 124px;
+  }
+
   .swal2-popup {
     width: calc(100vw - 36px) !important;
     max-width: calc(100vw - 36px) !important;
   }
+}
+
+/* =========================================
+   📐 PAGE WIDTH ALIGNMENT (DESKTOP)
+   ========================================= */
+.page-card,
+.attendance-container {
+  width: 100% !important;
+  max-width: 100% !important;
+  margin-left: 0 !important;
+  margin-right: 0 !important;
 }
 
 /* =========================================
