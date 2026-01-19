@@ -57,6 +57,23 @@
 
     <section class="section-card">
       <h3 class="section-title">Asistencias</h3>
+      <div class="attendance-cards" *ngIf="history.attendances?.length">
+        <article class="attendance-card" *ngFor="let a of history.attendances">
+          <div class="card-head">
+            <div>
+              <div class="card-title">{{ a.courseName }}</div>
+              <div class="card-subtitle">{{ a.takenAt | date:'dd/MM/yyyy' }}</div>
+            </div>
+            <span class="status-pill" [ngClass]="a.attended ? 'status-paid' : 'status-unpaid'">
+              {{ a.attended ? 'Presente' : 'Ausente' }}
+            </span>
+          </div>
+          <div class="card-row">
+            <span class="label">Observaciones</span>
+            <span class="value">{{ a.classObservations || '—' }}</span>
+          </div>
+        </article>
+      </div>
       <table mat-table [dataSource]="history.attendances || []" class="table-modern">
         <ng-container matColumnDef="date">
           <th mat-header-cell *matHeaderCellDef>Fecha</th>

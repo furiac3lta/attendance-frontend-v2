@@ -46,6 +46,51 @@
   border-color: #ffbac7;
 }
 
+.attendance-cards {
+  display: none;
+  gap: 12px;
+}
+
+.attendance-card {
+  border: 1px solid var(--border);
+  background: var(--card-bg);
+  padding: 14px;
+}
+
+.card-head {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  align-items: flex-start;
+  margin-bottom: 8px;
+}
+
+.card-title {
+  font-weight: 600;
+  color: var(--text-strong);
+}
+
+.card-subtitle {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+}
+
+.card-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+  align-items: center;
+}
+
+.card-row .label {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+}
+
+.card-row .value {
+  text-align: right;
+}
+
 @media (max-width: 768px) {
   .page-card {
     width: 95vw;
@@ -64,5 +109,13 @@
   .section-card,
   .table-modern {
     width: 100%;
+  }
+
+  .attendance-cards {
+    display: grid;
+  }
+
+  .table-modern {
+    display: none;
   }
 }
