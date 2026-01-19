@@ -134,7 +134,7 @@ export class AttendanceQrScanPage implements OnInit, AfterViewInit, OnDestroy {
   }
 
   private handleResult(text: string): void {
-    const match = text.match(/ATTENDANCE:CLASS:(\\d+):TOKEN:([A-Za-z0-9]+)/);
+    const match = text.match(/ATTENDANCE:CLASS:(\d+):TOKEN:([A-Za-z0-9]+)/);
     if (!match) {
       this.processing = false;
       Swal.fire('QR inválido', 'No se reconoció el QR de asistencia.', 'error');
