@@ -8,6 +8,7 @@
   </div>
 
   <p *ngIf="lastError" class="muted">{{ lastError }}</p>
+  <p *ngIf="lastScanText" class="muted">QR leído: {{ lastScanText }}</p>
 
   <div class="scan-actions">
     <button mat-stroked-button color="primary" (click)="startScan()" [disabled]="scanning">
