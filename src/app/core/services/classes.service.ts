@@ -61,4 +61,12 @@ export class ClassesService {
   createOrGetTodaySession(courseId: number): Observable<any> {
     return this.http.get<any>(`${this.apiUrl}/today/${courseId}`);
   }
+
+  deactivate(classId: number): Observable<string> {
+    return this.http.put(
+      `${this.apiUrl}/${classId}/deactivate`,
+      {},
+      { responseType: 'text' as const }
+    );
+  }
 }

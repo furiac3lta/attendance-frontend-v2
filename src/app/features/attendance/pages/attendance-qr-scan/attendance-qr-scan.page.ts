@@ -25,8 +25,6 @@ export class AttendanceQrScanPage implements OnInit, AfterViewInit, OnDestroy {
   processing = false;
   private errorShown = false;
   lastError = '';
-  lastScanText = '';
-  readonly debugVersion = 'qr-debug-v1';
 
   constructor(
     private attendanceSvc: AttendanceService,
@@ -57,7 +55,6 @@ export class AttendanceQrScanPage implements OnInit, AfterViewInit, OnDestroy {
     this.scanning = true;
     this.errorShown = false;
     this.lastError = '';
-    this.lastScanText = '';
 
     if (!navigator.mediaDevices?.getUserMedia) {
       this.scanning = false;
@@ -138,7 +135,6 @@ export class AttendanceQrScanPage implements OnInit, AfterViewInit, OnDestroy {
 
   private handleResult(text: string): void {
     const cleaned = text.trim();
-    this.lastScanText = cleaned;
     const parsed = this.parseQrText(cleaned);
     if (!parsed) {
       this.processing = false;

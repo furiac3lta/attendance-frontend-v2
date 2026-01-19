@@ -207,6 +207,37 @@ export class ClassDetailPage implements OnInit {
     });
   }
 
+  canDeleteClass(): boolean {
+    return this.role === 'SUPER_ADMIN';
+  }
+
+  deleteClass(c: ClassSessionDto): void {
+    if (!this.canDeleteClass()) return;
+    if (!c?.id) return;
+
+    Swal.fire({
+      title: '¿Eliminar clase?',
+      text: 'Esto realizará un borrado lógico de la clase.',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Eliminar',
+      cancelButtonText: 'Cancelar',
+      heightAuto: false
+    }).then(result => {
+      if (!result.isConfirmed) return;
+
+      this.classesSvc.deactivate(c.id).subscribe({
+        next: () => {
+          this.classes = this.classes.filter(item => item.id !== c.id);
+          Swal.fire('Clase eliminada', '', 'success');
+        },
+        error: () => {
+          Swal.fire('Error', 'No se pudo eliminar la clase.', 'error');
+        }
+      });
+    });
+  }
+
   goToReport(): void {
     if (!this.proPlan) {
       Swal.fire('Plan PRO', 'Esta función está disponible solo para plan PRO.', 'info');

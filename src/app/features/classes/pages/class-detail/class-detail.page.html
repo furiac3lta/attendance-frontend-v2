@@ -87,6 +87,14 @@
                 (click)="viewAttendance(c.id)">
           Ver
         </button>
+
+        <button
+          mat-stroked-button
+          color="warn"
+          *ngIf="canDeleteClass()"
+          (click)="deleteClass(c)">
+          Eliminar
+        </button>
       </div>
     </article>
   </div>
@@ -156,6 +164,14 @@
                 *ngIf="c.attendanceTaken"
                 (click)="viewAttendance(c.id)">
           Ver
+        </button>
+
+        <button
+          mat-stroked-button
+          color="warn"
+          *ngIf="canDeleteClass()"
+          (click)="deleteClass(c)">
+          Eliminar
         </button>
 
       </td>
