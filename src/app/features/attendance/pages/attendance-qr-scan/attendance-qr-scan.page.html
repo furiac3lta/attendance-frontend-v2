@@ -7,6 +7,8 @@
     <video #video autoplay muted playsinline></video>
   </div>
 
+  <p *ngIf="lastError" class="muted">{{ lastError }}</p>
+
   <div class="scan-actions">
     <button mat-stroked-button color="primary" (click)="startScan()" [disabled]="scanning">
       Iniciar

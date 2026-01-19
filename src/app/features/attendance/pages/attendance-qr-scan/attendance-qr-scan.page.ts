@@ -1,4 +1,4 @@
-import { Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, OnDestroy, OnInit, AfterViewInit, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { MatCardModule } from '@angular/material/card';
@@ -15,7 +15,7 @@ import { AuthService } from '../../../../core/services/auth.service';
   templateUrl: './attendance-qr-scan.page.html',
   styleUrls: ['./attendance-qr-scan.page.css']
 })
-export class AttendanceQrScanPage implements OnInit, OnDestroy {
+export class AttendanceQrScanPage implements OnInit, AfterViewInit, OnDestroy {
   @ViewChild('video', { static: true }) video?: ElementRef<HTMLVideoElement>;
 
   private reader = new BrowserQRCodeReader();
@@ -23,6 +23,7 @@ export class AttendanceQrScanPage implements OnInit, OnDestroy {
   scanning = false;
   processing = false;
   private errorShown = false;
+  lastError = '';
 
   constructor(
     private attendanceSvc: AttendanceService,
@@ -39,6 +40,10 @@ export class AttendanceQrScanPage implements OnInit, OnDestroy {
     }
   }
 
+  ngAfterViewInit(): void {
+    // Start scan only after user interaction to ensure camera permissions.
+  }
+
   ngOnDestroy(): void {
     this.stopScan();
   }
@@ -47,29 +52,23 @@ export class AttendanceQrScanPage implements OnInit, OnDestroy {
     if (!this.video || this.scanning) return;
     this.scanning = true;
     this.errorShown = false;
+    this.lastError = '';
 
     if (!navigator.mediaDevices?.getUserMedia) {
       this.scanning = false;
-      Swal.fire('Cámara no disponible', 'El navegador no soporta cámara.', 'error');
+      this.lastError = 'El navegador no soporta cámara.';
+      Swal.fire('Cámara no disponible', this.lastError, 'error');
       return;
     }
-
-    navigator.mediaDevices.getUserMedia({ video: { facingMode: 'environment' } })
-      .then((stream) => {
-        stream.getTracks().forEach((t) => t.stop());
-        this.startDecode();
-      })
-      .catch(() => {
-        this.scanning = false;
-        Swal.fire('Permiso de cámara', 'Debes permitir el acceso a la cámara.', 'error');
-      });
+    this.startDecode();
   }
 
   private startDecode(): void {
     const videoEl = this.video?.nativeElement;
     if (!videoEl) {
       this.scanning = false;
-      Swal.fire('Cámara no disponible', 'No se encontró el video para escanear.', 'error');
+      this.lastError = 'No se encontró el video para escanear.';
+      Swal.fire('Cámara no disponible', this.lastError, 'error');
       return;
     }
 
@@ -88,7 +87,8 @@ export class AttendanceQrScanPage implements OnInit, OnDestroy {
         if (err?.name && err.name !== 'NotFoundException' && !this.errorShown) {
           this.errorShown = true;
           this.stopScan();
-          Swal.fire('Cámara no disponible', 'Activa los permisos de cámara e intenta nuevamente.', 'error');
+          this.lastError = this.resolveCameraError(err.name);
+          Swal.fire('Cámara no disponible', this.lastError, 'error');
         }
       }
     );
@@ -100,7 +100,8 @@ export class AttendanceQrScanPage implements OnInit, OnDestroy {
         if (!this.errorShown) {
           this.errorShown = true;
           this.stopScan();
-          Swal.fire('Cámara no disponible', 'Activa los permisos de cámara e intenta nuevamente.', 'error');
+          this.lastError = 'Activa los permisos de cámara e intenta nuevamente.';
+          Swal.fire('Cámara no disponible', this.lastError, 'error');
         }
       });
     }
@@ -135,5 +136,18 @@ export class AttendanceQrScanPage implements OnInit, OnDestroy {
         Swal.fire('Error', 'No se pudo registrar la asistencia.', 'error');
       }
     });
+  }
+
+  private resolveCameraError(name?: string): string {
+    if (name === 'NotAllowedError') {
+      return 'Debes permitir el acceso a la cámara.';
+    }
+    if (name === 'NotFoundError') {
+      return 'No se encontró una cámara disponible.';
+    }
+    if (name === 'NotReadableError') {
+      return 'La cámara está siendo usada por otra app.';
+    }
+    return 'Activa los permisos de cámara e intenta nuevamente.';
   }
 }
