@@ -26,6 +26,7 @@ export class AttendanceQrScanPage implements OnInit, AfterViewInit, OnDestroy {
   private errorShown = false;
   lastError = '';
   lastScanText = '';
+  readonly debugVersion = 'qr-debug-v1';
 
   constructor(
     private attendanceSvc: AttendanceService,

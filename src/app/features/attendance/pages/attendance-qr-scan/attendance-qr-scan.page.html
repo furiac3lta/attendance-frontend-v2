@@ -7,8 +7,11 @@
     <video #video autoplay muted playsinline></video>
   </div>
 
-  <p *ngIf="lastError" class="muted">{{ lastError }}</p>
-  <p *ngIf="lastScanText" class="muted">QR leído: {{ lastScanText }}</p>
+  <div class="muted">
+    <div>Debug: {{ debugVersion }}</div>
+    <div *ngIf="lastError">Error: {{ lastError }}</div>
+    <div *ngIf="lastScanText">QR leído: {{ lastScanText }}</div>
+  </div>
 
   <div class="scan-actions">
     <button mat-stroked-button color="primary" (click)="startScan()" [disabled]="scanning">
