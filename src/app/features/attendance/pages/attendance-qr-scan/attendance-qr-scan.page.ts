@@ -134,7 +134,11 @@ export class AttendanceQrScanPage implements OnInit, AfterViewInit, OnDestroy {
   }
 
   private handleResult(text: string): void {
-    const match = text.match(/ATTENDANCE:CLASS:(\d+):TOKEN:([A-Za-z0-9]+)/);
+    const cleaned = text.trim();
+    const match =
+      cleaned.match(/ATTENDANCE:CLASS:(\d+):TOKEN:([A-Za-z0-9]+)/i) ||
+      cleaned.match(/CLASS:(\d+):TOKEN:([A-Za-z0-9]+)/i) ||
+      this.matchFromUrl(cleaned);
     if (!match) {
       this.processing = false;
       Swal.fire('QR inválido', 'No se reconoció el QR de asistencia.', 'error');
@@ -155,6 +159,20 @@ export class AttendanceQrScanPage implements OnInit, AfterViewInit, OnDestroy {
         Swal.fire('Error', 'No se pudo registrar la asistencia.', 'error');
       }
     });
+  }
+
+  private matchFromUrl(value: string): RegExpMatchArray | null {
+    try {
+      const parsed = new URL(value);
+      const classId = parsed.searchParams.get('classId');
+      const token = parsed.searchParams.get('token');
+      if (classId && token) {
+        return ['', classId, token] as RegExpMatchArray;
+      }
+    } catch {
+      // Not a URL.
+    }
+    return null;
   }
 
   private resolveCameraError(name?: string, message?: string): string {
