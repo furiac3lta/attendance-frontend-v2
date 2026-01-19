@@ -51,7 +51,18 @@
   gap: 12px;
 }
 
+.payment-cards {
+  display: none;
+  gap: 12px;
+}
+
 .attendance-card {
+  border: 1px solid var(--border);
+  background: var(--card-bg);
+  padding: 14px;
+}
+
+.payment-card {
   border: 1px solid var(--border);
   background: var(--card-bg);
   padding: 14px;
@@ -115,7 +126,12 @@
     display: grid;
   }
 
-  .table-modern {
+  .payment-cards {
+    display: grid;
+  }
+
+  .attendance-table,
+  .payment-table {
     display: none;
   }
 }

@@ -74,7 +74,7 @@
           </div>
         </article>
       </div>
-      <table mat-table [dataSource]="history.attendances || []" class="table-modern">
+      <table mat-table [dataSource]="history.attendances || []" class="table-modern attendance-table">
         <ng-container matColumnDef="date">
           <th mat-header-cell *matHeaderCellDef>Fecha</th>
           <td mat-cell *matCellDef="let a">{{ a.takenAt | date:'dd/MM/yyyy' }}</td>
@@ -100,7 +100,20 @@
 
     <section class="section-card">
       <h3 class="section-title">Pagos</h3>
-      <table mat-table [dataSource]="history.payments || []" class="table-modern">
+      <div class="payment-cards" *ngIf="history.payments?.length">
+        <article class="payment-card" *ngFor="let p of history.payments">
+          <div class="card-head">
+            <div>
+              <div class="card-title">{{ p.month }}/{{ p.year }}</div>
+              <div class="card-subtitle">{{ p.amount | currency:'$':'symbol':'1.0-0' }}</div>
+            </div>
+            <span class="status-pill" [ngClass]="p.status === 'PAID' ? 'status-paid' : 'status-unpaid'">
+              {{ p.status === 'PAID' ? 'Pagado' : 'Pendiente' }}
+            </span>
+          </div>
+        </article>
+      </div>
+      <table mat-table [dataSource]="history.payments || []" class="table-modern payment-table">
         <ng-container matColumnDef="month">
           <th mat-header-cell *matHeaderCellDef>Mes</th>
           <td mat-cell *matCellDef="let p">{{ p.month }}/{{ p.year }}</td>
