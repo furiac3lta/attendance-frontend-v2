@@ -20,6 +20,7 @@ export class AttendanceQrScanPage implements OnInit, AfterViewInit, OnDestroy {
 
   private reader = new BrowserQRCodeReader();
   private controls?: IScannerControls;
+  private activeStream?: MediaStream;
   scanning = false;
   processing = false;
   private errorShown = false;
@@ -73,42 +74,22 @@ export class AttendanceQrScanPage implements OnInit, AfterViewInit, OnDestroy {
       return;
     }
 
-    try {
-      const controls = await this.reader.decodeFromConstraints(
-        { video: { facingMode: { ideal: 'environment' } } },
-        videoEl,
-        (result: { getText: () => string } | undefined, _err: unknown, innerControls: IScannerControls | undefined) => {
-          if (innerControls) {
-            this.controls = innerControls;
-          }
-          if (result && !this.processing) {
-            this.processing = true;
-            this.handleResult(result.getText());
-          }
-          const err = _err as { name?: string } | null;
-          if (err?.name && err.name !== 'NotFoundException' && !this.errorShown) {
-            this.errorShown = true;
-            this.stopScan();
-            this.lastError = this.resolveCameraError(err.name);
-            Swal.fire('Cámara no disponible', this.lastError, 'error');
-          }
-        }
-      );
-      this.controls = controls;
+    const stream = await this.getCameraStream();
+    if (!stream) {
       return;
-    } catch (err) {
-      const errName = (err as { name?: string } | null)?.name;
-      if (errName !== 'NotFoundError' && errName !== 'OverconstrainedError') {
-        this.scanning = false;
-        this.lastError = this.resolveCameraError(errName);
-        Swal.fire('Cámara no disponible', this.lastError, 'error');
-        return;
-      }
+    }
+
+    this.activeStream = stream;
+    videoEl.srcObject = stream;
+    try {
+      await videoEl.play();
+    } catch {
+      // Ignore autoplay restrictions; scan continues once video plays.
     }
 
     try {
-      const controls = await this.reader.decodeFromConstraints(
-        { video: true },
+      const controls = await this.reader.decodeFromStream(
+        stream,
         videoEl,
         (result: { getText: () => string } | undefined, _err: unknown, innerControls: IScannerControls | undefined) => {
           if (innerControls) {
@@ -139,6 +120,10 @@ export class AttendanceQrScanPage implements OnInit, AfterViewInit, OnDestroy {
   stopScan(): void {
     this.controls?.stop();
     this.controls = undefined;
+    if (this.activeStream) {
+      this.activeStream.getTracks().forEach((t) => t.stop());
+      this.activeStream = undefined;
+    }
     this.scanning = false;
     this.processing = false;
     if (this.video?.nativeElement) {
@@ -188,5 +173,31 @@ export class AttendanceQrScanPage implements OnInit, AfterViewInit, OnDestroy {
       return 'No se pudo seleccionar la cámara trasera.';
     }
     return 'Activa los permisos de cámara e intenta nuevamente.';
+  }
+
+  private async getCameraStream(): Promise<MediaStream | null> {
+    try {
+      return await navigator.mediaDevices.getUserMedia({
+        video: { facingMode: { ideal: 'environment' } }
+      });
+    } catch (err) {
+      const errName = (err as { name?: string } | null)?.name;
+      if (errName && errName !== 'NotFoundError' && errName !== 'OverconstrainedError') {
+        this.scanning = false;
+        this.lastError = this.resolveCameraError(errName);
+        Swal.fire('Cámara no disponible', this.lastError, 'error');
+        return null;
+      }
+    }
+
+    try {
+      return await navigator.mediaDevices.getUserMedia({ video: true });
+    } catch (err) {
+      const errName = (err as { name?: string } | null)?.name;
+      this.scanning = false;
+      this.lastError = this.resolveCameraError(errName);
+      Swal.fire('Cámara no disponible', this.lastError, 'error');
+      return null;
+    }
   }
 }
