@@ -60,10 +60,10 @@ export class AttendanceQrScanPage implements OnInit, AfterViewInit, OnDestroy {
       Swal.fire('Cámara no disponible', this.lastError, 'error');
       return;
     }
-    this.startDecode();
+    void this.startDecode();
   }
 
-  private startDecode(): void {
+  private async startDecode(): Promise<void> {
     const videoEl = this.video?.nativeElement;
     if (!videoEl) {
       this.scanning = false;
@@ -72,38 +72,43 @@ export class AttendanceQrScanPage implements OnInit, AfterViewInit, OnDestroy {
       return;
     }
 
-    const start = this.reader.decodeFromVideoDevice(
-      undefined,
-      videoEl,
-      (result: { getText: () => string } | undefined, _err: unknown, controls: IScannerControls | undefined) => {
-        if (controls) {
-          this.controls = controls;
-        }
-        if (result && !this.processing) {
-          this.processing = true;
-          this.handleResult(result.getText());
-        }
-        const err = _err as { name?: string } | null;
-        if (err?.name && err.name !== 'NotFoundException' && !this.errorShown) {
-          this.errorShown = true;
-          this.stopScan();
-          this.lastError = this.resolveCameraError(err.name);
-          Swal.fire('Cámara no disponible', this.lastError, 'error');
-        }
+    try {
+      const devices = await BrowserQRCodeReader.listVideoInputDevices();
+      if (!devices.length) {
+        throw { name: 'NotFoundError' };
       }
-    );
-
-    if (start && typeof (start as Promise<IScannerControls>).then === 'function') {
-      (start as Promise<IScannerControls>).then((controls) => {
-        this.controls = controls;
-      }).catch(() => {
-        if (!this.errorShown) {
-          this.errorShown = true;
-          this.stopScan();
-          this.lastError = 'Activa los permisos de cámara e intenta nuevamente.';
-          Swal.fire('Cámara no disponible', this.lastError, 'error');
+      const preferred = devices.find((d) => /back|rear|environment/i.test(d.label)) ?? devices[0];
+      const controls = await this.reader.decodeFromVideoDevice(
+        preferred.deviceId,
+        videoEl,
+        (result: { getText: () => string } | undefined, _err: unknown, innerControls: IScannerControls | undefined) => {
+          if (innerControls) {
+            this.controls = innerControls;
+          }
+          if (result && !this.processing) {
+            this.processing = true;
+            this.handleResult(result.getText());
+          }
+          const err = _err as { name?: string } | null;
+          if (err?.name && err.name !== 'NotFoundException' && !this.errorShown) {
+            this.errorShown = true;
+            this.stopScan();
+            this.lastError = this.resolveCameraError(err.name);
+            Swal.fire('Cámara no disponible', this.lastError, 'error');
+          }
         }
-      });
+      );
+      this.controls = controls;
+      try {
+        await videoEl.play();
+      } catch {
+        // Ignore autoplay restrictions; scan still runs once the stream is active.
+      }
+    } catch (err) {
+      const errName = (err as { name?: string } | null)?.name;
+      this.scanning = false;
+      this.lastError = this.resolveCameraError(errName);
+      Swal.fire('Cámara no disponible', this.lastError, 'error');
     }
   }
 
@@ -147,6 +152,9 @@ export class AttendanceQrScanPage implements OnInit, AfterViewInit, OnDestroy {
     }
     if (name === 'NotReadableError') {
       return 'La cámara está siendo usada por otra app.';
+    }
+    if (name === 'NotSupportedError') {
+      return 'El navegador no soporta acceso a cámara.';
     }
     return 'Activa los permisos de cámara e intenta nuevamente.';
   }
