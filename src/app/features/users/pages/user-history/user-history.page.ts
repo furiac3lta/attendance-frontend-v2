@@ -72,8 +72,8 @@ export class UserHistoryPage implements OnInit {
 
     if (!param) {
       this.title = 'Mi panel';
-      this.isOwnPanel = true;
     }
+    this.isOwnPanel = this.userId === currentUser?.id;
 
     if (this.proPlan) {
       this.loadHistory();

@@ -9,6 +9,27 @@
     </button>
   </div>
 
+  <section class="section-card" *ngIf="isOwnPanel">
+    <h3 class="section-title">Cambiar contraseña</h3>
+    <form class="password-form" (ngSubmit)="updateOwnPassword()">
+      <mat-form-field appearance="outline">
+        <mat-label>Contraseña actual</mat-label>
+        <input matInput type="password" [(ngModel)]="currentPassword" name="currentPassword">
+      </mat-form-field>
+      <mat-form-field appearance="outline">
+        <mat-label>Nueva contraseña</mat-label>
+        <input matInput type="password" [(ngModel)]="newPassword" name="newPassword">
+      </mat-form-field>
+      <mat-form-field appearance="outline">
+        <mat-label>Confirmar nueva contraseña</mat-label>
+        <input matInput type="password" [(ngModel)]="confirmPassword" name="confirmPassword">
+      </mat-form-field>
+      <button mat-raised-button color="primary" type="submit" [disabled]="updatingPassword">
+        {{ updatingPassword ? 'Guardando...' : 'Actualizar contraseña' }}
+      </button>
+    </form>
+  </section>
+
   <div *ngIf="loading" class="muted">Cargando historial...</div>
 
   <div *ngIf="!loading && !proPlan" class="muted">
@@ -32,27 +53,6 @@
           <mat-chip *ngIf="!history.courses?.length">Sin cursos</mat-chip>
         </mat-chip-set>
       </article>
-    </section>
-
-    <section class="section-card" *ngIf="isOwnPanel">
-      <h3 class="section-title">Cambiar contraseña</h3>
-      <form class="password-form" (ngSubmit)="updateOwnPassword()">
-        <mat-form-field appearance="outline">
-          <mat-label>Contraseña actual</mat-label>
-          <input matInput type="password" [(ngModel)]="currentPassword" name="currentPassword">
-        </mat-form-field>
-        <mat-form-field appearance="outline">
-          <mat-label>Nueva contraseña</mat-label>
-          <input matInput type="password" [(ngModel)]="newPassword" name="newPassword">
-        </mat-form-field>
-        <mat-form-field appearance="outline">
-          <mat-label>Confirmar nueva contraseña</mat-label>
-          <input matInput type="password" [(ngModel)]="confirmPassword" name="confirmPassword">
-        </mat-form-field>
-        <button mat-raised-button color="primary" type="submit" [disabled]="updatingPassword">
-          {{ updatingPassword ? 'Guardando...' : 'Actualizar contraseña' }}
-        </button>
-      </form>
     </section>
 
     <section class="section-card">

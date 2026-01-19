@@ -45,6 +45,7 @@ export class NavbarComponent implements OnInit, OnDestroy {
   userRole: string | null = null;
   organizationName: string | null = null;
   proPlan = false;
+  userId: number | null = null;
 
   private subRole?: Subscription;
   private subLogin?: Subscription;
@@ -136,6 +137,7 @@ export class NavbarComponent implements OnInit, OnDestroy {
       this.userName = user.fullName?.split(' ')[0] ?? 'Usuario';
       this.organizationName = user.organization?.name ?? null;
       this.proPlan = !!user.organizationProPlan;
+      this.userId = user.id ?? null;
       return;
     }
 

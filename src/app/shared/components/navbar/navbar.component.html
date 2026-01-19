@@ -55,6 +55,17 @@
     <button
       mat-button
       class="nav-link"
+      *ngIf="isInstructor && userId"
+      [routerLink]="['/users', userId]"
+      routerLinkActive="active"
+      (click)="menuOpen = false">
+      <mat-icon>person</mat-icon>
+      Mi perfil
+    </button>
+
+    <button
+      mat-button
+      class="nav-link"
       *ngIf="canSee('organizations')"
       routerLink="/organizations"
       routerLinkActive="active"
