@@ -94,6 +94,39 @@ export class AttendanceQrScanPage implements OnInit, AfterViewInit, OnDestroy {
         }
       );
       this.controls = controls;
+      return;
+    } catch (err) {
+      const errName = (err as { name?: string } | null)?.name;
+      if (errName !== 'NotFoundError' && errName !== 'OverconstrainedError') {
+        this.scanning = false;
+        this.lastError = this.resolveCameraError(errName);
+        Swal.fire('Cámara no disponible', this.lastError, 'error');
+        return;
+      }
+    }
+
+    try {
+      const controls = await this.reader.decodeFromConstraints(
+        { video: true },
+        videoEl,
+        (result: { getText: () => string } | undefined, _err: unknown, innerControls: IScannerControls | undefined) => {
+          if (innerControls) {
+            this.controls = innerControls;
+          }
+          if (result && !this.processing) {
+            this.processing = true;
+            this.handleResult(result.getText());
+          }
+          const err = _err as { name?: string } | null;
+          if (err?.name && err.name !== 'NotFoundException' && !this.errorShown) {
+            this.errorShown = true;
+            this.stopScan();
+            this.lastError = this.resolveCameraError(err.name);
+            Swal.fire('Cámara no disponible', this.lastError, 'error');
+          }
+        }
+      );
+      this.controls = controls;
     } catch (err) {
       const errName = (err as { name?: string } | null)?.name;
       this.scanning = false;
@@ -145,6 +178,9 @@ export class AttendanceQrScanPage implements OnInit, AfterViewInit, OnDestroy {
     }
     if (name === 'NotSupportedError') {
       return 'El navegador no soporta acceso a cámara.';
+    }
+    if (name === 'OverconstrainedError') {
+      return 'No se pudo seleccionar la cámara trasera.';
     }
     return 'Activa los permisos de cámara e intenta nuevamente.';
   }
