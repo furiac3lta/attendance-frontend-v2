@@ -185,6 +185,7 @@ export class AttendanceQrScanPage implements OnInit, AfterViewInit, OnDestroy {
       if (errName && errName !== 'NotFoundError' && errName !== 'OverconstrainedError') {
         this.scanning = false;
         this.lastError = this.resolveCameraError(errName);
+        console.error('Camera error (preferred):', err);
         Swal.fire('Cámara no disponible', this.lastError, 'error');
         return null;
       }
@@ -196,6 +197,7 @@ export class AttendanceQrScanPage implements OnInit, AfterViewInit, OnDestroy {
       const errName = (err as { name?: string } | null)?.name;
       this.scanning = false;
       this.lastError = this.resolveCameraError(errName);
+      console.error('Camera error (fallback):', err);
       Swal.fire('Cámara no disponible', this.lastError, 'error');
       return null;
     }
