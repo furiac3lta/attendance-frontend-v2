@@ -135,19 +135,15 @@ export class AttendanceQrScanPage implements OnInit, AfterViewInit, OnDestroy {
 
   private handleResult(text: string): void {
     const cleaned = text.trim();
-    const match =
-      cleaned.match(/ATTENDANCE:CLASS:(\d+):TOKEN:([A-Za-z0-9]+)/i) ||
-      cleaned.match(/CLASS:(\d+):TOKEN:([A-Za-z0-9]+)/i) ||
-      cleaned.match(/CLASS\D*(\d+).*TOKEN\D*([A-Za-z0-9]+)/i) ||
-      this.matchFromUrl(cleaned);
-    if (!match) {
+    const parsed = this.parseQrText(cleaned);
+    if (!parsed) {
       this.processing = false;
-      Swal.fire('QR inválido', 'No se reconoció el QR de asistencia.', 'error');
+      const preview = cleaned.length > 140 ? `${cleaned.slice(0, 140)}…` : cleaned;
+      Swal.fire('QR inválido', `No se reconoció el QR de asistencia.\n${preview}`, 'error');
       return;
     }
 
-    const classId = Number(match[1]);
-    const token = match[2];
+    const { classId, token } = parsed;
 
     this.attendanceSvc.registerAttendanceViaQr(classId, token).subscribe({
       next: () => {
@@ -174,6 +170,41 @@ export class AttendanceQrScanPage implements OnInit, AfterViewInit, OnDestroy {
       // Not a URL.
     }
     return null;
+  }
+
+  private parseQrText(value: string): { classId: number; token: string } | null {
+    const fromUrl = this.matchFromUrl(value);
+    if (fromUrl) {
+      const classId = Number(fromUrl[1]);
+      const token = fromUrl[2];
+      if (!Number.isNaN(classId) && token) {
+        return { classId, token };
+      }
+    }
+
+    const compact = value.replace(/\s+/g, '');
+    const lower = compact.toLowerCase();
+    const classIdx = lower.indexOf('class');
+    const tokenIdx = lower.indexOf('token');
+    if (classIdx === -1 || tokenIdx === -1) {
+      return null;
+    }
+
+    const classPart = compact.slice(classIdx + 5, tokenIdx);
+    const tokenPart = compact.slice(tokenIdx + 5);
+    const classMatch = classPart.match(/(\d+)/);
+    const tokenMatch = tokenPart.match(/([A-Za-z0-9]+)/);
+    if (!classMatch || !tokenMatch) {
+      return null;
+    }
+
+    const classId = Number(classMatch[1]);
+    const token = tokenMatch[1];
+    if (Number.isNaN(classId) || !token) {
+      return null;
+    }
+
+    return { classId, token };
   }
 
   private resolveCameraError(name?: string, message?: string): string {
