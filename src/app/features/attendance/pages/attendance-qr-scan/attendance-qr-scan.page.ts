@@ -156,23 +156,28 @@ export class AttendanceQrScanPage implements OnInit, AfterViewInit, OnDestroy {
     });
   }
 
-  private resolveCameraError(name?: string): string {
+  private resolveCameraError(name?: string, message?: string): string {
     if (name === 'NotAllowedError') {
-      return 'Debes permitir el acceso a la cámara.';
+      return this.buildCameraError('Debes permitir el acceso a la cámara.', name, message);
     }
     if (name === 'NotFoundError') {
-      return 'No se encontró una cámara disponible.';
+      return this.buildCameraError('No se encontró una cámara disponible.', name, message);
     }
     if (name === 'NotReadableError') {
-      return 'La cámara está siendo usada por otra app.';
+      return this.buildCameraError('La cámara está siendo usada por otra app.', name, message);
     }
     if (name === 'NotSupportedError') {
-      return 'El navegador no soporta acceso a cámara.';
+      return this.buildCameraError('El navegador no soporta acceso a cámara.', name, message);
     }
     if (name === 'OverconstrainedError') {
-      return 'No se pudo seleccionar la cámara trasera.';
+      return this.buildCameraError('No se pudo seleccionar la cámara trasera.', name, message);
     }
-    return 'Activa los permisos de cámara e intenta nuevamente.';
+    return this.buildCameraError('Activa los permisos de cámara e intenta nuevamente.', name, message);
+  }
+
+  private buildCameraError(base: string, name?: string, message?: string): string {
+    const details = [name, message].filter(Boolean).join(' - ');
+    return details ? `${base} (${details})` : base;
   }
 
   private async getCameraStream(): Promise<MediaStream | null> {
@@ -181,10 +186,11 @@ export class AttendanceQrScanPage implements OnInit, AfterViewInit, OnDestroy {
         video: { facingMode: { ideal: 'environment' } }
       });
     } catch (err) {
-      const errName = (err as { name?: string } | null)?.name;
+      const errName = (err as { name?: string; message?: string } | null)?.name;
+      const errMessage = (err as { message?: string } | null)?.message;
       if (errName && errName !== 'NotFoundError' && errName !== 'OverconstrainedError') {
         this.scanning = false;
-        this.lastError = this.resolveCameraError(errName);
+        this.lastError = this.resolveCameraError(errName, errMessage);
         console.error('Camera error (preferred):', err);
         Swal.fire('Cámara no disponible', this.lastError, 'error');
         return null;
@@ -194,9 +200,10 @@ export class AttendanceQrScanPage implements OnInit, AfterViewInit, OnDestroy {
     try {
       return await navigator.mediaDevices.getUserMedia({ video: true });
     } catch (err) {
-      const errName = (err as { name?: string } | null)?.name;
+      const errName = (err as { name?: string; message?: string } | null)?.name;
+      const errMessage = (err as { message?: string } | null)?.message;
       this.scanning = false;
-      this.lastError = this.resolveCameraError(errName);
+      this.lastError = this.resolveCameraError(errName, errMessage);
       console.error('Camera error (fallback):', err);
       Swal.fire('Cámara no disponible', this.lastError, 'error');
       return null;
