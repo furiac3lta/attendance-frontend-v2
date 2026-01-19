@@ -155,9 +155,10 @@ export class AttendanceQrScanPage implements OnInit, AfterViewInit, OnDestroy {
         Swal.fire('Asistencia registrada', 'Tu asistencia fue marcada con QR.', 'success')
           .then(() => this.router.navigate(['/dashboard/student']));
       },
-      error: () => {
+      error: (err) => {
         this.processing = false;
-        Swal.fire('Error', 'No se pudo registrar la asistencia.', 'error');
+        const message = err?.error?.message || err?.error || 'No se pudo registrar la asistencia.';
+        Swal.fire('Error', message, 'error');
       }
     });
   }
