@@ -50,6 +50,7 @@ export class AttendanceQrScanPage implements OnInit, AfterViewInit, OnDestroy {
 
   startScan(): void {
     if (!this.video || this.scanning) return;
+    this.stopScan();
     this.scanning = true;
     this.errorShown = false;
     this.lastError = '';
@@ -140,6 +141,10 @@ export class AttendanceQrScanPage implements OnInit, AfterViewInit, OnDestroy {
     this.controls = undefined;
     this.scanning = false;
     this.processing = false;
+    if (this.video?.nativeElement) {
+      BrowserQRCodeReader.cleanVideoSource(this.video.nativeElement);
+    }
+    BrowserQRCodeReader.releaseAllStreams();
   }
 
   private handleResult(text: string): void {
