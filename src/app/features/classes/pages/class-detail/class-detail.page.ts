@@ -17,6 +17,7 @@ import { MatTableModule } from '@angular/material/table';
 import { MatIconModule } from '@angular/material/icon';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
+import { MatSlideToggleChange, MatSlideToggleModule } from '@angular/material/slide-toggle';
 
 @Component({
   selector: 'app-class-detail',
@@ -30,7 +31,8 @@ import { MatInputModule } from '@angular/material/input';
     MatTableModule,
     MatIconModule,
     MatFormFieldModule,
-    MatInputModule
+    MatInputModule,
+    MatSlideToggleModule
   ],
   providers: [DatePipe],
   templateUrl: './class-detail.page.html',
@@ -44,6 +46,7 @@ export class ClassDetailPage implements OnInit {
   newClassObservations = '';
   role = '';
   proPlan = false;
+  showInactive = false;
 
   classes: (ClassSessionDto & {
     attendanceTaken?: boolean;
@@ -87,12 +90,16 @@ export class ClassDetailPage implements OnInit {
   }
 
   loadClasses(): void {
-    this.classesSvc.getByCourseId(this.courseId).subscribe({
+    this.classesSvc.getByCourseId(this.courseId, !this.showInactive).subscribe({
       next: classes => {
         this.classes = classes ?? [];
 
         this.classes.forEach(c => {
           // 🔥 USAR EL MÉTODO CORRECTO
+          if (c.active === false) {
+            c.attendanceTaken = false;
+            return;
+          }
           this.attendanceSvc.getByClassId(c.id).subscribe({
             next: (records: any[]) => {
               if (records.length > 0) {
@@ -110,6 +117,10 @@ export class ClassDetailPage implements OnInit {
         });
       }
     });
+  }
+
+  toggleInactiveView(): void {
+    this.loadClasses();
   }
 
   goToAttendance(classId: number): void {
@@ -211,9 +222,29 @@ export class ClassDetailPage implements OnInit {
     return this.role === 'SUPER_ADMIN';
   }
 
-  deleteClass(c: ClassSessionDto): void {
-    if (!this.canDeleteClass()) return;
-    if (!c?.id) return;
+  toggleClassActive(c: ClassSessionDto, toggle: MatSlideToggleChange): void {
+    if (!this.canDeleteClass() || !c?.id) {
+      toggle.source.checked = c.active !== false;
+      return;
+    }
+
+    const nextActive = toggle.checked;
+
+    if (nextActive) {
+      this.classesSvc.activate(c.id).subscribe({
+        next: () => {
+          c.active = true;
+          if (this.showInactive) {
+            this.classes = this.classes.filter(item => item.id !== c.id);
+          }
+        },
+        error: () => {
+          toggle.source.checked = c.active !== false;
+          Swal.fire('Error', 'No se pudo activar la clase.', 'error');
+        }
+      });
+      return;
+    }
 
     Swal.fire({
       title: '¿Eliminar clase?',
@@ -224,14 +255,21 @@ export class ClassDetailPage implements OnInit {
       cancelButtonText: 'Cancelar',
       heightAuto: false
     }).then(result => {
-      if (!result.isConfirmed) return;
+      if (!result.isConfirmed) {
+        toggle.source.checked = c.active !== false;
+        return;
+      }
 
       this.classesSvc.deactivate(c.id).subscribe({
         next: () => {
-          this.classes = this.classes.filter(item => item.id !== c.id);
+          c.active = false;
+          if (!this.showInactive) {
+            this.classes = this.classes.filter(item => item.id !== c.id);
+          }
           Swal.fire('Clase eliminada', '', 'success');
         },
         error: () => {
+          toggle.source.checked = c.active !== false;
           Swal.fire('Error', 'No se pudo eliminar la clase.', 'error');
         }
       });

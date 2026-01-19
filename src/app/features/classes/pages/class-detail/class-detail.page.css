@@ -35,6 +35,11 @@
   margin: 12px 0 20px;
 }
 
+.inactive-toggle {
+  display: inline-flex;
+  margin-bottom: 12px;
+}
+
 /* ============================= */
 /*   TABLA                       */
 /* ============================= */
@@ -164,6 +169,11 @@ tr.mat-row:hover {
 
 .status-pending {
   color: var(--text-muted);
+}
+
+.status-inactive {
+  color: var(--danger);
+  border-color: var(--danger);
 }
 
 .class-actions {

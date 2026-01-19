@@ -16,6 +16,7 @@ export interface ClassSessionDto {
   attendanceTaken?: boolean;
   courseId: number;
   observations?: string | null;
+  active?: boolean;
 }
 
 @Injectable({ providedIn: 'root' })
@@ -30,8 +31,10 @@ export class ClassesService {
   }
 
   /** ✅ Clases por curso */
-  getByCourseId(courseId: number): Observable<ClassSessionDto[]> {
-    return this.http.get<ClassSessionDto[]>(`${this.apiUrl}/course/${courseId}`);
+  getByCourseId(courseId: number, active: boolean = true): Observable<ClassSessionDto[]> {
+    return this.http.get<ClassSessionDto[]>(`${this.apiUrl}/course/${courseId}`, {
+      params: { active }
+    });
   }
 
   /** ✅ Obtener clase por ID */
@@ -65,6 +68,14 @@ export class ClassesService {
   deactivate(classId: number): Observable<string> {
     return this.http.put(
       `${this.apiUrl}/${classId}/deactivate`,
+      {},
+      { responseType: 'text' as const }
+    );
+  }
+
+  activate(classId: number): Observable<string> {
+    return this.http.put(
+      `${this.apiUrl}/${classId}/activate`,
       {},
       { responseType: 'text' as const }
     );

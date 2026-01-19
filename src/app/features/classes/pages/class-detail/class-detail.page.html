@@ -25,6 +25,14 @@
     Ver reporte mensual
   </button>
 
+  <mat-slide-toggle
+    class="inactive-toggle"
+    [(ngModel)]="showInactive"
+    (change)="toggleInactiveView()"
+    *ngIf="canDeleteClass()">
+    Ver inactivas
+  </mat-slide-toggle>
+
   <mat-divider></mat-divider>
 
   <div class="class-cards" *ngIf="classes.length > 0">
@@ -37,8 +45,10 @@
             Observaciones: {{ c.observations }}
           </div>
         </div>
-        <span class="status-pill" [ngClass]="c.attendanceTaken ? 'status-ok' : 'status-pending'">
-          {{ c.attendanceTaken ? 'Tomada' : 'No tomada' }}
+        <span
+          class="status-pill"
+          [ngClass]="c.active === false ? 'status-inactive' : (c.attendanceTaken ? 'status-ok' : 'status-pending')">
+          {{ c.active === false ? 'Inactiva' : (c.attendanceTaken ? 'Tomada' : 'No tomada') }}
         </span>
       </div>
 
@@ -63,7 +73,7 @@
 
       <div class="class-actions">
         <button mat-raised-button color="primary"
-                *ngIf="!c.attendanceTaken"
+                *ngIf="c.active !== false && !c.attendanceTaken"
                 (click)="goToAttendance(c.id)">
           Tomar
         </button>
@@ -71,30 +81,31 @@
         <button
           mat-stroked-button
           color="primary"
-          *ngIf="canUseQr(c)"
+          *ngIf="c.active !== false && canUseQr(c)"
           (click)="generateQr(c)">
           Generar QR
         </button>
 
         <button mat-raised-button color="warn"
-                *ngIf="c.attendanceTaken"
+                *ngIf="c.active !== false && c.attendanceTaken"
                 (click)="goToAttendance(c.id)">
           Editar
         </button>
 
         <button mat-raised-button color="accent"
-                *ngIf="c.attendanceTaken"
+                *ngIf="c.active !== false && c.attendanceTaken"
                 (click)="viewAttendance(c.id)">
           Ver
         </button>
 
-        <button
-          mat-stroked-button
+        <mat-slide-toggle
+          class="delete-toggle"
           color="warn"
-          *ngIf="canDeleteClass()"
-          (click)="deleteClass(c)">
-          Eliminar
-        </button>
+          [checked]="c.active !== false"
+          [disabled]="!canDeleteClass()"
+          (change)="toggleClassActive(c, $event)">
+          Activa
+        </mat-slide-toggle>
       </div>
     </article>
   </div>
@@ -113,6 +124,14 @@
       <th mat-header-cell *matHeaderCellDef>Fecha</th>
       <td mat-cell *matCellDef="let c">
         {{ c.date | date:'dd/MM/yyyy' }}
+      </td>
+    </ng-container>
+
+    <!-- Observaciones -->
+    <ng-container matColumnDef="observations">
+      <th mat-header-cell *matHeaderCellDef>Observaciones</th>
+      <td mat-cell *matCellDef="let c">
+        {{ c.observations || '—' }}
       </td>
     </ng-container>
 
@@ -149,36 +168,37 @@
       <td mat-cell *matCellDef="let c">
 
         <button mat-raised-button color="primary"
-                *ngIf="!c.attendanceTaken"
+                *ngIf="c.active !== false && !c.attendanceTaken"
                 (click)="goToAttendance(c.id)">
           Tomar
         </button>
 
         <button mat-raised-button color="warn"
-                *ngIf="c.attendanceTaken"
+                *ngIf="c.active !== false && c.attendanceTaken"
                 (click)="goToAttendance(c.id)">
           Editar
         </button>
 
         <button mat-raised-button color="accent"
-                *ngIf="c.attendanceTaken"
+                *ngIf="c.active !== false && c.attendanceTaken"
                 (click)="viewAttendance(c.id)">
           Ver
         </button>
 
-        <button
-          mat-stroked-button
+        <mat-slide-toggle
+          class="delete-toggle"
           color="warn"
-          *ngIf="canDeleteClass()"
-          (click)="deleteClass(c)">
-          Eliminar
-        </button>
+          [checked]="c.active !== false"
+          [disabled]="!canDeleteClass()"
+          (change)="toggleClassActive(c, $event)">
+          Activa
+        </mat-slide-toggle>
 
       </td>
     </ng-container>
 
-    <tr mat-header-row *matHeaderRowDef="['name','date','takenBy','action']"></tr>
-    <tr mat-row *matRowDef="let row; columns: ['name','date','takenBy','action']"></tr>
+    <tr mat-header-row *matHeaderRowDef="['name','date','observations','takenBy','action']"></tr>
+    <tr mat-row *matRowDef="let row; columns: ['name','date','observations','takenBy','action']"></tr>
 
     </table>
   </div>
