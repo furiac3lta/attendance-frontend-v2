@@ -138,6 +138,7 @@ export class AttendanceQrScanPage implements OnInit, AfterViewInit, OnDestroy {
     const match =
       cleaned.match(/ATTENDANCE:CLASS:(\d+):TOKEN:([A-Za-z0-9]+)/i) ||
       cleaned.match(/CLASS:(\d+):TOKEN:([A-Za-z0-9]+)/i) ||
+      cleaned.match(/CLASS\D*(\d+).*TOKEN\D*([A-Za-z0-9]+)/i) ||
       this.matchFromUrl(cleaned);
     if (!match) {
       this.processing = false;
