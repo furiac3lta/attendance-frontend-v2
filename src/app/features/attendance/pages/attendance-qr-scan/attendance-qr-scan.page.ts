@@ -108,6 +108,7 @@ export class AttendanceQrScanPage implements OnInit, AfterViewInit, OnDestroy {
           }
         }
       );
+      
       this.controls = controls;
     } catch (err) {
       const errName = (err as { name?: string } | null)?.name;
