@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { OrganizationsService } from '../../../../core/services/organizations.service';
 import { UsersService } from '../../../../core/services/users.service';
+import { AuthService } from '../../../../core/services/auth.service';
 import { RouterModule } from '@angular/router';
 import { MatTableModule } from '@angular/material/table';
 import { MatSelectModule } from '@angular/material/select';
@@ -33,14 +34,17 @@ export class OrganizationListPage {
 
   private orgService = inject(OrganizationsService);
   private usersService = inject(UsersService);
+  private auth = inject(AuthService);
 
   organizations: any[] = [];
   admins: any[] = [];
   selectedAdmin: Record<number, number | null> = {};
-  userRole: string | null = sessionStorage.getItem('role');
+  userRole: string | null = null;
   showInactive = false;
 
   ngOnInit() {
+    this.userRole = this.normalizeRole(this.auth.getRole());
+    this.updateDisplayedColumns();
     this.loadOrganizations();
     this.loadAdmins();
   }
@@ -177,10 +181,19 @@ export class OrganizationListPage {
   }
 
   // 📌 Columnas de la tabla
-  displayedColumns =
-    this.userRole === 'SUPER_ADMIN'
-      ? ['name', 'type', 'phone', 'address', 'plan', 'admin', 'selectAdmin', 'status', 'actions']
-      : ['name', 'type', 'phone', 'address', 'admin', 'status'];
+  displayedColumns: string[] = [];
+
+  private updateDisplayedColumns(): void {
+    this.displayedColumns =
+      this.userRole === 'SUPER_ADMIN'
+        ? ['name', 'type', 'phone', 'address', 'plan', 'admin', 'selectAdmin', 'status', 'actions']
+        : ['name', 'type', 'phone', 'address', 'admin', 'status'];
+  }
+
+  private normalizeRole(role?: string | null): string | null {
+    if (!role) return null;
+    return role.replace(/^ROLE_/, '').toUpperCase();
+  }
 
 
     }

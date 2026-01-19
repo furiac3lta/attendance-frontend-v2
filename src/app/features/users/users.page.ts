@@ -63,7 +63,7 @@ export class UsersPage implements OnInit {
   totalPages = 0;
 
   loading = false;
-  currentRole = sessionStorage.getItem('role');
+  currentRole: string | null = null;
   editingUserId: number | null = null;
   proPlan = false;
   tableColumns: string[] = [];
@@ -101,6 +101,7 @@ export class UsersPage implements OnInit {
   // INIT
   // =========================
   ngOnInit(): void {
+    this.currentRole = this.normalizeRole(this.auth.getRole());
     this.proPlan = this.auth.isProPlan();
     this.tableColumns = this.proPlan
       ? ['fullName','email','role','organization','courses','paid','status','actions']
@@ -112,6 +113,11 @@ export class UsersPage implements OnInit {
 
   isSuperAdmin(): boolean {
     return this.currentRole === 'SUPER_ADMIN';
+  }
+
+  private normalizeRole(role?: string | null): string | null {
+    if (!role) return null;
+    return role.replace(/^ROLE_/, '').toUpperCase();
   }
 
   // =========================

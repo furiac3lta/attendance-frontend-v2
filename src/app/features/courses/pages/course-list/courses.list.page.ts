@@ -54,6 +54,7 @@ availableInstructors: Record<number, InstructorDTO[]> = {};
   loading = true;
   message = '';
   proPlan = false;
+  role = '';
 
   constructor(
     private router: Router,
@@ -65,6 +66,7 @@ availableInstructors: Record<number, InstructorDTO[]> = {};
   // 🔹 INIT
   ngOnInit(): void {
     this.proPlan = this.auth.isProPlan();
+    this.role = this.normalizeRole(this.auth.getRole());
     this.loadCourses();
 
     // 👉 SOLO ADMIN / SUPER_ADMIN
@@ -106,16 +108,12 @@ availableInstructors: Record<number, InstructorDTO[]> = {};
 
   // 🔹 Permisos
   canEdit(): boolean {
-    const role = sessionStorage.getItem('role');
-    if (!role) return false;
-    const normalized = role.replace('ROLE_', '').toUpperCase();
-    return normalized === 'SUPER_ADMIN' || normalized === 'ADMIN';
+    return this.role === 'SUPER_ADMIN' || this.role === 'ADMIN';
   }
 
 
   canTakeAttendance(): boolean {
-    const role = sessionStorage.getItem('role')?.replace('ROLE_', '') ?? '';
-    return ['SUPER_ADMIN', 'ADMIN', 'INSTRUCTOR'].includes(role.toUpperCase());
+    return ['SUPER_ADMIN', 'ADMIN', 'INSTRUCTOR'].includes(this.role);
   }
 
   // 🔹 Navegación
@@ -186,6 +184,11 @@ availableInstructors: Record<number, InstructorDTO[]> = {};
     }
   });
 }
+
+  private normalizeRole(role?: string | null): string {
+    if (!role) return '';
+    return role.replace('ROLE_', '').toUpperCase();
+  }
 
   
 }
