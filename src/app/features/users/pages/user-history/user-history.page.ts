@@ -34,7 +34,7 @@ export class UserHistoryPage implements OnInit {
   history: any | null = null;
   loading = false;
 
-  attendanceColumns = ['date', 'course', 'status'];
+  attendanceColumns = ['date', 'course', 'observations', 'status'];
   paymentColumns = ['month', 'amount', 'status'];
 
   constructor(
