@@ -100,7 +100,7 @@ export class AttendanceQrScanPage implements OnInit, AfterViewInit, OnDestroy {
             this.handleResult(result.getText());
           }
           const err = _err as { name?: string } | null;
-          if (err?.name && err.name !== 'NotFoundException' && !this.errorShown) {
+          if (err?.name && err.name !== 'NotFoundException' && this.isCameraError(err.name) && !this.errorShown) {
             this.errorShown = true;
             this.stopScan();
             this.lastError = this.resolveCameraError(err.name);
@@ -173,6 +173,17 @@ export class AttendanceQrScanPage implements OnInit, AfterViewInit, OnDestroy {
       return this.buildCameraError('No se pudo seleccionar la cámara trasera.', name, message);
     }
     return this.buildCameraError('Activa los permisos de cámara e intenta nuevamente.', name, message);
+  }
+
+  private isCameraError(name: string): boolean {
+    return [
+      'NotAllowedError',
+      'NotFoundError',
+      'NotReadableError',
+      'NotSupportedError',
+      'OverconstrainedError',
+      'SecurityError'
+    ].includes(name);
   }
 
   private buildCameraError(base: string, name?: string, message?: string): string {
