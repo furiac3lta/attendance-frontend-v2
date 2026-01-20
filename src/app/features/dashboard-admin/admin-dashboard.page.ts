@@ -370,20 +370,9 @@ export class AdminDashboardPage implements OnInit {
     printWindow.document.close();
 
     printWindow.focus();
-    const closeAndRefocus = () => {
-      try {
-        printWindow.close();
-      } finally {
-        window.focus();
-      }
-    };
-
-    printWindow.addEventListener('afterprint', closeAndRefocus);
 
     setTimeout(() => {
       printWindow.print();
-      // Fallback in case afterprint doesn't fire.
-      setTimeout(closeAndRefocus, 500);
     }, 300);
   }
 

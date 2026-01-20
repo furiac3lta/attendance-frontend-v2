@@ -6,17 +6,18 @@ import { Debtor } from '../../models/debtor.model';
 import { MatIconModule } from '@angular/material/icon';
 import { AuthService } from '../../../../core/services/auth.service';
 import Swal from 'sweetalert2';
-import { Router } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
+import { MatButtonModule } from '@angular/material/button';
 
 @Component({
   standalone: true,
-  imports: [CommonModule, MatTableModule, MatIconModule],
+  imports: [CommonModule, MatTableModule, MatIconModule, MatButtonModule, RouterLink],
   templateUrl: './debtor-list.page.html',
   styleUrl: './debtor-list.page.css'
 })
 export class DebtorListPage implements OnInit {
 
-  displayedColumns = ['fullName', 'courseName', 'status', 'actions'];
+  displayedColumns = ['fullName', 'courseName', 'status', 'history', 'actions'];
   dataSource: Debtor[] = [];
 
   constructor(

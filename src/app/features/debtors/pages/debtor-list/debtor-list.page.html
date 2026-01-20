@@ -1,7 +1,7 @@
 <div class="page">
 
-  <h1>Seguimiento de morosos</h1>
-  <p class="subtitle">Alumnos que no registran pago</p>
+  <h1>Clientes que adeudan</h1>
+  <p class="subtitle">Personas que no registran pago</p>
 
   <div class="debtors-cards" *ngIf="dataSource.length > 0">
     <article class="debtor-card" *ngFor="let d of dataSource">
@@ -13,6 +13,7 @@
         <mat-icon class="icon-close">report</mat-icon>
       </div>
       <div class="debtor-actions">
+        <button class="btn-link" [routerLink]="['/users', d.userId]">Ver historial</button>
         <button class="btn-link">Contactar</button>
       </div>
     </article>
@@ -37,6 +38,16 @@
       <th mat-header-cell *matHeaderCellDef> Estado </th>
       <td mat-cell *matCellDef>
        <mat-icon class="icon-close">report</mat-icon>
+      </td>
+    </ng-container>
+
+    <!-- Historial -->
+    <ng-container matColumnDef="history">
+      <th mat-header-cell *matHeaderCellDef> Historial </th>
+      <td mat-cell *matCellDef="let d">
+        <button mat-icon-button [routerLink]="['/users', d.userId]" aria-label="Ver historial">
+          <mat-icon>visibility</mat-icon>
+        </button>
       </td>
     </ng-container>
 
