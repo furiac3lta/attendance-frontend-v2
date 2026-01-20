@@ -33,11 +33,58 @@
   <div *ngIf="loading" class="muted">Cargando historial...</div>
 
   <div *ngIf="!loading && !proPlan" class="muted">
-    Función disponible solo en plan PRO.
+    Algunas secciones requieren plan PRO (pagos y asistencias completas).
   </div>
 
   <ng-container *ngIf="!loading && history">
     <section class="history-grid">
+      <article class="section-card">
+        <h3 class="section-title">Datos personales</h3>
+        <div class="personal-grid">
+          <div>
+            <div class="personal-label">Nombre</div>
+            <div class="personal-value">{{ history.fullName }}</div>
+          </div>
+          <div>
+            <div class="personal-label">Rol</div>
+            <div class="personal-value">{{ history.role }}</div>
+          </div>
+          <div>
+            <div class="personal-label">Email</div>
+            <div class="personal-value">{{ history.email }}</div>
+          </div>
+          <div *ngIf="!canEditPersonal">
+            <div class="personal-label">DNI</div>
+            <div class="personal-value">{{ history.dni || '—' }}</div>
+          </div>
+          <div *ngIf="!canEditPersonal">
+            <div class="personal-label">Teléfono</div>
+            <div class="personal-value">{{ history.phone || '—' }}</div>
+          </div>
+          <div *ngIf="!canEditPersonal">
+            <div class="personal-label">Domicilio</div>
+            <div class="personal-value">{{ history.address || '—' }}</div>
+          </div>
+        </div>
+        <form class="personal-form" *ngIf="canEditPersonal" (ngSubmit)="updatePersonalData()">
+          <mat-form-field appearance="outline">
+            <mat-label>DNI</mat-label>
+            <input matInput [(ngModel)]="personalDni" name="personalDni">
+          </mat-form-field>
+          <mat-form-field appearance="outline">
+            <mat-label>Teléfono</mat-label>
+            <input matInput [(ngModel)]="personalPhone" name="personalPhone">
+          </mat-form-field>
+          <mat-form-field appearance="outline">
+            <mat-label>Domicilio</mat-label>
+            <input matInput [(ngModel)]="personalAddress" name="personalAddress">
+          </mat-form-field>
+          <button mat-raised-button color="primary" type="submit" [disabled]="updatingPersonal">
+            {{ updatingPersonal ? 'Guardando...' : 'Guardar datos' }}
+          </button>
+        </form>
+      </article>
+
       <article class="section-card">
         <h3 class="section-title">Observaciones</h3>
         <p *ngIf="history.observations; else noObs">{{ history.observations }}</p>

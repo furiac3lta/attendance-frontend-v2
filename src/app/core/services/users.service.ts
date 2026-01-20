@@ -11,6 +11,9 @@ export interface User {
   role?: string;
   active?: boolean;
   observations?: string | null;
+  dni?: string | null;
+  phone?: string | null;
+  address?: string | null;
   organizationProPlan?: boolean;
   courses?: string[];
   organizationId?: number | null;
@@ -23,6 +26,9 @@ export interface CreateUserDto {
   password: string;
   role: string;
   organization?: { id: number };
+  dni?: string | null;
+  phone?: string | null;
+  address?: string | null;
 }
 
 export interface PageResponse<T> {

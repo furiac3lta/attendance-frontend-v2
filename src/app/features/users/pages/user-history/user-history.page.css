@@ -24,6 +24,31 @@
   justify-self: flex-start;
 }
 
+.personal-grid {
+  display: grid;
+  gap: 10px;
+  margin-bottom: 12px;
+}
+
+.personal-label {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+}
+
+.personal-value {
+  font-weight: 600;
+  color: var(--text-strong);
+}
+
+.personal-form {
+  display: grid;
+  gap: 12px;
+}
+
+.personal-form button {
+  justify-self: flex-start;
+}
+
 .status-pill {
   display: inline-flex;
   align-items: center;

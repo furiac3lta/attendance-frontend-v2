@@ -86,7 +86,10 @@ export class UsersPage implements OnInit {
     role: ['USER', Validators.required],
     organizationId: [null as number | null],
     courseIds: [[] as number[]],
-    observations: ['']
+    observations: [''],
+    dni: [''],
+    phone: [''],
+    address: ['']
   });
 
   // =========================
@@ -104,8 +107,8 @@ export class UsersPage implements OnInit {
     this.currentRole = this.normalizeRole(this.auth.getRole());
     this.proPlan = this.auth.isProPlan();
     this.tableColumns = this.proPlan
-      ? ['fullName','email','role','organization','courses','paid','status','actions']
-      : ['fullName','email','role','organization','courses','status','actions'];
+      ? ['fullName','email','role','organization','courses','paid','status','history','actions']
+      : ['fullName','email','role','organization','courses','status','history','actions'];
     this.loadCourses();
     this.loadUsers();
     if (this.isSuperAdmin()) this.loadOrganizations();
@@ -191,6 +194,9 @@ editUser(u: User): void {
     organizationId: u.organizationId || null,
     courseIds: ids,
     observations: u.observations || '',
+    dni: u.dni || '',
+    phone: u.phone || '',
+    address: u.address || '',
     newPassword: ''
   });
 
@@ -394,7 +400,10 @@ saveUser(): void {
     email: dto.email || `${dto.username}@dojo.com`,
     role: dto.role,
     organizationId: dto.organizationId ?? null,
-    observations: this.proPlan ? (dto.observations || null) : null
+    observations: this.proPlan ? (dto.observations || null) : null,
+    dni: dto.dni || null,
+    phone: dto.phone || null,
+    address: dto.address || null
   };
 
   const courseIds: number[] = dto.courseIds || [];

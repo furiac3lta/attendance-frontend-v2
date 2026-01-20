@@ -37,14 +37,21 @@ export class UserHistoryPage implements OnInit {
   isUser = false;
   proPlan = false;
   isOwnPanel = false;
+  currentRole = '';
+  canEditPersonal = false;
 
   history: any | null = null;
   loading = false;
   updatingPassword = false;
+  updatingPersonal = false;
 
   currentPassword = '';
   newPassword = '';
   confirmPassword = '';
+
+  personalDni = '';
+  personalPhone = '';
+  personalAddress = '';
 
   attendanceColumns = ['date', 'course', 'observations', 'status'];
   paymentColumns = ['month', 'amount', 'status'];
@@ -61,8 +68,10 @@ export class UserHistoryPage implements OnInit {
     const fromRoute = param ? Number(param) : null;
     const currentUser = this.auth.getUser();
     const role = (this.auth.getRole() ?? '').replace(/^ROLE_/, '').toUpperCase();
+    this.currentRole = role;
     this.isUser = role === 'USER';
     this.proPlan = !!currentUser?.organizationProPlan;
+    this.canEditPersonal = ['SUPER_ADMIN', 'ADMIN'].includes(role);
 
     this.userId = fromRoute || currentUser?.id || null;
     if (!this.userId) {
@@ -75,9 +84,7 @@ export class UserHistoryPage implements OnInit {
     }
     this.isOwnPanel = this.userId === currentUser?.id;
 
-    if (this.proPlan) {
-      this.loadHistory();
-    }
+    this.loadHistory();
   }
 
   loadHistory(): void {
@@ -86,6 +93,9 @@ export class UserHistoryPage implements OnInit {
     this.usersSvc.getHistory(this.userId).subscribe({
       next: (res: any) => {
         this.history = res;
+        this.personalDni = res?.dni ?? '';
+        this.personalPhone = res?.phone ?? '';
+        this.personalAddress = res?.address ?? '';
         this.loading = false;
       },
       error: () => {
@@ -126,6 +136,36 @@ export class UserHistoryPage implements OnInit {
       error: (err) => {
         this.updatingPassword = false;
         const message = err?.error ?? 'No se pudo actualizar la contraseña.';
+        Swal.fire('Error', message, 'error');
+      }
+    });
+  }
+
+  updatePersonalData(): void {
+    if (!this.userId || !this.history || !this.canEditPersonal) return;
+    if (this.updatingPersonal) return;
+
+    this.updatingPersonal = true;
+
+    const payload = {
+      fullName: this.history.fullName,
+      email: this.history.email,
+      role: this.history.role,
+      observations: this.history.observations ?? null,
+      dni: this.personalDni || null,
+      phone: this.personalPhone || null,
+      address: this.personalAddress || null
+    };
+
+    this.usersSvc.update(this.userId, payload).subscribe({
+      next: () => {
+        this.updatingPersonal = false;
+        Swal.fire('Listo', 'Datos personales actualizados.', 'success');
+        this.loadHistory();
+      },
+      error: (err) => {
+        this.updatingPersonal = false;
+        const message = err?.error ?? 'No se pudieron guardar los datos.';
         Swal.fire('Error', message, 'error');
       }
     });
