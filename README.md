@@ -1,61 +1,95 @@
-# AttendanceWeb
+# Attendance App
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 20.3.6.
+Frontend web app for managing organizations, courses, classes, attendance, payments, and dashboards with role-based access.
 
-## Development server
+## Highlights
+- Multi-tenant organizations with plan gating (FREE/PRO).
+- Roles: SUPER_ADMIN, ADMIN, INSTRUCTOR, USER (Alumno).
+- Class sessions with QR attendance and manual attendance.
+- Dashboards and reports for admins (monthly PDF print).
+- Student panel with history, payments, and personal profile.
+- Soft-deactivation for users, courses, and classes.
 
-To start a local development server, run:
+## Roles & Access
+- SUPER_ADMIN: system-wide management (organizations, users, courses).
+- ADMIN: manages users/courses in their organization, dashboards/reports (PRO).
+- INSTRUCTOR: takes attendance, sees courses, can view user history.
+- USER: student panel, QR attendance (PRO).
 
-```bash
-ng serve
-```
+## Main Areas
+- Organizations: create, edit, activate/deactivate.
+- Users: create/edit, assign courses, personal data (dni/phone/address), history access.
+- Courses: create/edit, assign instructor, activate/deactivate.
+- Classes: create sessions, generate QR, take/view attendance, soft delete.
+- Attendance: register marks, view per class, monthly reports.
+- Payments: create payments and view status (PRO).
+- Dashboards: admin KPIs and monthly printable report (PRO).
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
+## Student Panel
+- Personal data (read-only for Instructor/User; editable by Admin/SuperAdmin).
+- Courses and attendance history (PRO for full history).
+- Payments history (PRO).
+- Change own password.
 
-## Code scaffolding
+## Debtors (PRO)
+- "Clientes que adeudan" view with quick access to user history.
 
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
+## Tech Stack
+- Angular (standalone components)
+- Angular Material
+- RxJS
+- SweetAlert2
 
-```bash
-ng generate component component-name
-```
+## Setup
+1. Install dependencies:
+   ```bash
+   npm install
+   ```
+2. Run locally:
+   ```bash
+   ng serve
+   ```
+   App runs on `http://localhost:4200/`.
 
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
-
-```bash
-ng generate --help
-```
-
-## Building
-
-To build the project run:
-
+## Build
 ```bash
 ng build
 ```
+Artifacts go to `dist/`.
 
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
-
-## Running unit tests
-
-To execute unit tests with the [Karma](https://karma-runner.github.io) test runner, use the following command:
-
+## Tests
 ```bash
 ng test
 ```
 
-## Running end-to-end tests
+## Environment
+API base URL is configured in:
+- `src/environments/environment.ts`
+- `src/environments/environment.prod.ts`
 
-For end-to-end (e2e) testing, run:
+## Backend Expectations
+The frontend expects these backend capabilities:
+- Auth: login/register and JWT.
+- Users: CRUD, history, change password, import users.
+- Courses: list, create/update, activate/deactivate, assign instructor.
+- Classes: list by course, create, details, QR, activate/deactivate.
+- Attendance: register, view by class, QR register, monthly reports.
+- Payments: create, list by course/student, payment status.
+- Dashboards: admin/system endpoints.
 
-```bash
-ng e2e
-```
+## Notes
+- QR attendance is limited to class day and PRO plan.
+- Certain sections are hidden for FREE plans.
+- User history shows personal data for all roles and full attendance/payment history only with PRO.
 
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
-
-## Additional Resources
-
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
-
-agregando
+## Paths (Quick Reference)
+- `/dashboard/admin`: Admin dashboard (PRO)
+- `/dashboard/student`: Student panel
+- `/users`: User management
+- `/users/:id`: User history/detail
+- `/courses`: Courses
+- `/attendance/class/:courseId`: Class sessions
+- `/attendance/take/:classId`: Take attendance
+- `/attendance/view/:classId`: View attendance
+- `/attendance/report/:courseId`: Monthly report
+- `/attendance/scan`: QR scan (USER)
