@@ -136,7 +136,7 @@ export class ClassDetailPage implements OnInit {
     this.classesSvc.createClass({
       name: 'Clase nueva',
       courseId: this.courseId,
-      date: new Date().toISOString().split('T')[0],
+      date: this.getLocalDateISO(),
       observations: this.newClassObservations?.trim() || null
     }).subscribe({
       next: (res: any) => {
@@ -169,7 +169,7 @@ export class ClassDetailPage implements OnInit {
         this.classesSvc.createClass({
           name: 'Clase nueva',
           courseId: this.courseId,
-          date: new Date().toISOString().split('T')[0],
+          date: this.getLocalDateISO(),
           observations: this.newClassObservations?.trim() || null
         }).subscribe({
           next: (created: any) => {
@@ -191,14 +191,12 @@ export class ClassDetailPage implements OnInit {
   canUseQr(c: ClassSessionDto): boolean {
     if (!this.proPlan) return false;
     if (!['INSTRUCTOR', 'ADMIN', 'SUPER_ADMIN'].includes(this.role)) return false;
-    if (!c?.date) return false;
-    const today = new Date().toISOString().split('T')[0];
-    return c.date === today;
+    return !!c?.id;
   }
 
   generateQr(c: ClassSessionDto): void {
     if (!this.canUseQr(c)) {
-      Swal.fire('Atención', 'El QR solo está disponible el día de la clase.', 'info');
+      Swal.fire('Atención', 'No tienes permisos para generar el QR.', 'info');
       return;
     }
 
@@ -274,6 +272,12 @@ export class ClassDetailPage implements OnInit {
         }
       });
     });
+  }
+
+  private getLocalDateISO(): string {
+    const now = new Date();
+    const local = new Date(now.getTime() - now.getTimezoneOffset() * 60000);
+    return local.toISOString().split('T')[0];
   }
 
   goToReport(): void {
