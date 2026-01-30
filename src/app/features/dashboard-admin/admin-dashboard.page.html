@@ -112,6 +112,26 @@
         {{ isDownloading ? 'Generando...' : 'Descargar' }}
       </button>
     </article>
+
+    <article class="quick-card">
+      <div>
+        <p class="label">Reporte diario</p>
+        <h4>Asistencia del día</h4>
+        <p class="muted">Imprimí la asistencia de todas las clases del día.</p>
+        <mat-form-field appearance="outline" class="report-date">
+          <mat-label>Fecha</mat-label>
+          <input matInput [matDatepicker]="picker" [(ngModel)]="reportDate" />
+          <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+          <mat-datepicker #picker></mat-datepicker>
+        </mat-form-field>
+      </div>
+      <button
+        type="button"
+        (click)="downloadDailyReport()"
+        [disabled]="isDownloadingDaily">
+        {{ isDownloadingDaily ? 'Generando...' : 'Imprimir' }}
+      </button>
+    </article>
   </section>
 
   </ng-container>
