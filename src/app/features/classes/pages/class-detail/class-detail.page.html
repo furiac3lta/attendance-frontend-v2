@@ -12,13 +12,6 @@
     <button mat-raised-button color="primary" (click)="createClass()">
       Crear nueva clase
     </button>
-    <button
-      mat-stroked-button
-      color="accent"
-      *ngIf="proPlan && ['INSTRUCTOR', 'ADMIN', 'SUPER_ADMIN'].includes(role)"
-      (click)="createClassAndGenerateQr()">
-      Generar QR
-    </button>
   </div>
 
   <button mat-stroked-button color="accent" class="report-btn" (click)="goToReport()" *ngIf="proPlan">
@@ -90,6 +83,14 @@
                 *ngIf="c.active !== false && c.attendanceTaken"
                 (click)="goToAttendance(c.id)">
           Editar
+        </button>
+
+        <button
+          mat-stroked-button
+          color="primary"
+          *ngIf="c.active !== false && canUseQr(c)"
+          (click)="generateQr(c)">
+          Generar QR
         </button>
 
         <button mat-raised-button color="accent"
@@ -177,6 +178,14 @@
                 *ngIf="c.active !== false && c.attendanceTaken"
                 (click)="goToAttendance(c.id)">
           Editar
+        </button>
+
+        <button
+          mat-stroked-button
+          color="primary"
+          *ngIf="c.active !== false && canUseQr(c)"
+          (click)="generateQr(c)">
+          Generar QR
         </button>
 
         <button mat-raised-button color="accent"
