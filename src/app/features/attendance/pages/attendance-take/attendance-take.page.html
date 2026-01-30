@@ -144,6 +144,16 @@
     </button>
 
     <button
+      mat-stroked-button
+      color="primary"
+      class="action-pill"
+      *ngIf="canGenerateQr()"
+      (click)="generateQr()">
+      <mat-icon>qr_code_2</mat-icon>
+      Generar QR
+    </button>
+
+    <button
       mat-raised-button
       color="accent"
       class="action-pill action-accent"

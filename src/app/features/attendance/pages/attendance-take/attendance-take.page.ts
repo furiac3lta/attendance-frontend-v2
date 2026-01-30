@@ -48,6 +48,7 @@ export class AttendanceTakePage implements OnInit {
   classObservations = '';
   qrEnabled = false;
   proPlan = false;
+  role = '';
   tableColumns: string[] = ['name', 'paid', 'present'];
 
   students: StudentWithPayment[] = [];
@@ -65,6 +66,7 @@ export class AttendanceTakePage implements OnInit {
   ngOnInit(): void {
     this.classId = Number(this.route.snapshot.paramMap.get('classId'));
     this.proPlan = this.auth.isProPlan();
+    this.role = (this.auth.getRole() ?? '').replace(/^ROLE_/, '').toUpperCase();
     this.tableColumns = this.proPlan ? ['name', 'paid', 'present'] : ['name', 'present'];
 
     if (!this.classId) {
@@ -132,6 +134,32 @@ export class AttendanceTakePage implements OnInit {
         this.router.navigate(['/attendance/class', this.courseId]);
       },
       error: () => Swal.fire('Error', 'No se pudo guardar', 'error')
+    });
+  }
+
+  canGenerateQr(): boolean {
+    return this.proPlan && ['INSTRUCTOR', 'ADMIN', 'SUPER_ADMIN'].includes(this.role);
+  }
+
+  generateQr(): void {
+    if (!this.canGenerateQr()) {
+      Swal.fire('Atención', 'No tienes permisos para generar el QR.', 'info');
+      return;
+    }
+
+    this.classesSvc.generateQr(this.classId).subscribe({
+      next: (res: any) => {
+        Swal.fire({
+          title: 'QR de asistencia',
+          html: `<img src="${res.imageBase64}" alt="QR" style="width: 240px; max-width: 100%;" />`,
+          showConfirmButton: true,
+          confirmButtonText: 'Cerrar'
+        });
+      },
+      error: (err) => {
+        const message = err?.error ?? 'No se pudo generar el QR.';
+        Swal.fire('Error', message, 'error');
+      }
     });
   }
 
