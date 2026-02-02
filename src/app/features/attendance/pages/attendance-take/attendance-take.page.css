@@ -124,6 +124,10 @@
   background: #2aa3f4;
 }
 
+.action-pill.action-qr {
+  background: #38bdf8;
+}
+
 .action-pill.action-accent {
   background: #d7263d;
 }

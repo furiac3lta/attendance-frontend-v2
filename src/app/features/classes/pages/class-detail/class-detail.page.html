@@ -71,26 +71,10 @@
           Tomar
         </button>
 
-        <button
-          mat-stroked-button
-          color="primary"
-          *ngIf="c.active !== false && canUseQr(c)"
-          (click)="generateQr(c)">
-          Generar QR
-        </button>
-
         <button mat-raised-button color="warn"
                 *ngIf="c.active !== false && c.attendanceTaken"
                 (click)="goToAttendance(c.id)">
           Editar
-        </button>
-
-        <button
-          mat-stroked-button
-          color="primary"
-          *ngIf="c.active !== false && canUseQr(c)"
-          (click)="generateQr(c)">
-          Generar QR
         </button>
 
         <button mat-raised-button color="accent"
@@ -178,14 +162,6 @@
                 *ngIf="c.active !== false && c.attendanceTaken"
                 (click)="goToAttendance(c.id)">
           Editar
-        </button>
-
-        <button
-          mat-stroked-button
-          color="primary"
-          *ngIf="c.active !== false && canUseQr(c)"
-          (click)="generateQr(c)">
-          Generar QR
         </button>
 
         <button mat-raised-button color="accent"
