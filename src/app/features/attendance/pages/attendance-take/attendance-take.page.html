@@ -12,6 +12,11 @@
     <p *ngIf="qrEnabled" class="muted"><strong>QR activo:</strong> también podés marcar asistencia manualmente.</p>
   </div>
 
+  <mat-form-field appearance="outline" class="full-width">
+    <mat-label>Observaciones de la clase</mat-label>
+    <textarea matInput [(ngModel)]="classObservations" rows="3"></textarea>
+  </mat-form-field>
+
   <mat-divider></mat-divider>
 
   <div *ngIf="students.length === 0" class="loading">

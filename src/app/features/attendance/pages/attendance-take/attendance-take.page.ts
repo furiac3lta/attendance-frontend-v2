@@ -14,6 +14,9 @@ import { MatIcon } from '@angular/material/icon';
 import { RouterLink } from '@angular/router';
 import Swal from 'sweetalert2';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { switchMap } from 'rxjs/operators';
 
 type StudentWithPayment = StudentDto & {
   paid: boolean;
@@ -32,7 +35,9 @@ type StudentWithPayment = StudentDto & {
     MatDividerModule,
     MatIcon,
     RouterLink,
-    MatTooltipModule
+    MatTooltipModule,
+    MatFormFieldModule,
+    MatInputModule
   ],
   templateUrl: './attendance-take.page.html',
   styleUrls: ['./attendance-take.page.css'],
@@ -128,7 +133,11 @@ export class AttendanceTakePage implements OnInit {
   }
 
   save() {
-    this.attendanceSvc.registerAttendance(this.classId, this.attendanceMarks).subscribe({
+    const observations = this.classObservations?.trim() || null;
+
+    this.classesSvc.updateObservations(this.classId, observations).pipe(
+      switchMap(() => this.attendanceSvc.registerAttendance(this.classId, this.attendanceMarks))
+    ).subscribe({
       next: () => {
         Swal.fire('Asistencia guardada', '', 'success');
         this.router.navigate(['/attendance/class', this.courseId]);

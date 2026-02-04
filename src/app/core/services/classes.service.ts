@@ -47,6 +47,11 @@ export class ClassesService {
     return this.http.get<any>(`${this.apiUrl}/${id}/details`);
   }
 
+  /** ✅ Actualizar observaciones de clase */
+  updateObservations(classId: number, observations: string | null): Observable<any> {
+    return this.http.put<any>(`${this.apiUrl}/${classId}`, { observations });
+  }
+
   /** ✅ Lista alumnos */
   getStudentsForClass(classId: number): Observable<StudentDto[]> {
     return this.http.get<StudentDto[]>(`${this.apiUrl}/${classId}/students`);
