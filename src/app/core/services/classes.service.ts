@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { environment } from '../../../environments/environment';
 import { Observable } from 'rxjs';
 
@@ -49,7 +49,9 @@ export class ClassesService {
 
   /** ✅ Actualizar observaciones de clase */
   updateObservations(classId: number, observations: string | null): Observable<any> {
-    return this.http.put<any>(`${this.apiUrl}/${classId}`, { observations });
+    const token = localStorage.getItem('token') || sessionStorage.getItem('token') || '';
+    const headers = token ? new HttpHeaders({ Authorization: `Bearer ${token}` }) : undefined;
+    return this.http.put<any>(`${this.apiUrl}/${classId}`, { observations }, headers ? { headers } : {});
   }
 
   /** ✅ Lista alumnos */
