@@ -105,9 +105,13 @@ export class AttendanceTakePage implements OnInit {
           }));
         }
 
-        this.attendanceMarks = marks.length
-          ? marks
-          : this.students.map(s => ({ userId: s.id, present: false }));
+        const markMap = new Map<number, boolean>();
+        (marks ?? []).forEach(m => markMap.set(m.userId, !!m.present));
+
+        this.attendanceMarks = this.students.map(s => ({
+          userId: s.id,
+          present: markMap.get(s.id) ?? false
+        }));
 
         if (this.proPlan) {
           this.attendanceSvc.getPaymentStatus(this.courseId)
