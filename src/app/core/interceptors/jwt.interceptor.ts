@@ -8,7 +8,7 @@ import Swal from 'sweetalert2';
 export const jwtInterceptor: HttpInterceptorFn = (req, next) => {
   const router = inject(Router);
 
-  const token = localStorage.getItem('token');
+  const token = localStorage.getItem('token') || sessionStorage.getItem('token');
 
   if (token) {
     req = req.clone({
